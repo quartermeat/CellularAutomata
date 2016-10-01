@@ -20,7 +20,7 @@ namespace CellularAutomata
             CustomInitialization();
         }
 
-        public void CustomIntialization()
+        public void CustomInitialization()
         {
             //do custom stuff here
         }
