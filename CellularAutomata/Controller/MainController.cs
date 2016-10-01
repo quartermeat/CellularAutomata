@@ -13,6 +13,7 @@ namespace CellularAutomata.Controller
         private MainWindow mainWindow;
 
         //declare model stuff here
+        private Cell myCell;
 
         public MainController()
         {
