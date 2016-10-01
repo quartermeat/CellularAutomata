@@ -31,9 +31,11 @@
             this.mainPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.mapPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.controlPanel = new System.Windows.Forms.Panel();
-            this.startButton = new System.Windows.Forms.Button();
-            this.populationCountLabelTitle = new System.Windows.Forms.Label();
             this.populationCountLabel = new System.Windows.Forms.Label();
+            this.populationCountLabelTitle = new System.Windows.Forms.Label();
+            this.startButton = new System.Windows.Forms.Button();
+            this.timerLabelTitle = new System.Windows.Forms.Label();
+            this.timerLabel = new System.Windows.Forms.Label();
             this.mainPanel.SuspendLayout();
             this.controlPanel.SuspendLayout();
             this.SuspendLayout();
@@ -64,6 +66,8 @@
             this.controlPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.controlPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.controlPanel.Controls.Add(this.timerLabel);
+            this.controlPanel.Controls.Add(this.timerLabelTitle);
             this.controlPanel.Controls.Add(this.populationCountLabel);
             this.controlPanel.Controls.Add(this.populationCountLabelTitle);
             this.controlPanel.Controls.Add(this.startButton);
@@ -71,6 +75,24 @@
             this.controlPanel.Name = "controlPanel";
             this.controlPanel.Size = new System.Drawing.Size(468, 103);
             this.controlPanel.TabIndex = 2;
+            // 
+            // populationCountLabel
+            // 
+            this.populationCountLabel.AutoSize = true;
+            this.populationCountLabel.Location = new System.Drawing.Point(106, 12);
+            this.populationCountLabel.Name = "populationCountLabel";
+            this.populationCountLabel.Size = new System.Drawing.Size(13, 13);
+            this.populationCountLabel.TabIndex = 3;
+            this.populationCountLabel.Text = "0";
+            // 
+            // populationCountLabelTitle
+            // 
+            this.populationCountLabelTitle.AutoSize = true;
+            this.populationCountLabelTitle.Location = new System.Drawing.Point(9, 12);
+            this.populationCountLabelTitle.Name = "populationCountLabelTitle";
+            this.populationCountLabelTitle.Size = new System.Drawing.Size(91, 13);
+            this.populationCountLabelTitle.TabIndex = 2;
+            this.populationCountLabelTitle.Text = "Population Count:";
             // 
             // startButton
             // 
@@ -83,22 +105,23 @@
             this.startButton.Text = "Start";
             this.startButton.UseVisualStyleBackColor = true;
             // 
-            // populationCountLabelTitle
+            // timerLabelTitle
             // 
-            this.populationCountLabelTitle.AutoSize = true;
-            this.populationCountLabelTitle.Location = new System.Drawing.Point(9, 12);
-            this.populationCountLabelTitle.Name = "populationCountLabelTitle";
-            this.populationCountLabelTitle.Size = new System.Drawing.Size(91, 13);
-            this.populationCountLabelTitle.TabIndex = 2;
-            this.populationCountLabelTitle.Text = "Population Count:";
+            this.timerLabelTitle.AutoSize = true;
+            this.timerLabelTitle.Location = new System.Drawing.Point(12, 29);
+            this.timerLabelTitle.Name = "timerLabelTitle";
+            this.timerLabelTitle.Size = new System.Drawing.Size(36, 13);
+            this.timerLabelTitle.TabIndex = 4;
+            this.timerLabelTitle.Text = "Timer:";
             // 
-            // populationCountLabel
+            // timerLabel
             // 
-            this.populationCountLabel.AutoSize = true;
-            this.populationCountLabel.Location = new System.Drawing.Point(106, 12);
-            this.populationCountLabel.Name = "populationCountLabel";
-            this.populationCountLabel.Size = new System.Drawing.Size(0, 13);
-            this.populationCountLabel.TabIndex = 3;
+            this.timerLabel.AutoSize = true;
+            this.timerLabel.Location = new System.Drawing.Point(54, 29);
+            this.timerLabel.Name = "timerLabel";
+            this.timerLabel.Size = new System.Drawing.Size(13, 13);
+            this.timerLabel.TabIndex = 5;
+            this.timerLabel.Text = "0";
             // 
             // MainWindow
             // 
@@ -126,6 +149,8 @@
         private System.Windows.Forms.Button startButton;
         private System.Windows.Forms.Label populationCountLabel;
         private System.Windows.Forms.Label populationCountLabelTitle;
+        private System.Windows.Forms.Label timerLabel;
+        private System.Windows.Forms.Label timerLabelTitle;
     }
 }
 

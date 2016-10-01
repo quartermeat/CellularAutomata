@@ -15,7 +15,8 @@ namespace CellularAutomata
     {
         private Dictionary<int, MapButton> buttonMap;
 
-        public event EventHandler ButtonPressed;
+        public event EventHandler MapButtonPressed;
+        public event EventHandler StartButtonPressed;
         
         public MainWindow(Map map)
         {
@@ -57,11 +58,27 @@ namespace CellularAutomata
                 }
             }
             /////////////////////////////////////////////////
+
+            startButton.Click += OnStartButtonPressed;
         }
 
+        //update timer label
+        public void UpdateTimerLabel(string timeString)
+        {
+            //update label with that string
+            timerLabel.Text = timeString;
+        }
+
+        //update population label
         public void UpdatePopulationCountLabel(int populationCount)
         {
             populationCountLabel.Text = populationCount.ToString();
+        }
+
+        //update start button
+        public void UpdateStartButton(string buttonText)
+        {
+            startButton.Text = buttonText;
         }
         
         //draw population as it is
@@ -100,8 +117,13 @@ namespace CellularAutomata
 
             foreach (KeyValuePair<int, MapButton> button in buttonMap.Where(button => button.Value.Equals(pressedButton)))
             {
-                ButtonPressed(button, e);
+                if (MapButtonPressed != null) MapButtonPressed(button, e);
             }
+        }
+
+        public void OnStartButtonPressed(object sender, EventArgs e)
+        {
+            if (StartButtonPressed != null) StartButtonPressed(sender, e);
         }
     }
 }

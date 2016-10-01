@@ -15,6 +15,10 @@ namespace CellularAutomata.Controller
         private MainWindow mainWindow;
         private List<Cell> population;
 
+        //simulation timer
+        private readonly Timer timer;
+        private int timerCounter;
+
         public MainController()
         {
             //right now model initalization needs to be done before the view, because the view uses the model
@@ -23,26 +27,75 @@ namespace CellularAutomata.Controller
             map = new Map();
             population = new List<Cell>();
 
+            //setup timer
+            timer = new Timer();
+            timer.Interval = 1000; //1 sec
+            timer.Tick += TimerTick;
+            timerCounter = 0;
+
             //initialize view
             mainWindow = new MainWindow(map);
             mainWindow.SetupMap(map);
 
             //set up event handling
-            mainWindow.ButtonPressed += OnButtonClicked;
+            mainWindow.MapButtonPressed += OnMapButtonClicked;
+            mainWindow.StartButtonPressed += OnStartButtonClicked;
 
             //show the window
             mainWindow.ShowDialog();
         }
 
-        private void OnButtonClicked(object sender, EventArgs e)
+        //do stuff on the timer tick
+        private void TimerTick(object cvsender, EventArgs e)
+        {
+            timerCounter++;
+            mainWindow.UpdateTimerLabel(GetTimeString());
+
+            //main game logic has to happen here
+
+        }
+
+        //format time
+        public string GetTimeString()
+        {
+            //create time span from our counter
+            TimeSpan time = TimeSpan.FromSeconds(timerCounter);
+
+            //format that into a string
+            string timeString = time.ToString(@"mm\:ss");
+
+            //return it
+            return timeString;
+        }
+
+        private void OnStartButtonClicked(object sender, EventArgs e)
+        {
+            //if timer is going
+            if (timer.Enabled)
+            {
+                //stop timer
+                timer.Stop();
+                //update Start button text
+                mainWindow.UpdateStartButton("Start");
+            }
+            else
+            {
+                //start timer
+                timer.Start();
+                //update Start button text
+                mainWindow.UpdateStartButton("Stop");
+            }
+        }
+        
+        //handle a button press
+        private void OnMapButtonClicked(object sender, EventArgs e)
         {
             MouseEventArgs mouseEventArgs = e as MouseEventArgs;
 
             //get the current button that was clicked
             var pressedButton = (KeyValuePair<int, MapButton>)sender;
-
-
-            if (mouseEventArgs.Button == MouseButtons.Right)
+            
+            if (mouseEventArgs != null && mouseEventArgs.Button == MouseButtons.Right)
             {
                 //take cell out of population
                 population.Remove(pressedButton.Value.Tenant);
