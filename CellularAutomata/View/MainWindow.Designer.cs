@@ -32,6 +32,8 @@
             this.mapPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.controlPanel = new System.Windows.Forms.Panel();
             this.startButton = new System.Windows.Forms.Button();
+            this.populationCountLabelTitle = new System.Windows.Forms.Label();
+            this.populationCountLabel = new System.Windows.Forms.Label();
             this.mainPanel.SuspendLayout();
             this.controlPanel.SuspendLayout();
             this.SuspendLayout();
@@ -46,7 +48,7 @@
             this.mainPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.mainPanel.Location = new System.Drawing.Point(0, 0);
             this.mainPanel.Name = "mainPanel";
-            this.mainPanel.Size = new System.Drawing.Size(479, 503);
+            this.mainPanel.Size = new System.Drawing.Size(479, 558);
             this.mainPanel.TabIndex = 3;
             // 
             // mapPanel
@@ -62,10 +64,12 @@
             this.controlPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.controlPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.controlPanel.Controls.Add(this.populationCountLabel);
+            this.controlPanel.Controls.Add(this.populationCountLabelTitle);
             this.controlPanel.Controls.Add(this.startButton);
             this.controlPanel.Location = new System.Drawing.Point(3, 448);
             this.controlPanel.Name = "controlPanel";
-            this.controlPanel.Size = new System.Drawing.Size(468, 51);
+            this.controlPanel.Size = new System.Drawing.Size(468, 103);
             this.controlPanel.TabIndex = 2;
             // 
             // startButton
@@ -74,10 +78,27 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.startButton.Location = new System.Drawing.Point(374, 3);
             this.startButton.Name = "startButton";
-            this.startButton.Size = new System.Drawing.Size(91, 45);
+            this.startButton.Size = new System.Drawing.Size(91, 97);
             this.startButton.TabIndex = 1;
             this.startButton.Text = "Start";
             this.startButton.UseVisualStyleBackColor = true;
+            // 
+            // populationCountLabelTitle
+            // 
+            this.populationCountLabelTitle.AutoSize = true;
+            this.populationCountLabelTitle.Location = new System.Drawing.Point(9, 12);
+            this.populationCountLabelTitle.Name = "populationCountLabelTitle";
+            this.populationCountLabelTitle.Size = new System.Drawing.Size(91, 13);
+            this.populationCountLabelTitle.TabIndex = 2;
+            this.populationCountLabelTitle.Text = "Population Count:";
+            // 
+            // populationCountLabel
+            // 
+            this.populationCountLabel.AutoSize = true;
+            this.populationCountLabel.Location = new System.Drawing.Point(106, 12);
+            this.populationCountLabel.Name = "populationCountLabel";
+            this.populationCountLabel.Size = new System.Drawing.Size(0, 13);
+            this.populationCountLabel.TabIndex = 3;
             // 
             // MainWindow
             // 
@@ -85,12 +106,13 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(479, 503);
+            this.ClientSize = new System.Drawing.Size(479, 558);
             this.Controls.Add(this.mainPanel);
             this.Name = "MainWindow";
             this.Text = "Cellular Automata";
             this.mainPanel.ResumeLayout(false);
             this.controlPanel.ResumeLayout(false);
+            this.controlPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -102,6 +124,8 @@
         private System.Windows.Forms.FlowLayoutPanel mapPanel;
         private System.Windows.Forms.Panel controlPanel;
         private System.Windows.Forms.Button startButton;
+        private System.Windows.Forms.Label populationCountLabel;
+        private System.Windows.Forms.Label populationCountLabelTitle;
     }
 }
 

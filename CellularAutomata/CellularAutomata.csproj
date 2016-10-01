@@ -49,6 +49,9 @@
     <Compile Include="Controller\MainController.cs" />
     <Compile Include="Model\Cell.cs" />
     <Compile Include="Model\Map.cs" />
+    <Compile Include="Model\MapButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="View\MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>

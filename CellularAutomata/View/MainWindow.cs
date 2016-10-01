@@ -13,7 +13,7 @@ namespace CellularAutomata
 {
     public partial class MainWindow : Form
     {
-        private Dictionary<int, Button> buttonMap;
+        private Dictionary<int, MapButton> buttonMap;
 
         public event EventHandler ButtonPressed;
         
@@ -35,18 +35,20 @@ namespace CellularAutomata
             //////////////////////////////////////////////////
 
             //create a map of buttons//////////////////////
-            buttonMap = new Dictionary<int, Button>();
+            buttonMap = new Dictionary<int, MapButton>();
 
             int index = 0;
             for (int i = 0; i < map.Height; i++)
             {
                 for (int j = 0; j < map.Width; j++)
                 {
-                    Button newButton = new Button()
+                    MapButton newButton = new MapButton()
                     {
                         Width = map.Resolution,
                         Height = map.Resolution,
-                        Margin = new Padding(0)
+                        Margin = new Padding(0),
+                        Location = new Point(j, i)
+
                     };
                     newButton.MouseDown += OnMouseClicked;
                     buttonMap.Add(index, newButton);
@@ -57,24 +59,49 @@ namespace CellularAutomata
             /////////////////////////////////////////////////
         }
 
-        public void OnMouseClicked(object sender, MouseEventArgs e)
+        public void UpdatePopulationCountLabel(int populationCount)
         {
-            Button pressedButton = sender as Button;
-
-            foreach (KeyValuePair<int, Button> button in buttonMap)
-            {
-                if (button.Value.Equals(pressedButton))
-                {
-                    ButtonPressed(button, e);
-                }
-
-            }
+            populationCountLabel.Text = populationCount.ToString();
         }
         
-        public void SetupBoard(Map map)
+        //draw population as it is
+        public void DrawPopulation(List<Cell> population)
         {
-           
+            foreach (KeyValuePair<int, MapButton> currentButton in buttonMap)
+            {
+                if (currentButton.Value.Tenant == null)
+                {
+                    currentButton.Value.BackColor = DefaultBackColor;
+                }
+                else
+                {
+                    currentButton.Value.BackColor = currentButton.Value.Tenant.CellColor;
+                }
+            }
+        }
 
+        //update a single button
+        public void DrawTenantCell(MapButton currentButton)
+        {
+            if (currentButton.Tenant == null)
+            {
+                currentButton.BackColor = DefaultBackColor;
+            }
+            else
+            {
+                currentButton.BackColor = currentButton.Tenant.CellColor;
+            }
+        }
+
+        //handle button presses
+        public void OnMouseClicked(object sender, MouseEventArgs e)
+        {
+            MapButton pressedButton = sender as MapButton;
+
+            foreach (KeyValuePair<int, MapButton> button in buttonMap.Where(button => button.Value.Equals(pressedButton)))
+            {
+                ButtonPressed(button, e);
+            }
         }
     }
 }
