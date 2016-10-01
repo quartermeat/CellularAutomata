@@ -14,7 +14,15 @@ namespace CellularAutomata
     {
         public MainWindow()
         {
+            //do default designer stuff
             InitializeComponent();
+            //do my powerful will
+            CustomInitialization();
+        }
+
+        public void CustomIntialization()
+        {
+            //do custom stuff here
         }
     }
 }
