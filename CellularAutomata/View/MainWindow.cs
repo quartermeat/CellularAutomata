@@ -21,18 +21,17 @@ namespace CellularAutomata
         {
             //do default designer stuff
             InitializeComponent();
-            //do my powerful will
-            CustomInitialization(map);
         }
 
         //do our custom intializations of the main window
-        private void CustomInitialization(Map map)
+        public void SetupMap(Map map)
         {
             //custom window attributes done outside of designer
             StartPosition = FormStartPosition.CenterScreen;
             MaximizeBox = false;
             mapPanel.Width = map.Width*map.Resolution;
             mapPanel.Height = map.Height*map.Resolution;
+            mapPanel.Margin = new Padding(0);
             //////////////////////////////////////////////////
 
             //create a map of buttons//////////////////////

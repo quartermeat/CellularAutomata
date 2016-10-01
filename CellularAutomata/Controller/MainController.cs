@@ -22,7 +22,7 @@ namespace CellularAutomata.Controller
 
             //initialize view
             mainWindow = new MainWindow(map);
-            //mainWindow.SetupBoard(map);
+            mainWindow.SetupMap(map);
 
             //set up event handling
             mainWindow.ButtonPressed += OnButtonClicked;
