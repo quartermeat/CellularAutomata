@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using CellularAutomata.Model;
 
@@ -8,10 +10,10 @@ namespace CellularAutomata.Controller
     class MainController
     {
         //declare views here
-        private MainWindow mainWindow;
-
-        //declare model stuff here
         private Map map;
+        //declare model stuff here
+        private MainWindow mainWindow;
+        private List<Cell> population;
 
         public MainController()
         {
@@ -19,6 +21,7 @@ namespace CellularAutomata.Controller
 
             //intialize model
             map = new Map();
+            population = new List<Cell>();
 
             //initialize view
             mainWindow = new MainWindow(map);
@@ -33,7 +36,36 @@ namespace CellularAutomata.Controller
 
         private void OnButtonClicked(object sender, EventArgs e)
         {
-            MessageBox.Show("you've clicked here");
+            MouseEventArgs mouseEventArgs = e as MouseEventArgs;
+
+            //get the current button that was clicked
+            var pressedButton = (KeyValuePair<int, MapButton>)sender;
+
+
+            if (mouseEventArgs.Button == MouseButtons.Right)
+            {
+                //take cell out of population
+                population.Remove(pressedButton.Value.Tenant);
+                //take cell off of space - update window
+                pressedButton.Value.Tenant = null;
+                //update the window
+                mainWindow.DrawTenantCell(pressedButton.Value);
+                mainWindow.UpdatePopulationCountLabel(population.Count);
+
+            }else if(pressedButton.Value.Tenant == null)//if there is not already a cell there
+            {
+                //make a new cell at location
+                Cell newCell = new Cell(pressedButton.Value.Location);
+                //add the button as the cell's host
+                newCell.HostButton = pressedButton.Value;
+                //add a new cell to the population
+                population.Add(newCell);
+                //add the cell to the button
+                pressedButton.Value.Tenant = newCell;
+                //update window
+                mainWindow.DrawTenantCell(pressedButton.Value);
+                mainWindow.UpdatePopulationCountLabel(population.Count);
+            }
         }
     }
 }
