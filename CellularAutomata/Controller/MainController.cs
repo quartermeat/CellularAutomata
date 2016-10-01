@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CellularAutomata.Controller
+﻿namespace CellularAutomata.Controller
 {
     //main controller class that makes the magic happen
     class MainController
@@ -13,12 +7,14 @@ namespace CellularAutomata.Controller
         private MainWindow mainWindow;
 
         //declare model stuff here
-        private Cell myCell;
+        //private Cell myCell;
 
         public MainController()
         {
-            //intialize mainWindow
+            //initialize view
             mainWindow = new MainWindow();
+
+            //intialize model
 
             //show the window
             mainWindow.ShowDialog();
