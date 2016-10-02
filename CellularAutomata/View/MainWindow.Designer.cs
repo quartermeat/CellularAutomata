@@ -1,4 +1,4 @@
-﻿namespace CellularAutomata
+﻿namespace CellularAutomata.View
 {
     partial class MainWindow
     {
@@ -31,11 +31,13 @@
             this.mainPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.mapPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.controlPanel = new System.Windows.Forms.Panel();
+            this.timerLabel = new System.Windows.Forms.Label();
+            this.timerLabelTitle = new System.Windows.Forms.Label();
             this.populationCountLabel = new System.Windows.Forms.Label();
             this.populationCountLabelTitle = new System.Windows.Forms.Label();
             this.startButton = new System.Windows.Forms.Button();
-            this.timerLabelTitle = new System.Windows.Forms.Label();
-            this.timerLabel = new System.Windows.Forms.Label();
+            this.neighborCountLableTitle = new System.Windows.Forms.Label();
+            this.neighborCellCountLabel = new System.Windows.Forms.Label();
             this.mainPanel.SuspendLayout();
             this.controlPanel.SuspendLayout();
             this.SuspendLayout();
@@ -66,6 +68,8 @@
             this.controlPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.controlPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.controlPanel.Controls.Add(this.neighborCellCountLabel);
+            this.controlPanel.Controls.Add(this.neighborCountLableTitle);
             this.controlPanel.Controls.Add(this.timerLabel);
             this.controlPanel.Controls.Add(this.timerLabelTitle);
             this.controlPanel.Controls.Add(this.populationCountLabel);
@@ -75,6 +79,24 @@
             this.controlPanel.Name = "controlPanel";
             this.controlPanel.Size = new System.Drawing.Size(468, 103);
             this.controlPanel.TabIndex = 2;
+            // 
+            // timerLabel
+            // 
+            this.timerLabel.AutoSize = true;
+            this.timerLabel.Location = new System.Drawing.Point(54, 29);
+            this.timerLabel.Name = "timerLabel";
+            this.timerLabel.Size = new System.Drawing.Size(13, 13);
+            this.timerLabel.TabIndex = 5;
+            this.timerLabel.Text = "0";
+            // 
+            // timerLabelTitle
+            // 
+            this.timerLabelTitle.AutoSize = true;
+            this.timerLabelTitle.Location = new System.Drawing.Point(9, 29);
+            this.timerLabelTitle.Name = "timerLabelTitle";
+            this.timerLabelTitle.Size = new System.Drawing.Size(36, 13);
+            this.timerLabelTitle.TabIndex = 4;
+            this.timerLabelTitle.Text = "Timer:";
             // 
             // populationCountLabel
             // 
@@ -105,23 +127,24 @@
             this.startButton.Text = "Start";
             this.startButton.UseVisualStyleBackColor = true;
             // 
-            // timerLabelTitle
+            // neighborCountLableTitle
             // 
-            this.timerLabelTitle.AutoSize = true;
-            this.timerLabelTitle.Location = new System.Drawing.Point(12, 29);
-            this.timerLabelTitle.Name = "timerLabelTitle";
-            this.timerLabelTitle.Size = new System.Drawing.Size(36, 13);
-            this.timerLabelTitle.TabIndex = 4;
-            this.timerLabelTitle.Text = "Timer:";
+            this.neighborCountLableTitle.AutoSize = true;
+            this.neighborCountLableTitle.Location = new System.Drawing.Point(9, 45);
+            this.neighborCountLableTitle.Name = "neighborCountLableTitle";
+            this.neighborCountLableTitle.Size = new System.Drawing.Size(123, 13);
+            this.neighborCountLableTitle.TabIndex = 6;
+            this.neighborCountLableTitle.Text = "Selected Cell Neighbors:";
             // 
-            // timerLabel
+            // neighborCellCountLabel
             // 
-            this.timerLabel.AutoSize = true;
-            this.timerLabel.Location = new System.Drawing.Point(54, 29);
-            this.timerLabel.Name = "timerLabel";
-            this.timerLabel.Size = new System.Drawing.Size(13, 13);
-            this.timerLabel.TabIndex = 5;
-            this.timerLabel.Text = "0";
+            this.neighborCellCountLabel.AutoSize = true;
+            this.neighborCellCountLabel.Location = new System.Drawing.Point(138, 45);
+            this.neighborCellCountLabel.Name = "neighborCellCountLabel";
+            this.neighborCellCountLabel.Size = new System.Drawing.Size(10, 17);
+            this.neighborCellCountLabel.TabIndex = 7;
+            this.neighborCellCountLabel.Text = "0";
+            this.neighborCellCountLabel.UseCompatibleTextRendering = true;
             // 
             // MainWindow
             // 
@@ -151,6 +174,8 @@
         private System.Windows.Forms.Label populationCountLabelTitle;
         private System.Windows.Forms.Label timerLabel;
         private System.Windows.Forms.Label timerLabelTitle;
+        private System.Windows.Forms.Label neighborCellCountLabel;
+        private System.Windows.Forms.Label neighborCountLableTitle;
     }
 }
 

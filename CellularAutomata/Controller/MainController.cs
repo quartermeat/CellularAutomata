@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using CellularAutomata.Model;
+using CellularAutomata.View;
 
 namespace CellularAutomata.Controller
 {
@@ -34,8 +36,8 @@ namespace CellularAutomata.Controller
             timerCounter = 0;
 
             //initialize view
-            mainWindow = new MainWindow(map);
-            mainWindow.SetupMap(map);
+            mainWindow = new MainWindow();
+            mainWindow.SetupMap();
 
             //set up event handling
             mainWindow.MapButtonPressed += OnMapButtonClicked;
@@ -52,6 +54,11 @@ namespace CellularAutomata.Controller
             mainWindow.UpdateTimerLabel(GetTimeString());
 
             //main game logic has to happen here
+            //do cell tick stuff
+
+            //update cell's parameter
+
+            //draw board again
 
         }
 
@@ -76,49 +83,66 @@ namespace CellularAutomata.Controller
                 //stop timer
                 timer.Stop();
                 //update Start button text
-                mainWindow.UpdateStartButton("Start");
+                mainWindow.UpdateStartButton("Start", Color.Green);
             }
             else
             {
                 //start timer
                 timer.Start();
                 //update Start button text
-                mainWindow.UpdateStartButton("Stop");
+                mainWindow.UpdateStartButton("Stop", Color.Red);
             }
         }
-        
+
         //handle a button press
         private void OnMapButtonClicked(object sender, EventArgs e)
         {
             MouseEventArgs mouseEventArgs = e as MouseEventArgs;
 
+            var pressedButton = (MapButton)sender;
+
             //get the current button that was clicked
-            var pressedButton = (KeyValuePair<int, MapButton>)sender;
-            
+
             if (mouseEventArgs != null && mouseEventArgs.Button == MouseButtons.Right)
             {
                 //take cell out of population
-                population.Remove(pressedButton.Value.Tenant);
+                population.Remove(pressedButton.Tenant);
                 //take cell off of space - update window
-                pressedButton.Value.Tenant = null;
+                pressedButton.Tenant = null;
                 //update the window
-                mainWindow.DrawTenantCell(pressedButton.Value);
+                mainWindow.DrawTenantCell(pressedButton);
                 mainWindow.UpdatePopulationCountLabel(population.Count);
 
-            }else if(pressedButton.Value.Tenant == null)//if there is not already a cell there
+            }
+            else if (pressedButton.Tenant == null)//if there is not already a cell there
             {
-                //make a new cell at location
-                Cell newCell = new Cell(pressedButton.Value.Location);
-                //add the button as the cell's host
-                newCell.HostButton = pressedButton.Value;
+                //make a new cell at location with the pressed button as host
+                Cell newCell = new Cell(pressedButton.Location, pressedButton);
                 //add a new cell to the population
                 population.Add(newCell);
                 //add the cell to the button
-                pressedButton.Value.Tenant = newCell;
+                pressedButton.Tenant = newCell;
                 //update window
-                mainWindow.DrawTenantCell(pressedButton.Value);
+                mainWindow.DrawTenantCell(pressedButton);
                 mainWindow.UpdatePopulationCountLabel(population.Count);
+
+                foreach (Cell cell in population)
+                {
+                    cell.UpdateNeighbors();
+                }
+
+                UpdateNeighborCountLabel(pressedButton);
             }
+            else if (pressedButton.Tenant != null)
+            {
+                UpdateNeighborCountLabel(pressedButton);
+            }
+
+        }
+
+        public void UpdateNeighborCountLabel(MapButton pressedButton)
+        {
+            mainWindow.UpdateNeighborCountLabel(pressedButton.Tenant.Neighbors.Count);
         }
     }
 }

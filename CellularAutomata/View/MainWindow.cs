@@ -1,65 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using CellularAutomata.Model;
 
-namespace CellularAutomata
+namespace CellularAutomata.View
 {
     public partial class MainWindow : Form
     {
-        private Dictionary<int, MapButton> buttonMap;
-
         public event EventHandler MapButtonPressed;
         public event EventHandler StartButtonPressed;
         
-        public MainWindow(Map map)
+        public MainWindow()
         {
             //do default designer stuff
             InitializeComponent();
         }
 
         //do our custom intializations of the main window
-        public void SetupMap(Map map)
+        public void SetupMap()
         {
             //custom window attributes done outside of designer
             StartPosition = FormStartPosition.CenterScreen;
             MaximizeBox = false;
-            mapPanel.Width = map.Width*map.Resolution;
-            mapPanel.Height = map.Height*map.Resolution;
+            mapPanel.Width = Map.Width*Map.Resolution;
+            mapPanel.Height = Map.Height*Map.Resolution;
             mapPanel.Margin = new Padding(0);
             //////////////////////////////////////////////////
 
-            //create a map of buttons//////////////////////
-            buttonMap = new Dictionary<int, MapButton>();
-
-            int index = 0;
-            for (int i = 0; i < map.Height; i++)
+            //add buttonMap to panel//////////////////////
+            foreach (MapButton currentMapButton in Map.ButtonMap)
             {
-                for (int j = 0; j < map.Width; j++)
-                {
-                    MapButton newButton = new MapButton()
-                    {
-                        Width = map.Resolution,
-                        Height = map.Resolution,
-                        Margin = new Padding(0),
-                        Location = new Point(j, i)
-
-                    };
-                    newButton.MouseDown += OnMouseClicked;
-                    buttonMap.Add(index, newButton);
-                    mapPanel.Controls.Add(newButton);
-                    index++;
-                }
+                currentMapButton.MouseDown += OnMouseClicked;
+                mapPanel.Controls.Add(currentMapButton);
             }
-            /////////////////////////////////////////////////
 
             startButton.Click += OnStartButtonPressed;
+            startButton.BackColor = Color.Green;
         }
 
         //update timer label
@@ -69,6 +47,12 @@ namespace CellularAutomata
             timerLabel.Text = timeString;
         }
 
+        //update neighbor count label
+        public void UpdateNeighborCountLabel(int neighborCount)
+        {
+            neighborCellCountLabel.Text = neighborCount.ToString();
+        }
+
         //update population label
         public void UpdatePopulationCountLabel(int populationCount)
         {
@@ -76,24 +60,18 @@ namespace CellularAutomata
         }
 
         //update start button
-        public void UpdateStartButton(string buttonText)
+        public void UpdateStartButton(string buttonText, Color color)
         {
             startButton.Text = buttonText;
+            startButton.BackColor = color;
         }
         
         //draw population as it is
-        public void DrawPopulation(List<Cell> population)
+        public void DrawPopulation(List<Cell> population, Map map)
         {
-            foreach (KeyValuePair<int, MapButton> currentButton in buttonMap)
+            foreach (MapButton currentButton in Map.ButtonMap)
             {
-                if (currentButton.Value.Tenant == null)
-                {
-                    currentButton.Value.BackColor = DefaultBackColor;
-                }
-                else
-                {
-                    currentButton.Value.BackColor = currentButton.Value.Tenant.CellColor;
-                }
+                currentButton.BackColor = currentButton.Tenant == null ? DefaultBackColor : currentButton.Tenant.CellColor;
             }
         }
 
@@ -115,9 +93,9 @@ namespace CellularAutomata
         {
             MapButton pressedButton = sender as MapButton;
 
-            foreach (KeyValuePair<int, MapButton> button in buttonMap.Where(button => button.Value.Equals(pressedButton)))
+            foreach (MapButton currentMapButton in Map.ButtonMap.Where(button => button.Equals(pressedButton)))
             {
-                if (MapButtonPressed != null) MapButtonPressed(button, e);
+                if (MapButtonPressed != null) MapButtonPressed(currentMapButton, e);
             }
         }
 
