@@ -26,14 +26,14 @@ namespace CellularAutomata.Model
         public Color CellColor;
         public Point Location;
         public MapButton HostButton;
-        public List<Cell> Neighbors;
+        public Dictionary<int, Cell> Neighbors; 
         //public List<Cell> NeighborCells;
 
         //constructor: setup defaults
         public Cell(Point newLocation, MapButton newHost)
         {
             //initialize neighbors
-            Neighbors = new List<Cell>();
+            Neighbors = new Dictionary<int, Cell>();
             //setup its host
             HostButton = newHost;
             //setup defaults here
@@ -89,11 +89,16 @@ namespace CellularAutomata.Model
         public void UpdateNeighbors()
         {
             //get neighbor buttons and if they have an occupant, set them as a neighbor
-            foreach (KeyValuePair<int, MapButton> neighborHost in HostButton.Neighbors.Where(neighborHost => neighborHost.Value.Tenant != null))
+            foreach (KeyValuePair<int, MapButton> neighborHost in HostButton.Neighbors.Where(neighborHost => neighborHost.Value.Tenant != null).Where(neighborHost => !Neighbors.ContainsKey(neighborHost.Key)))
             {
-                if (!Neighbors.Contains(neighborHost.Value.Tenant))
                 //add this cell as a neighbor
-                Neighbors.Add(neighborHost.Value.Tenant);
+                Neighbors.Add(neighborHost.Key, neighborHost.Value.Tenant);
+            }
+            foreach (
+                KeyValuePair<int, MapButton> neighborHost in
+                    HostButton.Neighbors.Where(neighborHost => neighborHost.Value.Tenant == null))
+            {
+                Neighbors.Remove(neighborHost.Key);
             }
         }
     }

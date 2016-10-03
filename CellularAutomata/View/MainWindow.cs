@@ -53,6 +53,12 @@ namespace CellularAutomata.View
             neighborCellCountLabel.Text = neighborCount.ToString();
         }
 
+        //update neighbor location label
+        public void UpdateNeighborLocationLabel(string locationsString)
+        {
+            neighborLocationLabel.Text = locationsString;
+        }
+
         //update population label
         public void UpdatePopulationCountLabel(int populationCount)
         {
@@ -64,6 +70,13 @@ namespace CellularAutomata.View
         {
             startButton.Text = buttonText;
             startButton.BackColor = color;
+        }
+
+        //update neighbor label titles
+        public void UpdateNeighborLabelTitles(string newText)
+        {
+            neighborCountLableTitle.Text = "Selected " + newText + "'s neighbor count:";
+            selectedCellNeighborLocationLabelTitle.Text = "Selected " + newText + "'s neighbor locations:";
         }
         
         //draw population as it is

@@ -109,10 +109,17 @@ namespace CellularAutomata.Controller
                 population.Remove(pressedButton.Tenant);
                 //take cell off of space - update window
                 pressedButton.Tenant = null;
+                //update neighbors
+                foreach (Cell cell in population)
+                {
+                    cell.UpdateNeighbors();
+                }
                 //update the window
                 mainWindow.DrawTenantCell(pressedButton);
+                //update labels
+                mainWindow.UpdateNeighborLabelTitles("Button");
                 mainWindow.UpdatePopulationCountLabel(population.Count);
-
+                UpdateNeighborLabels(pressedButton);
             }
             else if (pressedButton.Tenant == null)//if there is not already a cell there
             {
@@ -122,27 +129,113 @@ namespace CellularAutomata.Controller
                 population.Add(newCell);
                 //add the cell to the button
                 pressedButton.Tenant = newCell;
-                //update window
-                mainWindow.DrawTenantCell(pressedButton);
-                mainWindow.UpdatePopulationCountLabel(population.Count);
-
+                //update neighbors
                 foreach (Cell cell in population)
                 {
                     cell.UpdateNeighbors();
                 }
-
-                UpdateNeighborCountLabel(pressedButton);
+                //update window
+                mainWindow.DrawTenantCell(pressedButton);
+                //update labels
+                mainWindow.UpdateNeighborLabelTitles("Cell");
+                mainWindow.UpdatePopulationCountLabel(population.Count);
+                UpdateNeighborLabels(pressedButton);
+    
             }
             else if (pressedButton.Tenant != null)
             {
-                UpdateNeighborCountLabel(pressedButton);
+                //update window labels
+                mainWindow.UpdateNeighborLabelTitles("Button");
+                UpdateNeighborLabels(pressedButton);
             }
 
         }
-
-        public void UpdateNeighborCountLabel(MapButton pressedButton)
+        
+        //update neighbor location label
+        public void UpdateNeighborLabels(MapButton pressedButton)
         {
-            mainWindow.UpdateNeighborCountLabel(pressedButton.Tenant.Neighbors.Count);
+            //neighbor location label
+            string locationsString = "";
+            
+            //if there is a Cell in the button
+            if (pressedButton.Tenant != null)
+            {
+                //neighbor count label
+                mainWindow.UpdateNeighborCountLabel(pressedButton.Tenant.Neighbors.Count);
+                
+                //could change this to linq, but this is easier for me to read, may change later for performance
+                foreach (KeyValuePair<int, Cell> neighborCell in pressedButton.Tenant.Neighbors)
+                {
+                    locationsString += GetLocationsString(neighborCell.Key) + ", ";
+                }
+                mainWindow.UpdateNeighborLocationLabel(locationsString);
+            }
+            else//if there is no Cell in the button
+            {
+                int neighborCount = 0;
+                foreach (KeyValuePair<int, MapButton> neighborButton in pressedButton.Neighbors.Where(neighborButton => neighborButton.Value.Tenant != null))
+                {
+                    neighborCount++;
+                    locationsString += GetLocationsString(neighborButton.Key) + ", ";
+                }
+                mainWindow.UpdateNeighborLocationLabel(locationsString);
+                mainWindow.UpdateNeighborCountLabel(neighborCount);
+            }
+            
+        }//end UpdateNeighborLabels
+
+        //get locations string
+        public string GetLocationsString(int location)
+        {
+            string locationString = "";
+
+            switch (location)
+            {
+                case 0:
+                    {
+                        locationString = "North";
+                        break;
+                    }
+                case 1:
+                    {
+                        locationString = "NorthEast";
+                        break;
+                    }
+                case 2:
+                    {
+                        locationString = "East";
+                        break;
+                    }
+                case 3:
+                    {
+                        locationString = "SouthEast";
+                        break;
+                    }
+                case 4:
+                    {
+                        locationString = "South";
+                        break;
+                    }
+                case 5:
+                    {
+                        locationString = "SouthWest";
+                        break;
+                    }
+                case 6:
+                    {
+                        locationString = "West";
+                        break;
+                    }
+                case 7:
+                    {
+                        locationString = "NorthWest";
+                        break;
+                    }
+            }
+
+            return locationString;
         }
+
+
     }
 }
