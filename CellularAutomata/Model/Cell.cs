@@ -11,7 +11,7 @@ using System.Windows.Forms;
 namespace CellularAutomata.Model
 {
     //an automata unit that behaves according to state and behavior
-    public class Cell
+    public class Cell : IComparable, IComparable<Cell>
     {
         private const int N = 0;
         private const int NE = 1;
@@ -26,12 +26,17 @@ namespace CellularAutomata.Model
         public Color CellColor;
         public Point Location;
         public MapButton HostButton;
-        public Dictionary<int, Cell> Neighbors; 
+        public Dictionary<int, Cell> Neighbors;
+        public int Agility;
         //public List<Cell> NeighborCells;
 
         //constructor: setup defaults
         public Cell(Point newLocation, MapButton newHost)
         {
+            Random random = new Random();
+
+            Agility = random.Next(1, 3);
+            
             //initialize neighbors
             Neighbors = new Dictionary<int, Cell>();
             //setup its host
@@ -46,6 +51,33 @@ namespace CellularAutomata.Model
             UpdateNeighbors();
         }
 
+        public int CompareTo(object cell)
+        {
+            if (cell == null) return 1;
+
+            Cell otherCell = cell as Cell;
+            if (otherCell != null)
+            {
+                return this.Agility.CompareTo(otherCell.Agility);
+            }
+            else
+            {
+                throw new ArgumentException("Object is not a Cell");
+            }
+        }
+
+        public int CompareTo(Cell otherCell)
+        {
+            if (otherCell != null)
+            {
+                return this.Agility.CompareTo(otherCell.Agility);
+            }
+            else
+            {
+                throw new ArgumentException("Object is not a Cell");
+            }
+        }
+        
         //this is where the magic happens baby!
         public void OnTick()
         {

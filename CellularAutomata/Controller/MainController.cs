@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using CellularAutomata.Controller.Helpers;
 using CellularAutomata.Model;
 using CellularAutomata.View;
 
@@ -126,7 +127,7 @@ namespace CellularAutomata.Controller
                 //make a new cell at location with the pressed button as host
                 Cell newCell = new Cell(pressedButton.Location, pressedButton);
                 //add a new cell to the population
-                population.Add(newCell);
+                population.AddSorted(newCell);
                 //add the cell to the button
                 pressedButton.Tenant = newCell;
                 //update neighbors
