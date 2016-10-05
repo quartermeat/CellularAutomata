@@ -67,7 +67,7 @@ namespace CellularAutomata.Model
         public void MoveToRandomVacantMapButton()
         {
             //random generator
-            Random random = new Random();
+            Random random = new Random(Guid.NewGuid().GetHashCode());
             //get empty neighbor hosts
             List<MapButton> vacantNeighborHosts = GetVacantNeighborHosts();
             //get random index
