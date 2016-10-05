@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/quartermeat/CellularAutomata.png?label=ready&title=Ready)](https://waffle.io/quartermeat/CellularAutomata)
 # CellularAutomata
 Attempting cellular automata with Windows Forms in C#
 
