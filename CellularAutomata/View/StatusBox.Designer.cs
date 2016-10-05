@@ -32,6 +32,8 @@
             this.selectedCellNeighborLocationLabelTitle = new System.Windows.Forms.Label();
             this.neighborCellCountLabel = new System.Windows.Forms.Label();
             this.neighborCountLableTitle = new System.Windows.Forms.Label();
+            this.agilityLabelTitle = new System.Windows.Forms.Label();
+            this.agilityLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // neighborLocationLabel
@@ -71,11 +73,31 @@
             this.neighborCountLableTitle.TabIndex = 10;
             this.neighborCountLableTitle.Text = "Selected Button\'s neighbor count:";
             // 
+            // agilityLabelTitle
+            // 
+            this.agilityLabelTitle.AutoSize = true;
+            this.agilityLabelTitle.Location = new System.Drawing.Point(12, 48);
+            this.agilityLabelTitle.Name = "agilityLabelTitle";
+            this.agilityLabelTitle.Size = new System.Drawing.Size(109, 13);
+            this.agilityLabelTitle.TabIndex = 14;
+            this.agilityLabelTitle.Text = "Selected Cell\'s Agility:";
+            // 
+            // agilityLabel
+            // 
+            this.agilityLabel.AutoSize = true;
+            this.agilityLabel.Location = new System.Drawing.Point(127, 48);
+            this.agilityLabel.Name = "agilityLabel";
+            this.agilityLabel.Size = new System.Drawing.Size(13, 13);
+            this.agilityLabel.TabIndex = 15;
+            this.agilityLabel.Text = "0";
+            // 
             // StatusBox
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(605, 261);
+            this.Controls.Add(this.agilityLabel);
+            this.Controls.Add(this.agilityLabelTitle);
             this.Controls.Add(this.neighborLocationLabel);
             this.Controls.Add(this.selectedCellNeighborLocationLabelTitle);
             this.Controls.Add(this.neighborCellCountLabel);
@@ -93,5 +115,7 @@
         private System.Windows.Forms.Label selectedCellNeighborLocationLabelTitle;
         private System.Windows.Forms.Label neighborCellCountLabel;
         private System.Windows.Forms.Label neighborCountLableTitle;
+        private System.Windows.Forms.Label agilityLabelTitle;
+        private System.Windows.Forms.Label agilityLabel;
     }
 }

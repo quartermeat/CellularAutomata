@@ -94,11 +94,13 @@ namespace CellularAutomata.View
             }
         }
 
+        //update start button
         public void OnStartButtonPressed(object sender, EventArgs e)
         {
             if (StartButtonPressed != null) StartButtonPressed(sender, e);
         }
 
+        //handle context status box menu item selection
         private void showStatusBoxMenuItem_Click(object sender, EventArgs e)
         {
             if (ShowStatusBoxMenuItemClicked != null) ShowStatusBoxMenuItemClicked(sender, e);

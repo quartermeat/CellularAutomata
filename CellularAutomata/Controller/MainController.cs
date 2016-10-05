@@ -167,7 +167,7 @@ namespace CellularAutomata.Controller
             }
 
         }
-        
+
         //update neighbor location label
         public void UpdateStatusBoxNeighborLabels(MapButton pressedButton)
         {
@@ -187,6 +187,7 @@ namespace CellularAutomata.Controller
                 }
                 statusBox.UpdateNeighborLocationLabel(locationsString);
                 statusBox.UpdateNeighborLabelTitles("Cell");
+                UpdateStatusBoxAgilityLabel(pressedButton.Tenant.Agility);
             }
             else//if there is no Cell in the button
             {
@@ -256,6 +257,11 @@ namespace CellularAutomata.Controller
             return locationString;
         }
 
-
+        //update agility label
+        public void UpdateStatusBoxAgilityLabel(int agility)
+        {
+            statusBox.UpdateAgilityLabel(agility);
+        }
+       
     }
 }

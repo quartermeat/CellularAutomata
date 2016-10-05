@@ -35,5 +35,11 @@ namespace CellularAutomata.View
             neighborCountLableTitle.Text = "Selected " + newText + "'s neighbor count:";
             selectedCellNeighborLocationLabelTitle.Text = "Selected " + newText + "'s neighbor locations:";
         }
+
+        //update agility label
+        public void UpdateAgilityLabel(int newAgility)
+        {
+            agilityLabel.Text = newAgility.ToString();
+        }
     }
 }

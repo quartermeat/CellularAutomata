@@ -27,15 +27,15 @@ namespace CellularAutomata.Model
         public Point Location;
         public MapButton HostButton;
         public Dictionary<int, Cell> Neighbors;
-        public int Agility;
+        public int Agility { get; set; }
         //public List<Cell> NeighborCells;
 
         //constructor: setup defaults
         public Cell(Point newLocation, MapButton newHost)
         {
-            Random random = new Random();
+            Random random = new Random(Guid.NewGuid().GetHashCode());
 
-            Agility = random.Next(1, 3);
+            Agility = random.Next(1, 4);
             
             //initialize neighbors
             Neighbors = new Dictionary<int, Cell>();
