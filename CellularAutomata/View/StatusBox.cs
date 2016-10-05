@@ -41,5 +41,15 @@ namespace CellularAutomata.View
         {
             agilityLabel.Text = newAgility.ToString();
         }
+
+        //hide the box instead of closing so it can just be reopened without creating a new one
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true;
+                Hide();
+            }
+        }
     }
 }
