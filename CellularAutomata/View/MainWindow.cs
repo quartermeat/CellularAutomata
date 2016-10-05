@@ -11,7 +11,8 @@ namespace CellularAutomata.View
     {
         public event EventHandler MapButtonPressed;
         public event EventHandler StartButtonPressed;
-        
+        public event EventHandler ShowStatusBoxMenuItemClicked;
+
         public MainWindow()
         {
             //do default designer stuff
@@ -35,7 +36,7 @@ namespace CellularAutomata.View
                 currentMapButton.MouseDown += OnMouseClicked;
                 mapPanel.Controls.Add(currentMapButton);
             }
-
+            
             startButton.Click += OnStartButtonPressed;
             startButton.BackColor = Color.Green;
         }
@@ -45,18 +46,6 @@ namespace CellularAutomata.View
         {
             //update label with that string
             timerLabel.Text = timeString;
-        }
-
-        //update neighbor count label
-        public void UpdateNeighborCountLabel(int neighborCount)
-        {
-            neighborCellCountLabel.Text = neighborCount.ToString();
-        }
-
-        //update neighbor location label
-        public void UpdateNeighborLocationLabel(string locationsString)
-        {
-            neighborLocationLabel.Text = locationsString;
         }
 
         //update population label
@@ -72,13 +61,6 @@ namespace CellularAutomata.View
             startButton.BackColor = color;
         }
 
-        //update neighbor label titles
-        public void UpdateNeighborLabelTitles(string newText)
-        {
-            neighborCountLableTitle.Text = "Selected " + newText + "'s neighbor count:";
-            selectedCellNeighborLocationLabelTitle.Text = "Selected " + newText + "'s neighbor locations:";
-        }
-        
         //draw population as it is
         public void DrawPopulation(List<Cell> population, Map map)
         {
@@ -115,6 +97,11 @@ namespace CellularAutomata.View
         public void OnStartButtonPressed(object sender, EventArgs e)
         {
             if (StartButtonPressed != null) StartButtonPressed(sender, e);
+        }
+
+        private void showStatusBoxMenuItem_Click(object sender, EventArgs e)
+        {
+            if (ShowStatusBoxMenuItemClicked != null) ShowStatusBoxMenuItemClicked(sender, e);
         }
     }
 }

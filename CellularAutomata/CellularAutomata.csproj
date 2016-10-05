@@ -49,6 +49,7 @@
     <Compile Include="Controller\Helpers\ListExt.cs" />
     <Compile Include="Controller\MainController.cs" />
     <Compile Include="Model\Cell.cs" />
+    <Compile Include="Model\Log.cs" />
     <Compile Include="Model\Map.cs" />
     <Compile Include="Model\MapButton.cs">
       <SubType>Component</SubType>
@@ -61,6 +62,12 @@
     </Compile>
     <Compile Include="Controller\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="View\StatusBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\StatusBox.Designer.cs">
+      <DependentUpon>StatusBox.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="View\MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>
@@ -73,6 +80,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="View\StatusBox.resx">
+      <DependentUpon>StatusBox.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

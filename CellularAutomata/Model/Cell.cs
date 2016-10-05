@@ -11,7 +11,7 @@ using System.Windows.Forms;
 namespace CellularAutomata.Model
 {
     //an automata unit that behaves according to state and behavior
-    public class Cell : IComparable, IComparable<Cell>
+    public class Cell : IComparable<Cell>
     {
         private const int N = 0;
         private const int NE = 1;
@@ -51,26 +51,11 @@ namespace CellularAutomata.Model
             UpdateNeighbors();
         }
 
-        public int CompareTo(object cell)
-        {
-            if (cell == null) return 1;
-
-            Cell otherCell = cell as Cell;
-            if (otherCell != null)
-            {
-                return this.Agility.CompareTo(otherCell.Agility);
-            }
-            else
-            {
-                throw new ArgumentException("Object is not a Cell");
-            }
-        }
-
         public int CompareTo(Cell otherCell)
         {
             if (otherCell != null)
             {
-                return this.Agility.CompareTo(otherCell.Agility);
+                return Agility.CompareTo(otherCell.Agility);
             }
             else
             {
@@ -79,14 +64,20 @@ namespace CellularAutomata.Model
         }
         
         //this is where the magic happens baby!
-        public void OnTick()
+        public void MoveToRandomVacantMapButton()
         {
             //random generator
             Random random = new Random();
-            //random from all the directions North to NorthWest
-            int direction = random.Next(0, 7);
-            
-            
+            //get empty neighbor hosts
+            List<MapButton> vacantNeighborHosts = GetVacantNeighborHosts();
+            //get random index
+            int randomIndex = random.Next(0, vacantNeighborHosts.Count);
+            //remove self from current Host
+            HostButton.Tenant = null;
+            //place this self into new host
+            vacantNeighborHosts[randomIndex].Tenant = this;
+            //update HostButton to the new spot
+            HostButton = vacantNeighborHosts[randomIndex];
         }
 
         //cell knows where it's parameter is
@@ -118,6 +109,7 @@ namespace CellularAutomata.Model
             Parameter.Add(NW, northWest);
         }
 
+        //update neighbors
         public void UpdateNeighbors()
         {
             //get neighbor buttons and if they have an occupant, set them as a neighbor
@@ -133,5 +125,22 @@ namespace CellularAutomata.Model
                 Neighbors.Remove(neighborHost.Key);
             }
         }
+
+        //get an array of empty buttons neighboring this cell
+        private List<MapButton> GetVacantNeighborHosts()
+        {
+             List<MapButton> vacantNeighborHosts = new List<MapButton>();
+
+            foreach (
+                KeyValuePair<int, MapButton> neighborHost in
+                    HostButton.Neighbors.Where(neighborHost => neighborHost.Value.Tenant == null))
+            {
+                vacantNeighborHosts.Add(neighborHost.Value);
+            }
+
+            return vacantNeighborHosts;
+        }
+
+
     }
 }
