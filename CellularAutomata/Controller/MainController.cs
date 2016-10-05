@@ -16,6 +16,7 @@ namespace CellularAutomata.Controller
         private Map map;
         //declare model stuff here
         private MainWindow mainWindow;
+        private StatusBox statusBox = new StatusBox();
         private List<Cell> population;
 
         //simulation timer
@@ -43,6 +44,7 @@ namespace CellularAutomata.Controller
             //set up event handling
             mainWindow.MapButtonPressed += OnMapButtonClicked;
             mainWindow.StartButtonPressed += OnStartButtonClicked;
+            mainWindow.ShowStatusBoxMenuItemClicked += OnShowStatusBoxMenuItemClicked;
 
             //show the window
             mainWindow.ShowDialog();
@@ -56,6 +58,17 @@ namespace CellularAutomata.Controller
 
             //main game logic has to happen here
             //do cell tick stuff
+            foreach (Cell cell in population)
+            {
+                //keep track of old host to draw it vacant
+                MapButton oldHost = cell.HostButton;
+                //move the cell
+                cell.MoveToRandomVacantMapButton();
+                //clear the old host button
+                mainWindow.DrawTenantCell(oldHost);
+                //draw new host
+                mainWindow.DrawTenantCell(cell.HostButton);
+            }
 
             //update cell's parameter
 
@@ -76,6 +89,7 @@ namespace CellularAutomata.Controller
             return timeString;
         }
 
+        //handle start button clicked
         private void OnStartButtonClicked(object sender, EventArgs e)
         {
             //if timer is going
@@ -93,6 +107,12 @@ namespace CellularAutomata.Controller
                 //update Start button text
                 mainWindow.UpdateStartButton("Stop", Color.Red);
             }
+        }
+
+        //handle ShowStatusBox menu item selected
+        private void OnShowStatusBoxMenuItemClicked(object sender, EventArgs e)
+        {
+            statusBox.Show();
         }
 
         //handle a button press
@@ -118,9 +138,8 @@ namespace CellularAutomata.Controller
                 //update the window
                 mainWindow.DrawTenantCell(pressedButton);
                 //update labels
-                mainWindow.UpdateNeighborLabelTitles("Button");
                 mainWindow.UpdatePopulationCountLabel(population.Count);
-                UpdateNeighborLabels(pressedButton);
+                UpdateStatusBoxNeighborLabels(pressedButton);
             }
             else if (pressedButton.Tenant == null)//if there is not already a cell there
             {
@@ -138,22 +157,19 @@ namespace CellularAutomata.Controller
                 //update window
                 mainWindow.DrawTenantCell(pressedButton);
                 //update labels
-                mainWindow.UpdateNeighborLabelTitles("Cell");
                 mainWindow.UpdatePopulationCountLabel(population.Count);
-                UpdateNeighborLabels(pressedButton);
-    
+                UpdateStatusBoxNeighborLabels(pressedButton);
+                
             }
             else if (pressedButton.Tenant != null)
             {
-                //update window labels
-                mainWindow.UpdateNeighborLabelTitles("Button");
-                UpdateNeighborLabels(pressedButton);
+                UpdateStatusBoxNeighborLabels(pressedButton);
             }
 
         }
         
         //update neighbor location label
-        public void UpdateNeighborLabels(MapButton pressedButton)
+        public void UpdateStatusBoxNeighborLabels(MapButton pressedButton)
         {
             //neighbor location label
             string locationsString = "";
@@ -162,14 +178,15 @@ namespace CellularAutomata.Controller
             if (pressedButton.Tenant != null)
             {
                 //neighbor count label
-                mainWindow.UpdateNeighborCountLabel(pressedButton.Tenant.Neighbors.Count);
+                statusBox.UpdateNeighborCountLabel(pressedButton.Tenant.Neighbors.Count);
                 
                 //could change this to linq, but this is easier for me to read, may change later for performance
                 foreach (KeyValuePair<int, Cell> neighborCell in pressedButton.Tenant.Neighbors)
                 {
                     locationsString += GetLocationsString(neighborCell.Key) + ", ";
                 }
-                mainWindow.UpdateNeighborLocationLabel(locationsString);
+                statusBox.UpdateNeighborLocationLabel(locationsString);
+                statusBox.UpdateNeighborLabelTitles("Cell");
             }
             else//if there is no Cell in the button
             {
@@ -179,11 +196,13 @@ namespace CellularAutomata.Controller
                     neighborCount++;
                     locationsString += GetLocationsString(neighborButton.Key) + ", ";
                 }
-                mainWindow.UpdateNeighborLocationLabel(locationsString);
-                mainWindow.UpdateNeighborCountLabel(neighborCount);
+                //update window labels
+                statusBox.UpdateNeighborLabelTitles("Button");
+                statusBox.UpdateNeighborLocationLabel(locationsString);
+                statusBox.UpdateNeighborCountLabel(neighborCount);
             }
             
-        }//end UpdateNeighborLabels
+        }//end UpdateStatusBoxNeighborLabels
 
         //get locations string
         public string GetLocationsString(int location)

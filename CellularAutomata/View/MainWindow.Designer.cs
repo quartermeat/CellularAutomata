@@ -28,13 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.mainPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.mapPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.controlPanel = new System.Windows.Forms.Panel();
-            this.neighborLocationLabel = new System.Windows.Forms.Label();
-            this.selectedCellNeighborLocationLabelTitle = new System.Windows.Forms.Label();
-            this.neighborCellCountLabel = new System.Windows.Forms.Label();
-            this.neighborCountLableTitle = new System.Windows.Forms.Label();
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.showStatusBoxMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timerLabel = new System.Windows.Forms.Label();
             this.timerLabelTitle = new System.Windows.Forms.Label();
             this.populationCountLabel = new System.Windows.Forms.Label();
@@ -42,6 +41,7 @@
             this.startButton = new System.Windows.Forms.Button();
             this.mainPanel.SuspendLayout();
             this.controlPanel.SuspendLayout();
+            this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainPanel
@@ -70,10 +70,7 @@
             this.controlPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.controlPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.controlPanel.Controls.Add(this.neighborLocationLabel);
-            this.controlPanel.Controls.Add(this.selectedCellNeighborLocationLabelTitle);
-            this.controlPanel.Controls.Add(this.neighborCellCountLabel);
-            this.controlPanel.Controls.Add(this.neighborCountLableTitle);
+            this.controlPanel.ContextMenuStrip = this.contextMenuStrip;
             this.controlPanel.Controls.Add(this.timerLabel);
             this.controlPanel.Controls.Add(this.timerLabelTitle);
             this.controlPanel.Controls.Add(this.populationCountLabel);
@@ -84,42 +81,20 @@
             this.controlPanel.Size = new System.Drawing.Size(468, 103);
             this.controlPanel.TabIndex = 2;
             // 
-            // neighborLocationLabel
+            // contextMenuStrip
             // 
-            this.neighborLocationLabel.AutoSize = true;
-            this.neighborLocationLabel.Location = new System.Drawing.Point(197, 62);
-            this.neighborLocationLabel.Name = "neighborLocationLabel";
-            this.neighborLocationLabel.Size = new System.Drawing.Size(31, 13);
-            this.neighborLocationLabel.TabIndex = 9;
-            this.neighborLocationLabel.Text = "none";
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.showStatusBoxMenuItem});
+            this.contextMenuStrip.Name = "contextMenuStrip";
+            this.contextMenuStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+            this.contextMenuStrip.Size = new System.Drawing.Size(161, 26);
             // 
-            // selectedCellNeighborLocationLabelTitle
+            // showStatusBoxMenuItem
             // 
-            this.selectedCellNeighborLocationLabelTitle.AutoSize = true;
-            this.selectedCellNeighborLocationLabelTitle.Location = new System.Drawing.Point(9, 62);
-            this.selectedCellNeighborLocationLabelTitle.Name = "selectedCellNeighborLocationLabelTitle";
-            this.selectedCellNeighborLocationLabelTitle.Size = new System.Drawing.Size(182, 13);
-            this.selectedCellNeighborLocationLabelTitle.TabIndex = 8;
-            this.selectedCellNeighborLocationLabelTitle.Text = "Selected Button\'s neighbor locations:";
-            // 
-            // neighborCellCountLabel
-            // 
-            this.neighborCellCountLabel.AutoSize = true;
-            this.neighborCellCountLabel.Location = new System.Drawing.Point(182, 45);
-            this.neighborCellCountLabel.Name = "neighborCellCountLabel";
-            this.neighborCellCountLabel.Size = new System.Drawing.Size(10, 17);
-            this.neighborCellCountLabel.TabIndex = 7;
-            this.neighborCellCountLabel.Text = "0";
-            this.neighborCellCountLabel.UseCompatibleTextRendering = true;
-            // 
-            // neighborCountLableTitle
-            // 
-            this.neighborCountLableTitle.AutoSize = true;
-            this.neighborCountLableTitle.Location = new System.Drawing.Point(9, 45);
-            this.neighborCountLableTitle.Name = "neighborCountLableTitle";
-            this.neighborCountLableTitle.Size = new System.Drawing.Size(167, 13);
-            this.neighborCountLableTitle.TabIndex = 6;
-            this.neighborCountLableTitle.Text = "Selected Button\'s neighbor count:";
+            this.showStatusBoxMenuItem.Name = "showStatusBoxMenuItem";
+            this.showStatusBoxMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.showStatusBoxMenuItem.Text = "Show Status Box";
+            this.showStatusBoxMenuItem.Click += new System.EventHandler(this.showStatusBoxMenuItem_Click);
             // 
             // timerLabel
             // 
@@ -181,6 +156,7 @@
             this.mainPanel.ResumeLayout(false);
             this.controlPanel.ResumeLayout(false);
             this.controlPanel.PerformLayout();
+            this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -196,10 +172,8 @@
         private System.Windows.Forms.Label populationCountLabelTitle;
         private System.Windows.Forms.Label timerLabel;
         private System.Windows.Forms.Label timerLabelTitle;
-        private System.Windows.Forms.Label neighborCellCountLabel;
-        private System.Windows.Forms.Label neighborCountLableTitle;
-        private System.Windows.Forms.Label neighborLocationLabel;
-        private System.Windows.Forms.Label selectedCellNeighborLocationLabelTitle;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem showStatusBoxMenuItem;
     }
 }
 
