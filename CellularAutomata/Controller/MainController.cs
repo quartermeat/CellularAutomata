@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using CellularAutomata.Controller.Helpers;
 using CellularAutomata.Model;
+using CellularAutomata.Model.CellTypes;
 using CellularAutomata.View;
 
 namespace CellularAutomata.Controller
@@ -29,7 +30,7 @@ namespace CellularAutomata.Controller
 
             //intialize model
             map = new Map();
-            population = new List<Cell>();
+            population = new Population();
 
             //setup timer
             timer = new Timer();
@@ -40,6 +41,8 @@ namespace CellularAutomata.Controller
             //initialize view
             mainWindow = new MainWindow();
             mainWindow.SetupMap();
+            //setup combo box
+            PopulateCellTypesComboBox();
 
             //set up event handling
             mainWindow.MapButtonPressed += OnMapButtonClicked;
@@ -58,12 +61,20 @@ namespace CellularAutomata.Controller
 
             //main game logic has to happen here
             //do cell tick stuff
-            foreach (Cell cell in population)
+            foreach (var cell in population)
             {
                 //keep track of old host to draw it vacant
                 MapButton oldHost = cell.HostButton;
                 //move the cell
-                cell.MoveToRandomVacantMapButton();
+                if (cell.CellType == CellType.Original)
+                {
+                    cell.MoveToRandomVacantMapButton();
+                }
+                else if (cell.CellType == CellType.Zombie)
+                {
+                    ZombieCell zombieCell = new ZombieCell(cell);
+                    zombieCell.GoGetBrains();
+                }
                 //clear the old host button
                 mainWindow.DrawTenantCell(oldHost);
                 //draw new host
@@ -261,6 +272,19 @@ namespace CellularAutomata.Controller
         public void UpdateStatusBoxAgilityLabel(int agility)
         {
             statusBox.UpdateAgilityLabel(agility);
+        }
+
+        //populate cell type strings into cell type combo box
+        public void PopulateCellTypesComboBox()
+        {
+            //populate cell type combobox
+            List<string> cellTypeStrings = new List<string>();
+            foreach (CellType cellType in EnumUtil.GetValues<CellType>())
+            {
+                cellTypeStrings.Add(cellType.ToString());
+            }
+
+            mainWindow.PopulateCellTypeComboBox(cellTypeStrings);
         }
        
     }

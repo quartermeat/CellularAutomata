@@ -10,6 +10,12 @@ using System.Windows.Forms;
 
 namespace CellularAutomata.Model
 {
+    public enum CellType
+    {
+        Original,
+        Zombie
+    }
+
     //an automata unit that behaves according to state and behavior
     public class Cell : IComparable<Cell>
     {
@@ -27,16 +33,21 @@ namespace CellularAutomata.Model
         public Point Location;
         public MapButton HostButton;
         public Dictionary<int, Cell> Neighbors;
+        public CellType CellType { get; set; }
+
         public int Agility { get; set; }
         //public List<Cell> NeighborCells;
 
         //constructor: setup defaults
         public Cell(Point newLocation, MapButton newHost)
         {
+            CellType = CellType.Original;
+
+            //random num generator
             Random random = new Random(Guid.NewGuid().GetHashCode());
 
+            //random Agility between 1 and 3
             Agility = random.Next(1, 4);
-            
             //initialize neighbors
             Neighbors = new Dictionary<int, Cell>();
             //setup its host
@@ -62,15 +73,14 @@ namespace CellularAutomata.Model
                 throw new ArgumentException("Object is not a Cell");
             }
         }
-        
+
         //this is where the magic happens baby!
         public void MoveToRandomVacantMapButton()
         {
-            //random generator
-            Random random = new Random(Guid.NewGuid().GetHashCode());
             //get empty neighbor hosts
             List<MapButton> vacantNeighborHosts = GetVacantNeighborHosts();
             //get random index
+            Random random = new Random(Guid.NewGuid().GetHashCode());
             int randomIndex = random.Next(0, vacantNeighborHosts.Count);
             //remove self from current Host
             HostButton.Tenant = null;
@@ -81,7 +91,7 @@ namespace CellularAutomata.Model
         }
 
         //cell knows where it's parameter is
-        public void SetParameter(int distance)
+        protected void SetParameter(int distance)
         {
             // Get North as a point and add it to the list
             Point north = Point.Add(Location, new Size(0, distance));
@@ -127,9 +137,9 @@ namespace CellularAutomata.Model
         }
 
         //get an array of empty buttons neighboring this cell
-        private List<MapButton> GetVacantNeighborHosts()
+        protected List<MapButton> GetVacantNeighborHosts()
         {
-             List<MapButton> vacantNeighborHosts = new List<MapButton>();
+            List<MapButton> vacantNeighborHosts = new List<MapButton>();
 
             foreach (
                 KeyValuePair<int, MapButton> neighborHost in
@@ -141,6 +151,25 @@ namespace CellularAutomata.Model
             return vacantNeighborHosts;
         }
 
+        //get an array of occupied buttons neighboring this cell
+        protected List<MapButton> GetOccupiedNeighborHosts()
+        {
+            List<MapButton> occupiedNeighborHosts = new List<MapButton>();
 
+            foreach (
+                KeyValuePair<int, MapButton> neighborHost in
+                    HostButton.Neighbors.Where(neighborHost => neighborHost.Value.Tenant != null))
+            {
+                occupiedNeighborHosts.Add(neighborHost.Value);
+            }
+
+            return occupiedNeighborHosts;
+        }
+
+        //to string override
+        public override string ToString()
+        {
+            return "Original";
+        }
     }
 }

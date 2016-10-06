@@ -34,6 +34,8 @@
             this.controlPanel = new System.Windows.Forms.Panel();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showStatusBoxMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cellTypeComboBox = new System.Windows.Forms.ComboBox();
+            this.cellTypeComboBoxTitle = new System.Windows.Forms.Label();
             this.timerLabel = new System.Windows.Forms.Label();
             this.timerLabelTitle = new System.Windows.Forms.Label();
             this.populationCountLabel = new System.Windows.Forms.Label();
@@ -71,6 +73,8 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.controlPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.controlPanel.ContextMenuStrip = this.contextMenuStrip;
+            this.controlPanel.Controls.Add(this.cellTypeComboBox);
+            this.controlPanel.Controls.Add(this.cellTypeComboBoxTitle);
             this.controlPanel.Controls.Add(this.timerLabel);
             this.controlPanel.Controls.Add(this.timerLabelTitle);
             this.controlPanel.Controls.Add(this.populationCountLabel);
@@ -95,6 +99,23 @@
             this.showStatusBoxMenuItem.Size = new System.Drawing.Size(160, 22);
             this.showStatusBoxMenuItem.Text = "Show Status Box";
             this.showStatusBoxMenuItem.Click += new System.EventHandler(this.showStatusBoxMenuItem_Click);
+            // 
+            // cellTypeComboBox
+            // 
+            this.cellTypeComboBox.FormattingEnabled = true;
+            this.cellTypeComboBox.Location = new System.Drawing.Point(216, 9);
+            this.cellTypeComboBox.Name = "cellTypeComboBox";
+            this.cellTypeComboBox.Size = new System.Drawing.Size(121, 21);
+            this.cellTypeComboBox.TabIndex = 7;
+            // 
+            // cellTypeComboBoxTitle
+            // 
+            this.cellTypeComboBoxTitle.AutoSize = true;
+            this.cellTypeComboBoxTitle.Location = new System.Drawing.Point(156, 12);
+            this.cellTypeComboBoxTitle.Name = "cellTypeComboBoxTitle";
+            this.cellTypeComboBoxTitle.Size = new System.Drawing.Size(54, 13);
+            this.cellTypeComboBoxTitle.TabIndex = 6;
+            this.cellTypeComboBoxTitle.Text = "Cell Type:";
             // 
             // timerLabel
             // 
@@ -174,6 +195,8 @@
         private System.Windows.Forms.Label timerLabelTitle;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem showStatusBoxMenuItem;
+        private System.Windows.Forms.ComboBox cellTypeComboBox;
+        private System.Windows.Forms.Label cellTypeComboBoxTitle;
     }
 }
 

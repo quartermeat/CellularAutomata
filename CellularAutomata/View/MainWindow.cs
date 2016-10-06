@@ -105,5 +105,11 @@ namespace CellularAutomata.View
         {
             if (ShowStatusBoxMenuItemClicked != null) ShowStatusBoxMenuItemClicked(sender, e);
         }
+
+        //populate combo box with cell types
+        public void PopulateCellTypeComboBox(List<string> cellTypeList)
+        {
+            cellTypeComboBox.DataSource = cellTypeList;
+        }
     }
 }
