@@ -2,22 +2,12 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using CellularAutomata.Controller.Helpers;
 
 namespace CellularAutomata.Model
 {
-    public enum CellType
-    {
-        Original,
-        Zombie
-    }
-
     //an automata unit that behaves according to state and behavior
-    public class Cell : IComparable<Cell>
+    public class Cell : ICell
     {
         private const int N = 0;
         private const int NE = 1;
@@ -28,68 +18,37 @@ namespace CellularAutomata.Model
         private const int W = 6;
         private const int NW = 7;
 
-        public Dictionary<int, Point> Parameter;
-        public Color CellColor;
-        public Point Location;
-        public MapButton HostButton;
-        public Dictionary<int, Cell> Neighbors;
-        public CellType CellType { get; set; }
-
-        public int Agility { get; set; }
-        //public List<Cell> NeighborCells;
-
+        private Dictionary<int, Point> _parameter;
+        private Color _cellColor;
+        private Point _location;
+        private MapButton _hostButton;
+        private MapButton _lastHostButton;
+        private Dictionary<int, ICell> _neighbors;
+        private int _agility;
+        
         //constructor: setup defaults
-        public Cell(Point newLocation, MapButton newHost)
+        public Cell(MapButton newHost)
         {
-            CellType = CellType.Original;
-
             //random num generator
             Random random = new Random(Guid.NewGuid().GetHashCode());
 
             //random Agility between 1 and 3
-            Agility = random.Next(1, 4);
+            _agility = random.Next(1, 4);
             //initialize neighbors
-            Neighbors = new Dictionary<int, Cell>();
-            //setup its host
-            HostButton = newHost;
+            _neighbors = new Dictionary<int, ICell>();
+            //setup its hosts
+            _hostButton = newHost;
+            _lastHostButton = new MapButton(newHost.MapLocation);
             //setup defaults here
-            CellColor = Color.Blue;
-            Location = newLocation;
+            _cellColor = Color.Blue;
+            //set location based on the host button
+            _location = newHost.MapLocation;
             //setup parameter
-            Parameter = new Dictionary<int, Point>();
+            _parameter = new Dictionary<int, Point>();
             SetParameter(1);
-            //get neighbors in parameter
-            UpdateNeighbors();
+            
         }
-
-        public int CompareTo(Cell otherCell)
-        {
-            if (otherCell != null)
-            {
-                return Agility.CompareTo(otherCell.Agility);
-            }
-            else
-            {
-                throw new ArgumentException("Object is not a Cell");
-            }
-        }
-
-        //this is where the magic happens baby!
-        public void MoveToRandomVacantMapButton()
-        {
-            //get empty neighbor hosts
-            List<MapButton> vacantNeighborHosts = GetVacantNeighborHosts();
-            //get random index
-            Random random = new Random(Guid.NewGuid().GetHashCode());
-            int randomIndex = random.Next(0, vacantNeighborHosts.Count);
-            //remove self from current Host
-            HostButton.Tenant = null;
-            //place this self into new host
-            vacantNeighborHosts[randomIndex].Tenant = this;
-            //update HostButton to the new spot
-            HostButton = vacantNeighborHosts[randomIndex];
-        }
-
+        
         //cell knows where it's parameter is
         protected void SetParameter(int distance)
         {
@@ -118,58 +77,75 @@ namespace CellularAutomata.Model
             Point northWest = Point.Add(Location, new Size(-distance, distance));
             Parameter.Add(NW, northWest);
         }
+        
+        #region interface
 
-        //update neighbors
-        public void UpdateNeighbors()
+        public CellType CellType
         {
-            //get neighbor buttons and if they have an occupant, set them as a neighbor
-            foreach (KeyValuePair<int, MapButton> neighborHost in HostButton.Neighbors.Where(neighborHost => neighborHost.Value.Tenant != null).Where(neighborHost => !Neighbors.ContainsKey(neighborHost.Key)))
-            {
-                //add this cell as a neighbor
-                Neighbors.Add(neighborHost.Key, neighborHost.Value.Tenant);
-            }
-            foreach (
-                KeyValuePair<int, MapButton> neighborHost in
-                    HostButton.Neighbors.Where(neighborHost => neighborHost.Value.Tenant == null))
-            {
-                Neighbors.Remove(neighborHost.Key);
-            }
+            get { return CellType.Original; }
         }
 
-        //get an array of empty buttons neighboring this cell
-        protected List<MapButton> GetVacantNeighborHosts()
+        public Dictionary<int, Point> Parameter
         {
-            List<MapButton> vacantNeighborHosts = new List<MapButton>();
-
-            foreach (
-                KeyValuePair<int, MapButton> neighborHost in
-                    HostButton.Neighbors.Where(neighborHost => neighborHost.Value.Tenant == null))
-            {
-                vacantNeighborHosts.Add(neighborHost.Value);
-            }
-
-            return vacantNeighborHosts;
+            get { return _parameter; }
+            set { _parameter = Parameter; }
         }
 
-        //get an array of occupied buttons neighboring this cell
-        protected List<MapButton> GetOccupiedNeighborHosts()
+        public Color CellColor
         {
-            List<MapButton> occupiedNeighborHosts = new List<MapButton>();
-
-            foreach (
-                KeyValuePair<int, MapButton> neighborHost in
-                    HostButton.Neighbors.Where(neighborHost => neighborHost.Value.Tenant != null))
-            {
-                occupiedNeighborHosts.Add(neighborHost.Value);
-            }
-
-            return occupiedNeighborHosts;
+            get { return _cellColor; }
+            set { _cellColor = CellColor; }
         }
 
-        //to string override
+        public Point Location
+        {
+            get { return _location; }
+            set { _location = Location; }
+        }
+
+        public MapButton HostButton
+        {
+            get { return _hostButton; }
+            set { _hostButton = HostButton; }
+        }
+
+        public MapButton LastHostButton
+        {
+            get { return _lastHostButton; }
+            set { _lastHostButton = LastHostButton; }
+        }
+
+        public Dictionary<int, ICell> Neighbors
+        {
+            get { return _neighbors; }
+            set { _neighbors = Neighbors; }
+        }
+
+        public int Agility
+        {
+            get { return _agility; }
+            set { _agility = Agility; }
+        }
+        
+        //methods//////////////////////////////////
         public override string ToString()
         {
             return "Original";
         }
+
+        //to keep cells sorted
+        public int CompareTo(ICell otherCell)
+        {
+            if (otherCell != null)
+            {
+                return Agility.CompareTo(otherCell.Agility);
+            }
+            else
+            {
+                throw new ArgumentException("Object is not a Cell");
+            }
+        }
+        
+        #endregion
     }
 }

@@ -1,55 +1,65 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Runtime.CompilerServices;
+using CellularAutomata.Controller.Helpers;
 
 namespace CellularAutomata.Model.CellTypes
 {
-    class ZombieCell : Cell
+    class ZombieCell : Cell, ICell
     {
-
-        public ZombieCell(Point newLocation, MapButton newHost) : base(newLocation, newHost)
+        public ZombieCell(MapButton newHost) : base(newHost)
         {
-            //initialize new stuff
-            CellType = CellType.Zombie;
-            Agility = 0;
+            CellColor = Color.Green;
+            //Agility = 0;
         }
 
-        public ZombieCell(Cell theUnfortunate) : base(theUnfortunate.Location, theUnfortunate.HostButton)
+        public ZombieCell(ICell theUnfortunate) : base(theUnfortunate.HostButton)
         {
-            //do turning stuff here
-            theUnfortunate = this;
-            
-            CellType = CellType.Zombie;
-            Agility = 0;
+            CellColor = Color.Green;
         }
 
-        public void GoGetBrains()
+        public void GoGetBrains(Map map)
         {
-            //get empty neighbor hosts
-            List<MapButton> occupiedNeighborHosts = GetOccupiedNeighborHosts();
-            
+            List<ICell> zombieCells = new List<ICell>();
+            List<ICell> originalCells = new List<ICell>();
+
+            foreach (MapButton host in map.GetOccupiedNeighborHosts(this))
+            {
+                if (host.Tenant.CellType == CellType.Zombie)
+                {
+                    zombieCells.Add(host.Tenant);
+                }
+                else if (host.Tenant.CellType == CellType.Original)
+                {
+                    originalCells.Add(host.Tenant);
+                }
+            }
+
             //if there are no neighbors
-            if (occupiedNeighborHosts.Count == 0)
+            if (originalCells.Count == 0)
             {
                 //move
-                MoveToRandomVacantMapButton();
+                map.MoveToRandomVacantMapButton(this);
             }
             else
             {
                 //get random index
                 Random random = new Random(Guid.NewGuid().GetHashCode());
-                int randomIndex = random.Next(0, occupiedNeighborHosts.Count);
+                int randomIndex = random.Next(0, originalCells.Count);
 
-                //turn neighbor into zombie
-                occupiedNeighborHosts[randomIndex].Tenant = new ZombieCell(occupiedNeighborHosts[randomIndex].Tenant);
+                //turn cell into zombie cell here
+               
             }
-            
-            
         }
 
-        public override string ToString()
+        #region interface
+
+
+        public new CellType CellType
         {
-            return "Zombie";
+            get { return CellType.Zombie; }
         }
+        #endregion
     }
 }

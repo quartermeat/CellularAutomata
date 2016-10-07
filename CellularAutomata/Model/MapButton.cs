@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using CellularAutomata.Controller.Helpers;
 
 namespace CellularAutomata.Model
 {
@@ -22,15 +19,15 @@ namespace CellularAutomata.Model
 
         public Point MapLocation { get; set; }
 
-        public Cell Tenant { get; set; }
+        public ICell Tenant { get; set; }
 
         public Dictionary<int, MapButton> Neighbors { get; private set; }
 
         public Dictionary<int, Point> Parameter { get; private set; }
-
-        public MapButton(Cell tenant, Point mapLocation) : base()
+        
+        
+        public MapButton(Point mapLocation) : base()
         {
-            Tenant = tenant;
             MapLocation = mapLocation;
             //setup neighbors
             Neighbors = new Dictionary<int, MapButton>();
@@ -82,7 +79,5 @@ namespace CellularAutomata.Model
                 
             }
         }
-
-
     }
 }

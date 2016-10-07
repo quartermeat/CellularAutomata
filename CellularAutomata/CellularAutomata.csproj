@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controller\Helpers\EnumUtil.cs" />
+    <Compile Include="Controller\Helpers\ICell.cs" />
     <Compile Include="Controller\Helpers\ListExt.cs" />
     <Compile Include="Controller\MainController.cs" />
     <Compile Include="Model\Cell.cs" />

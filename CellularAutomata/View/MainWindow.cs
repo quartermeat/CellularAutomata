@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using CellularAutomata.Controller.Helpers;
 using CellularAutomata.Model;
 
 namespace CellularAutomata.View
@@ -62,25 +63,22 @@ namespace CellularAutomata.View
         }
 
         //draw population as it is
-        public void DrawPopulation(List<Cell> population, Map map)
+        public void DrawMap(Map map)
         {
-            foreach (MapButton currentButton in Map.ButtonMap)
+            foreach (var currentCell in map.Population)
             {
-                currentButton.BackColor = currentButton.Tenant == null ? DefaultBackColor : currentButton.Tenant.CellColor;
+                //clear the old host button
+                DrawTenantCell(currentCell.LastHostButton);
+                //draw new host
+                DrawTenantCell(currentCell.HostButton);
             }
         }
 
         //update a single button
         public void DrawTenantCell(MapButton currentButton)
         {
-            if (currentButton.Tenant == null)
-            {
-                currentButton.BackColor = DefaultBackColor;
-            }
-            else
-            {
-                currentButton.BackColor = currentButton.Tenant.CellColor;
-            }
+            if (currentButton == null) return;
+            currentButton.BackColor = currentButton.Tenant == null ? DefaultBackColor : currentButton.Tenant.CellColor;
         }
 
         //handle button presses
@@ -110,6 +108,24 @@ namespace CellularAutomata.View
         public void PopulateCellTypeComboBox(List<string> cellTypeList)
         {
             cellTypeComboBox.DataSource = cellTypeList;
+        }
+
+        //get CellTypeComboBox selection
+        public CellType GetCellTypeComboxSelection()
+        {
+            switch (cellTypeComboBox.SelectedItem.ToString())
+            {
+                case "Original":
+                {
+                    return CellType.Original;
+                }
+                case "Zombie":
+                {
+                    return CellType.Zombie;
+                }
+            }
+
+            return CellType.Original;
         }
     }
 }

@@ -15,12 +15,12 @@ namespace CellularAutomata.Controller.Helpers
                 @this.Add(item);
                 return;
             }
-            if (@this[@this.Count - 1].CompareTo(item) <= 0)
+            if (@this[@this.Count - 1].CompareTo(item) >= 0)
             {
                 @this.Add(item);
                 return;
             }
-            if (@this[0].CompareTo(item) >= 0)
+            if (@this[0].CompareTo(item) <= 0)
             {
                 @this.Insert(0, item);
                 return;

@@ -18,7 +18,6 @@ namespace CellularAutomata.Controller
         //declare model stuff here
         private MainWindow mainWindow;
         private StatusBox statusBox = new StatusBox();
-        private List<Cell> population;
 
         //simulation timer
         private readonly Timer timer;
@@ -28,9 +27,8 @@ namespace CellularAutomata.Controller
         {
             //right now model initalization needs to be done before the view, because the view uses the model
 
-            //intialize model
-            map = new Map();
-            population = new Population();
+            //intialize model *this is setup this way so we can eventually load saved populations
+            map = new Map(new Population());
 
             //setup timer
             timer = new Timer();
@@ -61,30 +59,9 @@ namespace CellularAutomata.Controller
 
             //main game logic has to happen here
             //do cell tick stuff
-            foreach (var cell in population)
-            {
-                //keep track of old host to draw it vacant
-                MapButton oldHost = cell.HostButton;
-                //move the cell
-                if (cell.CellType == CellType.Original)
-                {
-                    cell.MoveToRandomVacantMapButton();
-                }
-                else if (cell.CellType == CellType.Zombie)
-                {
-                    ZombieCell zombieCell = new ZombieCell(cell);
-                    zombieCell.GoGetBrains();
-                }
-                //clear the old host button
-                mainWindow.DrawTenantCell(oldHost);
-                //draw new host
-                mainWindow.DrawTenantCell(cell.HostButton);
-            }
-
-            //update cell's parameter
-
-            //draw board again
-
+            map.UpdateMap();
+            //draw board
+            mainWindow.DrawMap(map);
         }
 
         //format time
@@ -131,51 +108,58 @@ namespace CellularAutomata.Controller
         {
             MouseEventArgs mouseEventArgs = e as MouseEventArgs;
 
-            var pressedButton = (MapButton)sender;
-
+            MapButton mapButton =(MapButton)sender;
+            
             //get the current button that was clicked
 
             if (mouseEventArgs != null && mouseEventArgs.Button == MouseButtons.Right)
             {
                 //take cell out of population
-                population.Remove(pressedButton.Tenant);
-                //take cell off of space - update window
-                pressedButton.Tenant = null;
+                map.RemoveCell(mapButton.Tenant);
                 //update neighbors
-                foreach (Cell cell in population)
+                foreach (var cell in map.Population)
                 {
-                    cell.UpdateNeighbors();
+                    map.UpdateNeighbors(cell);
                 }
-                //update the window
-                mainWindow.DrawTenantCell(pressedButton);
                 //update labels
-                mainWindow.UpdatePopulationCountLabel(population.Count);
-                UpdateStatusBoxNeighborLabels(pressedButton);
+                mainWindow.UpdatePopulationCountLabel(map.Population.Count);
+                UpdateStatusBoxNeighborLabels(mapButton);
             }
-            else if (pressedButton.Tenant == null)//if there is not already a cell there
+            else if (mapButton.Tenant == null)//if there is not already a cell there
             {
-                //make a new cell at location with the pressed button as host
-                Cell newCell = new Cell(pressedButton.Location, pressedButton);
-                //add a new cell to the population
-                population.AddSorted(newCell);
-                //add the cell to the button
-                pressedButton.Tenant = newCell;
-                //update neighbors
-                foreach (Cell cell in population)
+                CellType cellType = mainWindow.GetCellTypeComboxSelection();
+                ICell newCell = null;
+                
+                if (cellType == CellType.Original)
                 {
-                    cell.UpdateNeighbors();
+                    //make a new cell at location with the pressed button as host
+                    newCell = new Cell(mapButton);
                 }
-                //update window
-                mainWindow.DrawTenantCell(pressedButton);
+                else if (cellType == CellType.Zombie)
+                {
+                    newCell = new ZombieCell(mapButton);
+                }
+                
+                //add a new cell to the population
+                map.AddCell(newCell);
+                
+                //update neighbors
+                foreach (var cell in map.Population)
+                {
+                    map.UpdateNeighbors(cell);
+                }
                 //update labels
-                mainWindow.UpdatePopulationCountLabel(population.Count);
-                UpdateStatusBoxNeighborLabels(pressedButton);
+                mainWindow.UpdatePopulationCountLabel(map.Population.Count);
+                UpdateStatusBoxNeighborLabels(mapButton);
                 
             }
-            else if (pressedButton.Tenant != null)
+            else if (mapButton.Tenant != null)
             {
-                UpdateStatusBoxNeighborLabels(pressedButton);
+                UpdateStatusBoxNeighborLabels(mapButton);
             }
+
+            //update window
+            mainWindow.DrawMap(map);
 
         }
 
@@ -192,7 +176,7 @@ namespace CellularAutomata.Controller
                 statusBox.UpdateNeighborCountLabel(pressedButton.Tenant.Neighbors.Count);
                 
                 //could change this to linq, but this is easier for me to read, may change later for performance
-                foreach (KeyValuePair<int, Cell> neighborCell in pressedButton.Tenant.Neighbors)
+                foreach (KeyValuePair<int, ICell> neighborCell in pressedButton.Tenant.Neighbors)
                 {
                     locationsString += GetLocationsString(neighborCell.Key) + ", ";
                 }
