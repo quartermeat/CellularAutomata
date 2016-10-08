@@ -20,10 +20,7 @@ namespace CellularAutomata.Model
         public static Color MapColor;
         //color of selected cell
         public static Color BorderColor;
-
-        //map button selected, maybe I'll use this later
-        //public MapButton SelectedButton;
-
+        
         //population loaded to the map
         public Population Population { get; private set; }
         //map

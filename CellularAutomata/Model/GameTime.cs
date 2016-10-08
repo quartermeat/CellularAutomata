@@ -22,28 +22,6 @@ namespace CellularAutomata.Model
             _days = 0;
             _years = 0;
         }
-
-        //calculate time
-        public int ChangeTimeBasedOnTimeCounter(int timerCounter)
-        {
-            //get hours from timerCounter
-            _hours = timerCounter % _ticksInHour;
-            //if hours gets to 24
-            if (_hours == 24)
-            {
-                //reset timer counter
-                timerCounter = 0;
-                //increment days
-                _days++;
-                //if days gets to 365
-                if (_days == 365)
-                {
-                    //increment years
-                    _years++;
-                    //reset days
-                    _days = 0;
-                }
-            }
-        }
+        
     }
 }

@@ -8,11 +8,12 @@ namespace CellularAutomata.Model
     {
         public int ZombieCount;
         public int OriginalCount;
-
+        
         public Population()
             : base()
         {
             //initialize population here
+            
         }
 
         //the magic logic////////////////////////////////////////
@@ -47,7 +48,7 @@ namespace CellularAutomata.Model
             Sort();
         }
         //////////////////////////////////////////////////////////
-
+        
         //remove cell from population
         public void RemoveCell(ICell cellToRemove)
         {
