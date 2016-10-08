@@ -21,7 +21,7 @@ namespace CellularAutomata.Controller
         //simulation timer
         private readonly Timer _timer;
         private int _timerCounter;
-        private int _ticksInHour;
+        private readonly int _ticksInHour;
         private int _hours;
         private int _days;
         private int _years;
