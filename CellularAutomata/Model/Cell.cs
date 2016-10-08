@@ -8,6 +8,7 @@ namespace CellularAutomata.Model
     //the basic automata unit
     public class Cell : ICell
     {
+        //directions/////////////
         private const int N = 0;
         private const int NE = 1;
         private const int E = 2;
@@ -16,18 +17,24 @@ namespace CellularAutomata.Model
         private const int SW = 5;
         private const int W = 6;
         private const int NW = 7;
+        
+        //fields
         private Dictionary<int, Point> _parameter;
         protected Color _cellColor;
         private Point _location;
         private MapButton _hostButton;
-        private MapButton _lastHostButton;
         private Dictionary<int, ICell> _neighbors;
         protected int _agility;
         private int _originalAgility;
+        private CellState _cellState;
+        private bool _zombieBite;
+        
         
         //constructor: setup defaults
         public Cell(MapButton newHost)
         {
+            //make cell alive
+            _cellState = CellState.Alive;
             //random num generator
             Random random = new Random(Guid.NewGuid().GetHashCode());
             //random Agility between 1 and 3
@@ -46,7 +53,6 @@ namespace CellularAutomata.Model
             _parameter = new Dictionary<int, Point>();
             //set parameter as all spaces within a distance of 1 space away
             SetParameter(1);
-            
         }
         
         //cell knows where it's parameter is
@@ -80,9 +86,29 @@ namespace CellularAutomata.Model
         
         #region interface
 
+        public bool ZombieBite
+        {
+            get { return _zombieBite;}
+            set
+            {
+                _zombieBite = value;
+                _zombieBite = ZombieBite;
+            }
+        }
+
         public CellType CellType
         {
             get { return CellType.Original; }
+        }
+
+        public CellState CellState
+        {
+            get { return CellState; }
+            set
+            {
+                _cellState = value;
+                _cellState = CellState;
+            }
         }
 
         public Dictionary<int, Point> Parameter
@@ -124,17 +150,7 @@ namespace CellularAutomata.Model
                 _hostButton = HostButton;
             }
         }
-
-        public MapButton LastHostButton
-        {
-            get { return _lastHostButton; }
-            set
-            {
-                _lastHostButton = value;
-                _lastHostButton = LastHostButton;
-            }
-        }
-
+        
         public Dictionary<int, ICell> Neighbors
         {
             get { return _neighbors; }

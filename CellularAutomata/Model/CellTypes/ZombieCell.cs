@@ -14,6 +14,8 @@ namespace CellularAutomata.Model.CellTypes
             _cellColor = Color.Green;
             //zombies are slow
             _agility = 1;
+            //zombie's are always zombieBit
+
         }
 
         public ZombieCell(ICell theUnfortunate) : base(theUnfortunate.HostButton)
@@ -53,9 +55,9 @@ namespace CellularAutomata.Model.CellTypes
                 Random random = new Random(Guid.NewGuid().GetHashCode());
                 int randomIndex = random.Next(0, originalCells.Count);
 
-                //eat unfortunate neighbor 
+                //bite unfortunate neighbor 
+                originalCells[randomIndex].ZombieBite = true;
 
-                
             }
         }
 
