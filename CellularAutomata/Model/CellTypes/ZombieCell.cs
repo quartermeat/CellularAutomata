@@ -14,6 +14,7 @@ namespace CellularAutomata.Model.CellTypes
             //zombies are slow
             _agility = 1;
             //zombie's are always zombieBit
+            _zombieBite = true;
 
         }
 
@@ -56,13 +57,11 @@ namespace CellularAutomata.Model.CellTypes
 
                 //bite unfortunate neighbor 
                 originalCells[randomIndex].ZombieBite = true;
-
             }
         }
 
         #region interface
-
-
+        
         public new CellType CellType
         {
             get { return CellType.Zombie; }

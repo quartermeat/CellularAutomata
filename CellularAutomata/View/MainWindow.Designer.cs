@@ -34,18 +34,21 @@
             this.controlPanel = new System.Windows.Forms.Panel();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showStatusBoxMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.zombiePopulationCountLabel = new System.Windows.Forms.Label();
+            this.zombiePopulationLabelTitle = new System.Windows.Forms.Label();
             this.cellTypeComboBox = new System.Windows.Forms.ComboBox();
             this.cellTypeComboBoxTitle = new System.Windows.Forms.Label();
-            this.timerLabel = new System.Windows.Forms.Label();
-            this.timerLabelTitle = new System.Windows.Forms.Label();
+            this.timerHourLabel = new System.Windows.Forms.Label();
             this.originalPopulationCountLabel = new System.Windows.Forms.Label();
             this.originalPopulationCountLabelTitle = new System.Windows.Forms.Label();
             this.startButton = new System.Windows.Forms.Button();
-            this.zombiePopulationLabelTitle = new System.Windows.Forms.Label();
-            this.zombiePopulationCountLabel = new System.Windows.Forms.Label();
+            this.timerTrackBar = new System.Windows.Forms.TrackBar();
+            this.timerTrackBarTitle = new System.Windows.Forms.Label();
+            this.speedLabel = new System.Windows.Forms.Label();
             this.mainPanel.SuspendLayout();
             this.controlPanel.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.timerTrackBar)).BeginInit();
             this.SuspendLayout();
             // 
             // mainPanel
@@ -75,12 +78,14 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.controlPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.controlPanel.ContextMenuStrip = this.contextMenuStrip;
+            this.controlPanel.Controls.Add(this.speedLabel);
+            this.controlPanel.Controls.Add(this.timerTrackBarTitle);
+            this.controlPanel.Controls.Add(this.timerTrackBar);
             this.controlPanel.Controls.Add(this.zombiePopulationCountLabel);
             this.controlPanel.Controls.Add(this.zombiePopulationLabelTitle);
             this.controlPanel.Controls.Add(this.cellTypeComboBox);
             this.controlPanel.Controls.Add(this.cellTypeComboBoxTitle);
-            this.controlPanel.Controls.Add(this.timerLabel);
-            this.controlPanel.Controls.Add(this.timerLabelTitle);
+            this.controlPanel.Controls.Add(this.timerHourLabel);
             this.controlPanel.Controls.Add(this.originalPopulationCountLabel);
             this.controlPanel.Controls.Add(this.originalPopulationCountLabelTitle);
             this.controlPanel.Controls.Add(this.startButton);
@@ -104,44 +109,52 @@
             this.showStatusBoxMenuItem.Text = "Show Status Box";
             this.showStatusBoxMenuItem.Click += new System.EventHandler(this.showStatusBoxMenuItem_Click);
             // 
+            // zombiePopulationCountLabel
+            // 
+            this.zombiePopulationCountLabel.AutoSize = true;
+            this.zombiePopulationCountLabel.Location = new System.Drawing.Point(138, 16);
+            this.zombiePopulationCountLabel.Name = "zombiePopulationCountLabel";
+            this.zombiePopulationCountLabel.Size = new System.Drawing.Size(13, 13);
+            this.zombiePopulationCountLabel.TabIndex = 9;
+            this.zombiePopulationCountLabel.Text = "0";
+            // 
+            // zombiePopulationLabelTitle
+            // 
+            this.zombiePopulationLabelTitle.AutoSize = true;
+            this.zombiePopulationLabelTitle.Location = new System.Drawing.Point(3, 16);
+            this.zombiePopulationLabelTitle.Name = "zombiePopulationLabelTitle";
+            this.zombiePopulationLabelTitle.Size = new System.Drawing.Size(129, 13);
+            this.zombiePopulationLabelTitle.TabIndex = 8;
+            this.zombiePopulationLabelTitle.Text = "Zombie Population Count:";
+            // 
             // cellTypeComboBox
             // 
-            this.cellTypeComboBox.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.cellTypeComboBox.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.cellTypeComboBox.FormattingEnabled = true;
-            this.cellTypeComboBox.Location = new System.Drawing.Point(284, 77);
+            this.cellTypeComboBox.Location = new System.Drawing.Point(63, 42);
             this.cellTypeComboBox.Name = "cellTypeComboBox";
             this.cellTypeComboBox.Size = new System.Drawing.Size(84, 21);
             this.cellTypeComboBox.TabIndex = 7;
             // 
             // cellTypeComboBoxTitle
             // 
-            this.cellTypeComboBoxTitle.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.cellTypeComboBoxTitle.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.cellTypeComboBoxTitle.AutoSize = true;
-            this.cellTypeComboBoxTitle.Location = new System.Drawing.Point(224, 80);
+            this.cellTypeComboBoxTitle.Location = new System.Drawing.Point(3, 45);
             this.cellTypeComboBoxTitle.Name = "cellTypeComboBoxTitle";
             this.cellTypeComboBoxTitle.Size = new System.Drawing.Size(54, 13);
             this.cellTypeComboBoxTitle.TabIndex = 6;
             this.cellTypeComboBoxTitle.Text = "Cell Type:";
             // 
-            // timerLabel
+            // timerHourLabel
             // 
-            this.timerLabel.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.timerLabel.AutoSize = true;
-            this.timerLabel.Location = new System.Drawing.Point(337, 16);
-            this.timerLabel.Name = "timerLabel";
-            this.timerLabel.Size = new System.Drawing.Size(13, 13);
-            this.timerLabel.TabIndex = 5;
-            this.timerLabel.Text = "0";
-            // 
-            // timerLabelTitle
-            // 
-            this.timerLabelTitle.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.timerLabelTitle.AutoSize = true;
-            this.timerLabelTitle.Location = new System.Drawing.Point(295, 16);
-            this.timerLabelTitle.Name = "timerLabelTitle";
-            this.timerLabelTitle.Size = new System.Drawing.Size(36, 13);
-            this.timerLabelTitle.TabIndex = 4;
-            this.timerLabelTitle.Text = "Timer:";
+            this.timerHourLabel.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.timerHourLabel.AutoSize = true;
+            this.timerHourLabel.Location = new System.Drawing.Point(309, 26);
+            this.timerHourLabel.Name = "timerHourLabel";
+            this.timerHourLabel.Size = new System.Drawing.Size(48, 13);
+            this.timerHourLabel.TabIndex = 5;
+            this.timerHourLabel.Text = "0y 0d 0h";
             // 
             // originalPopulationCountLabel
             // 
@@ -172,23 +185,40 @@
             this.startButton.Text = "Start";
             this.startButton.UseVisualStyleBackColor = true;
             // 
-            // zombiePopulationLabelTitle
+            // timerTrackBar
             // 
-            this.zombiePopulationLabelTitle.AutoSize = true;
-            this.zombiePopulationLabelTitle.Location = new System.Drawing.Point(3, 16);
-            this.zombiePopulationLabelTitle.Name = "zombiePopulationLabelTitle";
-            this.zombiePopulationLabelTitle.Size = new System.Drawing.Size(129, 13);
-            this.zombiePopulationLabelTitle.TabIndex = 8;
-            this.zombiePopulationLabelTitle.Text = "Zombie Population Count:";
+            this.timerTrackBar.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.timerTrackBar.LargeChange = 2;
+            this.timerTrackBar.Location = new System.Drawing.Point(289, 42);
+            this.timerTrackBar.Maximum = 8;
+            this.timerTrackBar.Minimum = 1;
+            this.timerTrackBar.Name = "timerTrackBar";
+            this.timerTrackBar.Size = new System.Drawing.Size(79, 45);
+            this.timerTrackBar.TabIndex = 8;
+            this.timerTrackBar.TabStop = false;
+            this.timerTrackBar.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
+            this.timerTrackBar.Value = 1;
+            this.timerTrackBar.Scroll += new System.EventHandler(this.timerTrackBar_Scroll);
             // 
-            // zombiePopulationCountLabel
+            // timerTrackBarTitle
             // 
-            this.zombiePopulationCountLabel.AutoSize = true;
-            this.zombiePopulationCountLabel.Location = new System.Drawing.Point(138, 16);
-            this.zombiePopulationCountLabel.Name = "zombiePopulationCountLabel";
-            this.zombiePopulationCountLabel.Size = new System.Drawing.Size(13, 13);
-            this.zombiePopulationCountLabel.TabIndex = 9;
-            this.zombiePopulationCountLabel.Text = "0";
+            this.timerTrackBarTitle.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.timerTrackBarTitle.AutoSize = true;
+            this.timerTrackBarTitle.Location = new System.Drawing.Point(297, 81);
+            this.timerTrackBarTitle.Name = "timerTrackBarTitle";
+            this.timerTrackBarTitle.Size = new System.Drawing.Size(41, 13);
+            this.timerTrackBarTitle.TabIndex = 10;
+            this.timerTrackBarTitle.Text = "Speed:";
+            // 
+            // speedLabel
+            // 
+            this.speedLabel.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.speedLabel.AutoSize = true;
+            this.speedLabel.Location = new System.Drawing.Point(344, 81);
+            this.speedLabel.Name = "speedLabel";
+            this.speedLabel.Size = new System.Drawing.Size(13, 13);
+            this.speedLabel.TabIndex = 11;
+            this.speedLabel.Text = "1";
             // 
             // MainWindow
             // 
@@ -204,6 +234,7 @@
             this.controlPanel.ResumeLayout(false);
             this.controlPanel.PerformLayout();
             this.contextMenuStrip.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.timerTrackBar)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -217,14 +248,16 @@
         private System.Windows.Forms.Button startButton;
         private System.Windows.Forms.Label originalPopulationCountLabel;
         private System.Windows.Forms.Label originalPopulationCountLabelTitle;
-        private System.Windows.Forms.Label timerLabel;
-        private System.Windows.Forms.Label timerLabelTitle;
+        private System.Windows.Forms.Label timerHourLabel;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem showStatusBoxMenuItem;
         private System.Windows.Forms.ComboBox cellTypeComboBox;
         private System.Windows.Forms.Label cellTypeComboBoxTitle;
         private System.Windows.Forms.Label zombiePopulationCountLabel;
         private System.Windows.Forms.Label zombiePopulationLabelTitle;
+        private System.Windows.Forms.Label timerTrackBarTitle;
+        private System.Windows.Forms.TrackBar timerTrackBar;
+        private System.Windows.Forms.Label speedLabel;
     }
 }
 

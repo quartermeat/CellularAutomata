@@ -13,94 +13,124 @@ namespace CellularAutomata.Controller
     class MainController
     {
         //declare views here
-        private Map map;
+        private readonly Map _map;
         //declare model stuff here
-        private MainWindow mainWindow;
-        private StatusBox statusBox = new StatusBox();
+        private readonly MainWindow _mainWindow;
+        private readonly StatusBox _statusBox = new StatusBox();
 
         //simulation timer
-        private readonly Timer timer;
-        private int timerCounter;
+        private readonly Timer _timer;
+        private int _timerCounter;
+        private int _ticksInHour;
+        private int _hours;
+        private int _days;
+        private int _years;
+        private int _scale;
 
         public MainController()
         {
             //right now model initalization needs to be done before the view, because the view uses the model
 
             //intialize model *this is setup this way so we can eventually load saved populations
-            map = new Map(new Population());
+            _map = new Map(new Population());
 
             //setup timer
-            timer = new Timer();
-            timer.Interval = 250; //1/4 sec
-            timer.Tick += TimerTick;
-            timerCounter = 0;
+            _timerCounter = 0;
+            _ticksInHour = 120;
+            _scale = 1;//the higher the number, the faster time goes by
+            _hours = 0;
+            _days = 0;
+            _years = 0;
+            _timer = new Timer();
+            _timer.Interval = 1000/_scale;
+            _timer.Tick += TimerTick;
 
             //initialize view
-            mainWindow = new MainWindow();
-            mainWindow.SetupMap();
+            _mainWindow = new MainWindow();
+            _mainWindow.SetupMap();
             //setup combo box
             PopulateCellTypesComboBox();
 
             //set up event handling
-            mainWindow.MapButtonPressed += OnMapButtonClicked;
-            mainWindow.StartButtonPressed += OnStartButtonClicked;
-            mainWindow.ShowStatusBoxMenuItemClicked += OnShowStatusBoxMenuItemClicked;
+            _mainWindow.MapButtonPressed += OnMapButtonClicked;
+            _mainWindow.StartButtonPressed += OnStartButtonClicked;
+            _mainWindow.ShowStatusBoxMenuItemClicked += OnShowStatusBoxMenuItemClicked;
+            _mainWindow.ChangedTimerTrackBar += OnChangedTimerTrackBar;
 
             //show the window
-            mainWindow.ShowDialog();
+            _mainWindow.ShowDialog();
         }
 
         //do stuff on the timer tick
         private void TimerTick(object cvsender, EventArgs e)
         {
-            timerCounter++;
-            mainWindow.UpdateTimerLabel(GetTimeString());
-
+            //timer handling
+            #region timerStuff
+            //update counter
+            _timerCounter++;
+            //get hours from timerCounter
+            _hours = _timerCounter % _ticksInHour;
+            //if hours gets to 24
+            if (_hours == 24)
+            {
+                //reset timer counter
+                _timerCounter = 0;
+                //increment days
+                _days++;
+                //if days gets to 365
+                if (_days == 365)
+                {
+                    //increment years
+                    _years++;
+                    //reset days
+                    _days = 0;
+                }
+            }
+            //update timer label
+            string timeString = _years + "y " + _days + "d " + _hours + "h";
+            _mainWindow.UpdateTimerLabels(timeString);
+            #endregion
             //main game logic has to happen here
             //do cell tick stuff////////////////////////////
-            map.UpdateMap();
+            _map.UpdateMap();
             ///////////////////////////////////////////////
             //update the window
-            mainWindow.DrawMap(map);
+            _mainWindow.DrawMap(_map);
         }
 
-        //format time
-        public string GetTimeString()
-        {
-            //create time span from our counter (divide by 4 because each tick happens at 1/4 second
-            TimeSpan time = TimeSpan.FromSeconds(timerCounter/4);
-
-            //format that into a string
-            string timeString = time.ToString(@"mm\:ss");
-
-            //return it
-            return timeString;
-        }
-
+        #region timerStuff
         //handle start button clicked
         private void OnStartButtonClicked(object sender, EventArgs e)
         {
             //if timer is going
-            if (timer.Enabled)
+            if (_timer.Enabled)
             {
                 //stop timer
-                timer.Stop();
+                _timer.Stop();
                 //update Start button text
-                mainWindow.UpdateStartButton("Start", Color.Green);
+                _mainWindow.UpdateStartButton("Start", Color.Green);
             }
             else
             {
                 //start timer
-                timer.Start();
+                _timer.Start();
                 //update Start button text
-                mainWindow.UpdateStartButton("Stop", Color.Red);
+                _mainWindow.UpdateStartButton("Stop", Color.Red);
             }
         }
+
+        //update timer speed
+        public void OnChangedTimerTrackBar(object sender, EventArgs e)
+        {
+            _scale = _mainWindow.GetTimerTrackBarValue();
+            _timer.Interval = 1000 / _scale;
+        }
+        #endregion
 
         //handle ShowStatusBox menu item selected
         private void OnShowStatusBoxMenuItemClicked(object sender, EventArgs e)
         {
-            statusBox.Show();
+            _statusBox.Show();
         }
 
         //handle a button press
@@ -118,24 +148,24 @@ namespace CellularAutomata.Controller
                 if (mapButton.Tenant != null)
                 {
                     //take cell out of population
-                    map.RemoveCell(mapButton.Tenant);
+                    _map.RemoveCell(mapButton.Tenant);
                     //update window
-                    mainWindow.DrawTenantCell(mapButton);
+                    _mainWindow.DrawTenantCell(mapButton);
                 }
                 
                 //update neighbors
-                foreach (var cell in map.Population)
+                foreach (var cell in _map.Population)
                 {
-                    map.UpdateNeighbors(cell);
+                    _map.UpdateNeighbors(cell);
                 }
                 //update labels
-                mainWindow.UpdateOriginalPopulationCountLabel(map.Population.OriginalCount);
-                mainWindow.UpdateZombiePopulationCountLabel(map.Population.ZombieCount);
+                _mainWindow.UpdateOriginalPopulationCountLabel(_map.Population.OriginalCount);
+                _mainWindow.UpdateZombiePopulationCountLabel(_map.Population.ZombieCount);
                 UpdateStatusBoxNeighborLabels(mapButton);
             }
             else if (mapButton.Tenant == null)//if there is not already a cell there
             {
-                CellType cellType = mainWindow.GetCellTypeComboxSelection();
+                CellType cellType = _mainWindow.GetCellTypeComboxSelection();
                 ICell newCell = null;
                 
                 if (cellType == CellType.Original)
@@ -149,15 +179,15 @@ namespace CellularAutomata.Controller
                 }
                 
                 //add a new cell to the population
-                map.AddCell(newCell);
+                _map.AddCell(newCell);
                 //update neighbors of all cells currently on map
-                map.UpdateAllNeighbors();
+                _map.UpdateAllNeighbors();
                 //update window
-                mainWindow.DrawTenantCell(mapButton);
+                _mainWindow.DrawTenantCell(mapButton);
                 
                 //update labels
-                mainWindow.UpdateOriginalPopulationCountLabel(map.Population.OriginalCount);
-                mainWindow.UpdateZombiePopulationCountLabel(map.Population.ZombieCount);
+                _mainWindow.UpdateOriginalPopulationCountLabel(_map.Population.OriginalCount);
+                _mainWindow.UpdateZombiePopulationCountLabel(_map.Population.ZombieCount);
                 UpdateStatusBoxNeighborLabels(mapButton);
                 
             }
@@ -177,15 +207,15 @@ namespace CellularAutomata.Controller
             if (pressedButton.Tenant != null)
             {
                 //neighbor count label
-                statusBox.UpdateNeighborCountLabel(pressedButton.Tenant.Neighbors.Count);
+                _statusBox.UpdateNeighborCountLabel(pressedButton.Tenant.Neighbors.Count);
                 
                 //could change this to linq, but this is easier for me to read, may change later for performance
                 foreach (KeyValuePair<int, ICell> neighborCell in pressedButton.Tenant.Neighbors)
                 {
                     locationsString += GetLocationsString(neighborCell.Key) + ", ";
                 }
-                statusBox.UpdateNeighborLocationLabel(locationsString);
-                statusBox.UpdateNeighborLabelTitles("Cell");
+                _statusBox.UpdateNeighborLocationLabel(locationsString);
+                _statusBox.UpdateNeighborLabelTitles("Cell");
                 UpdateStatusBoxAgilityLabel(pressedButton.Tenant.Agility);
             }
             else//if there is no Cell in the button
@@ -197,9 +227,9 @@ namespace CellularAutomata.Controller
                     locationsString += GetLocationsString(neighborButton.Key) + ", ";
                 }
                 //update window labels
-                statusBox.UpdateNeighborLabelTitles("Button");
-                statusBox.UpdateNeighborLocationLabel(locationsString);
-                statusBox.UpdateNeighborCountLabel(neighborCount);
+                _statusBox.UpdateNeighborLabelTitles("Button");
+                _statusBox.UpdateNeighborLocationLabel(locationsString);
+                _statusBox.UpdateNeighborCountLabel(neighborCount);
             }
             
         }//end UpdateStatusBoxNeighborLabels
@@ -255,11 +285,11 @@ namespace CellularAutomata.Controller
 
             return locationString;
         }
-
+        
         //update agility label
         public void UpdateStatusBoxAgilityLabel(int agility)
         {
-            statusBox.UpdateAgilityLabel(agility);
+            _statusBox.UpdateAgilityLabel(agility);
         }
 
         //populate cell type strings into cell type combo box
@@ -272,7 +302,7 @@ namespace CellularAutomata.Controller
                 cellTypeStrings.Add(cellType.ToString());
             }
 
-            mainWindow.PopulateCellTypeComboBox(cellTypeStrings);
+            _mainWindow.PopulateCellTypeComboBox(cellTypeStrings);
         }
        
     }

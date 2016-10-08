@@ -26,7 +26,7 @@ namespace CellularAutomata.Model
         protected int _agility;
         private int _originalAgility;
         private CellState _cellState;
-        private bool _zombieBite;
+        protected bool _zombieBite;
         
         
         //constructor: setup defaults
@@ -34,6 +34,8 @@ namespace CellularAutomata.Model
         {
             //make cell alive
             _cellState = CellState.Alive;
+            //no zombie bites
+            _zombieBite = false;
             //random num generator
             Random random = new Random(Guid.NewGuid().GetHashCode());
             //random Agility between 1 and 3

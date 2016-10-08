@@ -12,6 +12,7 @@ namespace CellularAutomata.View
         public event EventHandler MapButtonPressed;
         public event EventHandler StartButtonPressed;
         public event EventHandler ShowStatusBoxMenuItemClicked;
+        public event EventHandler ChangedTimerTrackBar;
 
         public MainWindow()
         {
@@ -47,10 +48,10 @@ namespace CellularAutomata.View
         }
 
         //update timer label
-        public void UpdateTimerLabel(string timeString)
+        public void UpdateTimerLabels(string timeString)
         {
             //update label with that string
-            timerLabel.Text = timeString;
+            timerHourLabel.Text = timeString;
         }
 
         //update population label
@@ -134,6 +135,19 @@ namespace CellularAutomata.View
             }
 
             return CellType.Original;
+        }
+
+        //handle scrolling of timer track bar
+        private void timerTrackBar_Scroll(object sender, EventArgs e)
+        {
+            speedLabel.Text = timerTrackBar.Value.ToString();
+            if (ChangedTimerTrackBar != null) ChangedTimerTrackBar(sender, e);
+        }
+
+        //get timer track bar setting
+        public int GetTimerTrackBarValue()
+        {
+            return timerTrackBar.Value;
         }
     }
 }
