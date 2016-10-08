@@ -46,11 +46,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controller\Helpers\EnumUtil.cs" />
-    <Compile Include="Controller\Helpers\ICell.cs" />
-    <Compile Include="Controller\Helpers\ListExt.cs" />
     <Compile Include="Controller\MainController.cs" />
     <Compile Include="Model\Cell.cs" />
+    <Compile Include="Model\CellState.cs" />
+    <Compile Include="Model\CellType.cs" />
+    <Compile Include="Model\EnumUtil.cs" />
+    <Compile Include="Model\ICell.cs" />
+    <Compile Include="Model\ListExt.cs" />
     <Compile Include="Model\Log.cs" />
     <Compile Include="Model\Map.cs" />
     <Compile Include="Model\MapButton.cs">

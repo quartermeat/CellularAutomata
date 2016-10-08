@@ -1,23 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Windows.Forms;
-using CellularAutomata.Model;
 
-namespace CellularAutomata.Controller.Helpers
+namespace CellularAutomata.Model
 {
-    public enum CellType
-    {
-        Original,
-        Zombie
-    }
-
-    public enum CellState
-    {
-        Alive,
-        Dead
-    }
-    
     public interface ICell : IComparable<ICell>
     {
         CellType CellType { get; }

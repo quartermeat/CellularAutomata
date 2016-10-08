@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using CellularAutomata.Controller.Helpers;
 using CellularAutomata.Model.CellTypes;
 
 namespace CellularAutomata.Model

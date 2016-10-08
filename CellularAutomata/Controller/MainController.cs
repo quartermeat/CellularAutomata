@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using CellularAutomata.Controller.Helpers;
 using CellularAutomata.Model;
 using CellularAutomata.Model.CellTypes;
 using CellularAutomata.View;

@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Linq;
 using System.Security.Policy;
 using System.Windows.Forms;
-using CellularAutomata.Controller.Helpers;
 
 namespace CellularAutomata.Model
 {

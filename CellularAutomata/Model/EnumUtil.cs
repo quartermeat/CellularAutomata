@@ -1,10 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace CellularAutomata.Controller.Helpers
+namespace CellularAutomata.Model
 {
     public static class EnumUtil
     {
