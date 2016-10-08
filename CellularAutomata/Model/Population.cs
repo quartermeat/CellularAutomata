@@ -1,37 +1,92 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using CellularAutomata.Controller.Helpers;
+using CellularAutomata.Model.CellTypes;
 
 namespace CellularAutomata.Model
 {
     public class Population : List<ICell>
     {
-        public Population() : base()
+        public int ZombieCount;
+        public int OriginalCount;
+
+        public Population()
+            : base()
         {
             //initialize population here
         }
 
-        public void DoStuff(Map map)
+        //the magic logic////////////////////////////////////////
+        public void Live(Map map)
         {
             foreach (var cell in this)
             {
-                //keep track of old host to draw it vacant
-                //MapButton oldHost = cell.HostButton;
                 //move the cell
                 if (cell.CellType == CellType.Original)
                 {
                     //do original stuff
-                    MoveToRandomVacantMapButton(cell, map);
+                    map.MoveToRandomVacantMapButton(cell);
+
+                    //make sure they always have a fighting chance
+                    cell.Agility = cell.OriginalAgility;
+                    //then lower it accordingly
+                    for (int i = 0; i < cell.Neighbors.Count; i++)
+                    {
+                        cell.Agility--;
+                    }
                 }
                 else if (cell.CellType == CellType.Zombie)
                 {
-                   //do zombie stuff
+                    //do zombie stuff
+                    ZombieCell zombieCell = cell as ZombieCell;
+                    if (zombieCell != null) zombieCell.GoGetBrains(map);
                 }
+
             }
+
+            //sort the population based on agility
+            Sort();
+        }
+        //////////////////////////////////////////////////////////
+
+        //remove cell from population
+        public void RemoveCell(ICell cellToRemove)
+        {
+            switch (cellToRemove.CellType)
+            {
+                case CellType.Original:
+                    {
+                        OriginalCount--;
+                        break;
+                    }
+                case CellType.Zombie:
+                    {
+                        ZombieCount--;
+                        break;
+                    }
+            }
+
+            Remove(cellToRemove);
         }
 
-        private void MoveToRandomVacantMapButton(ICell cell, Map map)
+        //add cell to population
+        public void AddCell(ICell newCell)
         {
-            map.MoveToRandomVacantMapButton(cell);
+            switch (newCell.CellType)
+            {
+                case CellType.Original:
+                    {
+                        OriginalCount++;
+                        break;
+                    }
+                case CellType.Zombie:
+                    {
+                        ZombieCount++;
+                        break;
+                    }
+            }
+
+            this.AddSorted(newCell);
         }
     }
 }

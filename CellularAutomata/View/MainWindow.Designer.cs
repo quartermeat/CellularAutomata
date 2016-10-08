@@ -38,9 +38,11 @@
             this.cellTypeComboBoxTitle = new System.Windows.Forms.Label();
             this.timerLabel = new System.Windows.Forms.Label();
             this.timerLabelTitle = new System.Windows.Forms.Label();
-            this.populationCountLabel = new System.Windows.Forms.Label();
-            this.populationCountLabelTitle = new System.Windows.Forms.Label();
+            this.originalPopulationCountLabel = new System.Windows.Forms.Label();
+            this.originalPopulationCountLabelTitle = new System.Windows.Forms.Label();
             this.startButton = new System.Windows.Forms.Button();
+            this.zombiePopulationLabelTitle = new System.Windows.Forms.Label();
+            this.zombiePopulationCountLabel = new System.Windows.Forms.Label();
             this.mainPanel.SuspendLayout();
             this.controlPanel.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
@@ -73,12 +75,14 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.controlPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.controlPanel.ContextMenuStrip = this.contextMenuStrip;
+            this.controlPanel.Controls.Add(this.zombiePopulationCountLabel);
+            this.controlPanel.Controls.Add(this.zombiePopulationLabelTitle);
             this.controlPanel.Controls.Add(this.cellTypeComboBox);
             this.controlPanel.Controls.Add(this.cellTypeComboBoxTitle);
             this.controlPanel.Controls.Add(this.timerLabel);
             this.controlPanel.Controls.Add(this.timerLabelTitle);
-            this.controlPanel.Controls.Add(this.populationCountLabel);
-            this.controlPanel.Controls.Add(this.populationCountLabelTitle);
+            this.controlPanel.Controls.Add(this.originalPopulationCountLabel);
+            this.controlPanel.Controls.Add(this.originalPopulationCountLabelTitle);
             this.controlPanel.Controls.Add(this.startButton);
             this.controlPanel.Location = new System.Drawing.Point(3, 448);
             this.controlPanel.Name = "controlPanel";
@@ -102,16 +106,18 @@
             // 
             // cellTypeComboBox
             // 
+            this.cellTypeComboBox.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.cellTypeComboBox.FormattingEnabled = true;
-            this.cellTypeComboBox.Location = new System.Drawing.Point(216, 9);
+            this.cellTypeComboBox.Location = new System.Drawing.Point(284, 77);
             this.cellTypeComboBox.Name = "cellTypeComboBox";
-            this.cellTypeComboBox.Size = new System.Drawing.Size(121, 21);
+            this.cellTypeComboBox.Size = new System.Drawing.Size(84, 21);
             this.cellTypeComboBox.TabIndex = 7;
             // 
             // cellTypeComboBoxTitle
             // 
+            this.cellTypeComboBoxTitle.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.cellTypeComboBoxTitle.AutoSize = true;
-            this.cellTypeComboBoxTitle.Location = new System.Drawing.Point(156, 12);
+            this.cellTypeComboBoxTitle.Location = new System.Drawing.Point(224, 80);
             this.cellTypeComboBoxTitle.Name = "cellTypeComboBoxTitle";
             this.cellTypeComboBoxTitle.Size = new System.Drawing.Size(54, 13);
             this.cellTypeComboBoxTitle.TabIndex = 6;
@@ -119,8 +125,9 @@
             // 
             // timerLabel
             // 
+            this.timerLabel.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.timerLabel.AutoSize = true;
-            this.timerLabel.Location = new System.Drawing.Point(54, 29);
+            this.timerLabel.Location = new System.Drawing.Point(337, 16);
             this.timerLabel.Name = "timerLabel";
             this.timerLabel.Size = new System.Drawing.Size(13, 13);
             this.timerLabel.TabIndex = 5;
@@ -128,30 +135,31 @@
             // 
             // timerLabelTitle
             // 
+            this.timerLabelTitle.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.timerLabelTitle.AutoSize = true;
-            this.timerLabelTitle.Location = new System.Drawing.Point(9, 29);
+            this.timerLabelTitle.Location = new System.Drawing.Point(295, 16);
             this.timerLabelTitle.Name = "timerLabelTitle";
             this.timerLabelTitle.Size = new System.Drawing.Size(36, 13);
             this.timerLabelTitle.TabIndex = 4;
             this.timerLabelTitle.Text = "Timer:";
             // 
-            // populationCountLabel
+            // originalPopulationCountLabel
             // 
-            this.populationCountLabel.AutoSize = true;
-            this.populationCountLabel.Location = new System.Drawing.Point(106, 12);
-            this.populationCountLabel.Name = "populationCountLabel";
-            this.populationCountLabel.Size = new System.Drawing.Size(13, 13);
-            this.populationCountLabel.TabIndex = 3;
-            this.populationCountLabel.Text = "0";
+            this.originalPopulationCountLabel.AutoSize = true;
+            this.originalPopulationCountLabel.Location = new System.Drawing.Point(138, 3);
+            this.originalPopulationCountLabel.Name = "originalPopulationCountLabel";
+            this.originalPopulationCountLabel.Size = new System.Drawing.Size(13, 13);
+            this.originalPopulationCountLabel.TabIndex = 3;
+            this.originalPopulationCountLabel.Text = "0";
             // 
-            // populationCountLabelTitle
+            // originalPopulationCountLabelTitle
             // 
-            this.populationCountLabelTitle.AutoSize = true;
-            this.populationCountLabelTitle.Location = new System.Drawing.Point(9, 12);
-            this.populationCountLabelTitle.Name = "populationCountLabelTitle";
-            this.populationCountLabelTitle.Size = new System.Drawing.Size(91, 13);
-            this.populationCountLabelTitle.TabIndex = 2;
-            this.populationCountLabelTitle.Text = "Population Count:";
+            this.originalPopulationCountLabelTitle.AutoSize = true;
+            this.originalPopulationCountLabelTitle.Location = new System.Drawing.Point(3, 3);
+            this.originalPopulationCountLabelTitle.Name = "originalPopulationCountLabelTitle";
+            this.originalPopulationCountLabelTitle.Size = new System.Drawing.Size(129, 13);
+            this.originalPopulationCountLabelTitle.TabIndex = 2;
+            this.originalPopulationCountLabelTitle.Text = "Original Population Count:";
             // 
             // startButton
             // 
@@ -163,6 +171,24 @@
             this.startButton.TabIndex = 1;
             this.startButton.Text = "Start";
             this.startButton.UseVisualStyleBackColor = true;
+            // 
+            // zombiePopulationLabelTitle
+            // 
+            this.zombiePopulationLabelTitle.AutoSize = true;
+            this.zombiePopulationLabelTitle.Location = new System.Drawing.Point(3, 16);
+            this.zombiePopulationLabelTitle.Name = "zombiePopulationLabelTitle";
+            this.zombiePopulationLabelTitle.Size = new System.Drawing.Size(129, 13);
+            this.zombiePopulationLabelTitle.TabIndex = 8;
+            this.zombiePopulationLabelTitle.Text = "Zombie Population Count:";
+            // 
+            // zombiePopulationCountLabel
+            // 
+            this.zombiePopulationCountLabel.AutoSize = true;
+            this.zombiePopulationCountLabel.Location = new System.Drawing.Point(138, 16);
+            this.zombiePopulationCountLabel.Name = "zombiePopulationCountLabel";
+            this.zombiePopulationCountLabel.Size = new System.Drawing.Size(13, 13);
+            this.zombiePopulationCountLabel.TabIndex = 9;
+            this.zombiePopulationCountLabel.Text = "0";
             // 
             // MainWindow
             // 
@@ -189,14 +215,16 @@
         private System.Windows.Forms.FlowLayoutPanel mapPanel;
         private System.Windows.Forms.Panel controlPanel;
         private System.Windows.Forms.Button startButton;
-        private System.Windows.Forms.Label populationCountLabel;
-        private System.Windows.Forms.Label populationCountLabelTitle;
+        private System.Windows.Forms.Label originalPopulationCountLabel;
+        private System.Windows.Forms.Label originalPopulationCountLabelTitle;
         private System.Windows.Forms.Label timerLabel;
         private System.Windows.Forms.Label timerLabelTitle;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem showStatusBoxMenuItem;
         private System.Windows.Forms.ComboBox cellTypeComboBox;
         private System.Windows.Forms.Label cellTypeComboBoxTitle;
+        private System.Windows.Forms.Label zombiePopulationCountLabel;
+        private System.Windows.Forms.Label zombiePopulationLabelTitle;
     }
 }
 

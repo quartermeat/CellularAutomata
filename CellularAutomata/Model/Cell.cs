@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using CellularAutomata.Controller.Helpers;
 
 namespace CellularAutomata.Model
 {
-    //an automata unit that behaves according to state and behavior
+    //the basic automata unit
     public class Cell : ICell
     {
         private const int N = 0;
@@ -17,34 +16,35 @@ namespace CellularAutomata.Model
         private const int SW = 5;
         private const int W = 6;
         private const int NW = 7;
-
         private Dictionary<int, Point> _parameter;
-        private Color _cellColor;
+        protected Color _cellColor;
         private Point _location;
         private MapButton _hostButton;
         private MapButton _lastHostButton;
         private Dictionary<int, ICell> _neighbors;
-        private int _agility;
+        protected int _agility;
+        private int _originalAgility;
         
         //constructor: setup defaults
         public Cell(MapButton newHost)
         {
             //random num generator
             Random random = new Random(Guid.NewGuid().GetHashCode());
-
             //random Agility between 1 and 3
             _agility = random.Next(1, 4);
             //initialize neighbors
             _neighbors = new Dictionary<int, ICell>();
-            //setup its hosts
+            //add newHost to this cell's host
             _hostButton = newHost;
-            _lastHostButton = new MapButton(newHost.MapLocation);
-            //setup defaults here
+            //add this cell to the host
+            _hostButton.Tenant = this;
+            //set cell type color
             _cellColor = Color.Blue;
             //set location based on the host button
             _location = newHost.MapLocation;
             //setup parameter
             _parameter = new Dictionary<int, Point>();
+            //set parameter as all spaces within a distance of 1 space away
             SetParameter(1);
             
         }
@@ -88,43 +88,81 @@ namespace CellularAutomata.Model
         public Dictionary<int, Point> Parameter
         {
             get { return _parameter; }
-            set { _parameter = Parameter; }
+            set
+            {
+                _parameter = value;
+                _parameter = Parameter;
+            }
         }
 
         public Color CellColor
         {
             get { return _cellColor; }
-            set { _cellColor = CellColor; }
+            set
+            {
+                _cellColor = value;
+                _cellColor = CellColor;
+            }
         }
 
         public Point Location
         {
             get { return _location; }
-            set { _location = Location; }
+            set
+            {
+                _location = value;
+                _location = Location;
+            }
         }
 
         public MapButton HostButton
         {
             get { return _hostButton; }
-            set { _hostButton = HostButton; }
+            set
+            {
+                _hostButton = value;
+                _hostButton = HostButton;
+            }
         }
 
         public MapButton LastHostButton
         {
             get { return _lastHostButton; }
-            set { _lastHostButton = LastHostButton; }
+            set
+            {
+                _lastHostButton = value;
+                _lastHostButton = LastHostButton;
+            }
         }
 
         public Dictionary<int, ICell> Neighbors
         {
             get { return _neighbors; }
-            set { _neighbors = Neighbors; }
+            set
+            {
+                _neighbors = value;
+                _neighbors = Neighbors;
+            }
         }
 
         public int Agility
         {
             get { return _agility; }
-            set { _agility = Agility; }
+            set
+            {
+                _agility = value;
+                _agility = Agility;
+            }
+        }
+
+        public int OriginalAgility
+        {
+            get { return _originalAgility; }
+            set
+            {
+                _originalAgility = value;
+                _originalAgility = OriginalAgility;
+            }
         }
         
         //methods//////////////////////////////////

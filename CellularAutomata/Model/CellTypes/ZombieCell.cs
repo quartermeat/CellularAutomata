@@ -1,22 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Runtime.CompilerServices;
 using CellularAutomata.Controller.Helpers;
 
 namespace CellularAutomata.Model.CellTypes
 {
+    //a zombie cell
     class ZombieCell : Cell, ICell
     {
         public ZombieCell(MapButton newHost) : base(newHost)
         {
-            CellColor = Color.Green;
-            //Agility = 0;
+            //zombies are green
+            _cellColor = Color.Green;
+            //zombies are slow
+            _agility = 1;
         }
 
         public ZombieCell(ICell theUnfortunate) : base(theUnfortunate.HostButton)
         {
-            CellColor = Color.Green;
+            //your green now unfortunate
+            _cellColor = Color.Green;
+            //and your slow
+            _agility = 1;
         }
 
         public void GoGetBrains(Map map)
@@ -48,8 +53,9 @@ namespace CellularAutomata.Model.CellTypes
                 Random random = new Random(Guid.NewGuid().GetHashCode());
                 int randomIndex = random.Next(0, originalCells.Count);
 
-                //turn cell into zombie cell here
-               
+                //eat unfortunate neighbor 
+
+                
             }
         }
 

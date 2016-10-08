@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Globalization;
 using System.Linq;
-using System.Reflection;
+using System.Security.Policy;
 using System.Windows.Forms;
 using CellularAutomata.Controller.Helpers;
 
@@ -18,6 +17,14 @@ namespace CellularAutomata.Model
         public static int Height;
         //how big are the squares
         public static int Resolution;
+        //color of map
+        public static Color MapColor;
+        //color of selected cell
+        public static Color BorderColor;
+
+        //map button selected, maybe I'll use this later
+        //public MapButton SelectedButton;
+
         //population loaded to the map
         public Population Population { get; private set; }
         //map
@@ -31,6 +38,9 @@ namespace CellularAutomata.Model
             Width = 50;
             Height = 50;
             Resolution = 15;
+
+            MapColor = Color.LightGray;
+            BorderColor = Color.LightBlue;
 
             for (int i = 0; i < Height; i++)
             {
@@ -50,13 +60,12 @@ namespace CellularAutomata.Model
             {
                 button.SetNeighbors();
             }
-
         }
 
         //update neighbors
         public void UpdateNeighbors(ICell cell)
         {
-            
+
             //get neighbor buttons and if they have an occupant, set them as a neighbor
             foreach (KeyValuePair<int, MapButton> neighborHost in cell.HostButton.Neighbors.Where(neighborHost => neighborHost.Value.Tenant != null).Where(neighborHost => !cell.Neighbors.ContainsKey(neighborHost.Key)))
             {
@@ -68,6 +77,16 @@ namespace CellularAutomata.Model
                     cell.HostButton.Neighbors.Where(neighborHost => neighborHost.Value.Tenant == null))
             {
                 cell.Neighbors.Remove(neighborHost.Key);
+            }
+        }
+
+        //update all neighbors
+        public void UpdateAllNeighbors()
+        {
+            //update neighbors of all cells currently on map
+            foreach (ICell cell in Population)
+            {
+                UpdateNeighbors(cell);
             }
         }
 
@@ -89,8 +108,6 @@ namespace CellularAutomata.Model
         //get an array of occupied buttons neighboring this cell
         protected internal List<MapButton> GetOccupiedNeighborHosts(ICell cell)
         {
-            
-
             List<MapButton> occupiedNeighborHosts = new List<MapButton>();
 
             foreach (
@@ -103,7 +120,7 @@ namespace CellularAutomata.Model
             return occupiedNeighborHosts;
         }
 
-        //this is where the magic happens baby!
+        //this is where the magic happens baby!////////////////////////////////////////////////
         public void MoveToRandomVacantMapButton(ICell cell)
         {
             //get empty neighbor hosts
@@ -111,35 +128,42 @@ namespace CellularAutomata.Model
             //get random index
             Random random = new Random(Guid.NewGuid().GetHashCode());
             int randomIndex = random.Next(0, vacantNeighborHosts.Count);
-            //make current _hostButton the _lastHostButton
-            cell.LastHostButton = cell.HostButton;
             //remove self from current Host
+            cell.HostButton.BackColor = MapColor;
             cell.HostButton.Tenant = null;
-            //cell.LastHostButton.Tenant = null;
             //place this self into new host
             vacantNeighborHosts[randomIndex].Tenant = cell;
             //update _hostButton to the new spot
             cell.HostButton = vacantNeighborHosts[randomIndex];
+            //update neighbors
+            UpdateNeighbors(cell);
         }
+        ///////////////////////////////////////////////////////////////////
         
         //add cell
         public void AddCell(ICell cell)
         {
-            cell.HostButton.Tenant = cell;
-            Population.AddSorted(cell);
+            Population.AddCell(cell);
+            UpdateNeighbors(cell);
         }
 
         //remove cell
         public void RemoveCell(ICell cell)
         {
             Population.Remove(cell);
+            foreach (KeyValuePair<int, ICell> currentCell in cell.Neighbors)
+            {
+                UpdateNeighbors(currentCell.Value);
+            }
         }
 
-        //update the map
+        //update the map/////////////////////////////////
         public void UpdateMap()
         {
-            Population.DoStuff(this);
+            //make population do their thing on current map
+            Population.Live(this);
         }
+        //////////////////////////////////////////////////
 
         //get a map button at specific location
         public static MapButton GetMapButtonAt(Point location)

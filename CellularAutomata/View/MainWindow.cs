@@ -34,6 +34,11 @@ namespace CellularAutomata.View
             //add buttonMap to panel//////////////////////
             foreach (MapButton currentMapButton in Map.ButtonMap)
             {
+                currentMapButton.FlatStyle = FlatStyle.Flat;
+                currentMapButton.FlatAppearance.BorderSize = 1;
+                currentMapButton.FlatAppearance.BorderColor = Map.MapColor;
+                currentMapButton.BackColor = Map.MapColor;
+                currentMapButton.TabStop = false;
                 currentMapButton.MouseDown += OnMouseClicked;
                 mapPanel.Controls.Add(currentMapButton);
             }
@@ -50,9 +55,15 @@ namespace CellularAutomata.View
         }
 
         //update population label
-        public void UpdatePopulationCountLabel(int populationCount)
+        public void UpdateOriginalPopulationCountLabel(int populationCount)
         {
-            populationCountLabel.Text = populationCount.ToString();
+            originalPopulationCountLabel.Text = populationCount.ToString();
+        }
+
+        //update zombie population
+        public void UpdateZombiePopulationCountLabel(int zombieCount)
+        {
+            zombiePopulationCountLabel.Text = zombieCount.ToString();
         }
 
         //update start button
@@ -67,18 +78,16 @@ namespace CellularAutomata.View
         {
             foreach (var currentCell in map.Population)
             {
-                //clear the old host button
-                DrawTenantCell(currentCell.LastHostButton);
                 //draw new host
                 DrawTenantCell(currentCell.HostButton);
             }
         }
-
+        
         //update a single button
         public void DrawTenantCell(MapButton currentButton)
         {
             if (currentButton == null) return;
-            currentButton.BackColor = currentButton.Tenant == null ? DefaultBackColor : currentButton.Tenant.CellColor;
+            currentButton.BackColor = currentButton.Tenant == null ? Map.MapColor : currentButton.Tenant.CellColor;
         }
 
         //handle button presses

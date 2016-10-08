@@ -32,7 +32,7 @@ namespace CellularAutomata.Controller
 
             //setup timer
             timer = new Timer();
-            timer.Interval = 1000; //1 sec
+            timer.Interval = 250; //1/4 sec
             timer.Tick += TimerTick;
             timerCounter = 0;
 
@@ -58,17 +58,18 @@ namespace CellularAutomata.Controller
             mainWindow.UpdateTimerLabel(GetTimeString());
 
             //main game logic has to happen here
-            //do cell tick stuff
+            //do cell tick stuff////////////////////////////
             map.UpdateMap();
-            //draw board
+            ///////////////////////////////////////////////
+            //update the window
             mainWindow.DrawMap(map);
         }
 
         //format time
         public string GetTimeString()
         {
-            //create time span from our counter
-            TimeSpan time = TimeSpan.FromSeconds(timerCounter);
+            //create time span from our counter (divide by 4 because each tick happens at 1/4 second
+            TimeSpan time = TimeSpan.FromSeconds(timerCounter/4);
 
             //format that into a string
             string timeString = time.ToString(@"mm\:ss");
@@ -106,23 +107,31 @@ namespace CellularAutomata.Controller
         //handle a button press
         private void OnMapButtonClicked(object sender, EventArgs e)
         {
+            //get right click
             MouseEventArgs mouseEventArgs = e as MouseEventArgs;
-
-            MapButton mapButton =(MapButton)sender;
             
             //get the current button that was clicked
-
+            MapButton mapButton = (MapButton)sender;
+            
             if (mouseEventArgs != null && mouseEventArgs.Button == MouseButtons.Right)
             {
-                //take cell out of population
-                map.RemoveCell(mapButton.Tenant);
+                //if cell is in button
+                if (mapButton.Tenant != null)
+                {
+                    //take cell out of population
+                    map.RemoveCell(mapButton.Tenant);
+                    //update window
+                    mainWindow.DrawTenantCell(mapButton);
+                }
+                
                 //update neighbors
                 foreach (var cell in map.Population)
                 {
                     map.UpdateNeighbors(cell);
                 }
                 //update labels
-                mainWindow.UpdatePopulationCountLabel(map.Population.Count);
+                mainWindow.UpdateOriginalPopulationCountLabel(map.Population.OriginalCount);
+                mainWindow.UpdateZombiePopulationCountLabel(map.Population.ZombieCount);
                 UpdateStatusBoxNeighborLabels(mapButton);
             }
             else if (mapButton.Tenant == null)//if there is not already a cell there
@@ -142,14 +151,14 @@ namespace CellularAutomata.Controller
                 
                 //add a new cell to the population
                 map.AddCell(newCell);
+                //update neighbors of all cells currently on map
+                map.UpdateAllNeighbors();
+                //update window
+                mainWindow.DrawTenantCell(mapButton);
                 
-                //update neighbors
-                foreach (var cell in map.Population)
-                {
-                    map.UpdateNeighbors(cell);
-                }
                 //update labels
-                mainWindow.UpdatePopulationCountLabel(map.Population.Count);
+                mainWindow.UpdateOriginalPopulationCountLabel(map.Population.OriginalCount);
+                mainWindow.UpdateZombiePopulationCountLabel(map.Population.ZombieCount);
                 UpdateStatusBoxNeighborLabels(mapButton);
                 
             }
@@ -157,10 +166,6 @@ namespace CellularAutomata.Controller
             {
                 UpdateStatusBoxNeighborLabels(mapButton);
             }
-
-            //update window
-            mainWindow.DrawMap(map);
-
         }
 
         //update neighbor location label
