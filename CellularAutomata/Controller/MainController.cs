@@ -17,34 +17,17 @@ namespace CellularAutomata.Controller
         //declare model stuff here
         private readonly MainWindow _mainWindow;
         private readonly StatusBox _statusBox = new StatusBox();
-
-        //simulation timer
-        private readonly Timer _timer;
-        private int _timerCounter;
-        private readonly int _ticksInHour;
-        private int _hours;
-        private int _days;
-        private int _years;
-        private int _scale;
-
+        private readonly GameTime _gameTime;
+        
         public MainController()
         {
             //right now model initalization needs to be done before the view, because the view uses the model
 
             //intialize model *this is setup this way so we can eventually load saved populations
             _map = new Map(new Population());
-
-            //setup timer
-            _timerCounter = 0;
-            _ticksInHour = 120;
-            _scale = 1;//the higher the number, the faster time goes by
-            _hours = 0;
-            _days = 0;
-            _years = 0;
-            _timer = new Timer();
-            _timer.Interval = 1000/_scale;
-            _timer.Tick += TimerTick;
-
+            //later I should attach gametime to population or at least create a function in population to serialize gameTime data, so population is connected to a time
+            _gameTime = new GameTime();
+            
             //initialize view
             _mainWindow = new MainWindow();
             _mainWindow.SetupMap();
@@ -56,6 +39,7 @@ namespace CellularAutomata.Controller
             _mainWindow.StartButtonPressed += OnStartButtonClicked;
             _mainWindow.ShowStatusBoxMenuItemClicked += OnShowStatusBoxMenuItemClicked;
             _mainWindow.ChangedTimerTrackBar += OnChangedTimerTrackBar;
+            _gameTime.Tick += TimerTick;
 
             //show the window
             _mainWindow.ShowDialog();
@@ -64,38 +48,13 @@ namespace CellularAutomata.Controller
         //do stuff on the timer tick
         private void TimerTick(object cvsender, EventArgs e)
         {
-            //timer handling
-            #region timerStuff
-            //update counter
-            _timerCounter++;
-            //get hours from timerCounter
-            _hours = _timerCounter % _ticksInHour;
-            //if hours gets to 24
-            if (_hours == 24)
-            {
-                //reset timer counter
-                _timerCounter = 0;
-                //increment days
-                _days++;
-                //if days gets to 365
-                if (_days == 365)
-                {
-                    //increment years
-                    _years++;
-                    //reset days
-                    _days = 0;
-                }
-            }
-            //update timer label
-            string timeString = _years + "y " + _days + "d " + _hours + "h";
-            _mainWindow.UpdateTimerLabels(timeString);
-            #endregion
             //main game logic has to happen here
             //do cell tick stuff////////////////////////////
             _map.UpdateMap();
             ///////////////////////////////////////////////
             //update the window
             _mainWindow.DrawMap(_map);
+            _mainWindow.UpdateTimerLabels(_gameTime.TimeString);
         }
 
         #region timerStuff
@@ -103,17 +62,17 @@ namespace CellularAutomata.Controller
         private void OnStartButtonClicked(object sender, EventArgs e)
         {
             //if timer is going
-            if (_timer.Enabled)
+            if (_gameTime.Enabled)
             {
                 //stop timer
-                _timer.Stop();
+                _gameTime.Stop();
                 //update Start button text
                 _mainWindow.UpdateStartButton("Start", Color.Green);
             }
             else
             {
                 //start timer
-                _timer.Start();
+                _gameTime.Start();
                 //update Start button text
                 _mainWindow.UpdateStartButton("Stop", Color.Red);
             }
@@ -122,8 +81,9 @@ namespace CellularAutomata.Controller
         //update timer speed
         public void OnChangedTimerTrackBar(object sender, EventArgs e)
         {
-            _scale = _mainWindow.GetTimerTrackBarValue();
-            _timer.Interval = 1000 / _scale;
+            //_scale = _mainWindow.GetTimerTrackBarValue();
+            //_timer.Interval = 1000 / _scale;
+            _gameTime.SetTimeScale(_mainWindow.GetTimerTrackBarValue());
         }
         #endregion
 
