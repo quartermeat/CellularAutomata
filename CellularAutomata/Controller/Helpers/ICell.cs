@@ -29,6 +29,8 @@ namespace CellularAutomata.Controller.Helpers
 
         int Agility { get; set; }
 
+        int OriginalAgility { get; set; }
+
         string ToString();
 
 
