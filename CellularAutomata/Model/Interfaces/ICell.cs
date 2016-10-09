@@ -6,9 +6,10 @@ namespace CellularAutomata.Model
 {
     public interface ICell : IComparable<ICell>
     {
+        //fields
         CellType CellType { get; }
 
-        CellState CellState { get; }
+        CellState CellState { get; set; }
 
         Dictionary<int, Point> Parameter { get; set; }
 
@@ -21,7 +22,8 @@ namespace CellularAutomata.Model
         Dictionary<int, ICell> Neighbors { get; set; }
 
         bool ZombieBite { get; set; }
-
+        
+        //methods
         int Agility { get; set; }
 
         int OriginalAgility { get; set; }

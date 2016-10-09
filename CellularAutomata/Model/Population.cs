@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using CellularAutomata.Model.CellTypes;
 
 namespace CellularAutomata.Model
@@ -21,32 +22,56 @@ namespace CellularAutomata.Model
         {
             foreach (var cell in this)
             {
-                //move the cell
-                if (cell.CellType == CellType.Original)
+                //handle state
+                if (cell.CellState == CellState.Infected)
                 {
-                    //do original stuff
-                    map.MoveToRandomVacantMapButton(cell);
+                    //kill them
+                    cell.CellColor = Color.Black;
+                    cell.CellState = CellState.Dead;
 
-                    //make sure they always have a fighting chance
-                    cell.Agility = cell.OriginalAgility;
-                    //then lower it accordingly
-                    for (int i = 0; i < cell.Neighbors.Count; i++)
+                }else if (cell.CellState == CellState.Alive)
+                {
+                    //move the cell
+                    if (cell.CellType == CellType.Original)
                     {
-                        cell.Agility--;
+                        //do original stuff
+                        map.MoveToRandomVacantMapButton(cell);
+
+                        //make sure they always have a fighting chance
+                        cell.Agility = cell.OriginalAgility;
+                        //then lower it accordingly
+                        for (int i = 0; i < cell.Neighbors.Count; i++)
+                        {
+                            cell.Agility--;
+                        }
+                    }
+                    else if (cell.CellType == CellType.Zombie)
+                    {
+                        //do zombie stuff
+                        ZombieCell zombieCell = cell as ZombieCell;
+                        if (zombieCell != null) zombieCell.GoGetBrains(map);
                     }
                 }
-                else if (cell.CellType == CellType.Zombie)
+                else if (cell.CellState == CellState.Dead)
                 {
-                    //do zombie stuff
-                    ZombieCell zombieCell = cell as ZombieCell;
-                    if (zombieCell != null) zombieCell.GoGetBrains(map);
+                    if (cell.ZombieBite)
+                    {
+                        RemoveCell(cell);
+                        ZombieCell zombieCell = new ZombieCell(cell);
+                        AddCell(zombieCell);
+                    }
+                    else
+                    {
+                        RemoveCell(cell);    
+                    }
                 }
-
-            }
+                    
+            }//end foreach(cell)
 
             //sort the population based on agility
             Sort();
-        }
+
+        }//end Live
         //////////////////////////////////////////////////////////
         
         //remove cell from population

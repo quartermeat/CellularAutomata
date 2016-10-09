@@ -13,9 +13,7 @@ namespace CellularAutomata.Model.CellTypes
             _cellColor = Color.Green;
             //zombies are slow
             _agility = 1;
-            //zombie's are always zombieBit
-            _zombieBite = true;
-
+            
         }
 
         public ZombieCell(ICell theUnfortunate) : base(theUnfortunate.HostButton)
@@ -56,8 +54,15 @@ namespace CellularAutomata.Model.CellTypes
                 int randomIndex = random.Next(0, originalCells.Count);
 
                 //bite unfortunate neighbor 
-                originalCells[randomIndex].ZombieBite = true;
+                Bite(originalCells[randomIndex]);
+
             }
+        }
+
+        private static void Bite(ICell victim)
+        {
+            victim.ZombieBite = true;
+            victim.CellState = CellState.Infected;
         }
 
         #region interface

@@ -26,15 +26,14 @@ namespace CellularAutomata.Model
         protected int _agility;
         private int _originalAgility;
         private CellState _cellState;
-        protected bool _zombieBite;
-        
+        private bool _zombieBite;
         
         //constructor: setup defaults
         public Cell(MapButton newHost)
         {
             //make cell alive
             _cellState = CellState.Alive;
-            //no zombie bites
+            //not bit... yet
             _zombieBite = false;
             //random num generator
             Random random = new Random(Guid.NewGuid().GetHashCode());
@@ -86,6 +85,21 @@ namespace CellularAutomata.Model
         }
         
         #region interface
+        
+        public CellType CellType
+        {
+            get { return CellType.Original; }
+        }
+
+        public CellState CellState
+        {
+            get { return _cellState; }
+            set
+            {
+                _cellState = value;
+                _cellState = CellState;
+            }
+        }
 
         public bool ZombieBite
         {
@@ -94,21 +108,6 @@ namespace CellularAutomata.Model
             {
                 _zombieBite = value;
                 _zombieBite = ZombieBite;
-            }
-        }
-
-        public CellType CellType
-        {
-            get { return CellType.Original; }
-        }
-
-        public CellState CellState
-        {
-            get { return CellState; }
-            set
-            {
-                _cellState = value;
-                _cellState = CellState;
             }
         }
 

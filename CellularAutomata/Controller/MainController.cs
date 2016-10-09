@@ -81,8 +81,6 @@ namespace CellularAutomata.Controller
         //update timer speed
         public void OnChangedTimerTrackBar(object sender, EventArgs e)
         {
-            //_scale = _mainWindow.GetTimerTrackBarValue();
-            //_timer.Interval = 1000 / _scale;
             _gameTime.SetTimeScale(_mainWindow.GetTimerTrackBarValue());
         }
         #endregion

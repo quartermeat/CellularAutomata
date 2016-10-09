@@ -48,8 +48,8 @@
   <ItemGroup>
     <Compile Include="Controller\MainController.cs" />
     <Compile Include="Model\Cell.cs" />
-    <Compile Include="Model\CellState.cs" />
-    <Compile Include="Model\CellType.cs" />
+    <Compile Include="Model\Enums\CellState.cs" />
+    <Compile Include="Model\Enums\CellType.cs" />
     <Compile Include="Model\GameTime.cs" />
     <Compile Include="Model\Helpers\EnumUtil.cs" />
     <Compile Include="Model\Interfaces\ICell.cs" />
