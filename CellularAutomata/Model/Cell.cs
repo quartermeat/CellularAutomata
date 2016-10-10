@@ -25,7 +25,8 @@ namespace CellularAutomata.Model
         private Dictionary<int, ICell> _neighbors;
         protected int _agility;
         private int _originalAgility;
-        private CellState _cellState;
+        protected CellState _cellState;
+        protected CellType _cellType;
         private bool _zombieBite;
         
         //constructor: setup defaults
@@ -88,7 +89,12 @@ namespace CellularAutomata.Model
         
         public CellType CellType
         {
-            get { return CellType.Original; }
+            get { return _cellType; }
+            set
+            {
+                _cellType = value;
+                _cellType = CellType;
+            }
         }
 
         public CellState CellState

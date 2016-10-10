@@ -146,11 +146,16 @@ namespace CellularAutomata.Model
         //remove cell
         public void RemoveCell(ICell cell)
         {
-            Population.Remove(cell);
-            foreach (KeyValuePair<int, ICell> currentCell in cell.Neighbors)
+            if (cell != null)
             {
-                UpdateNeighbors(currentCell.Value);
+                Population.RemoveCell(cell);
+                foreach (KeyValuePair<int, ICell> currentCell in cell.Neighbors)
+                {
+                    UpdateNeighbors(currentCell.Value);
+                }
+                cell = null;
             }
+            
         }
 
         //update the map/////////////////////////////////
@@ -158,6 +163,11 @@ namespace CellularAutomata.Model
         {
             //make population do their thing on current map
             Population.Live(this);
+            //make sure the population is all good
+            Population.HandleDeadCells();
+            //sort population to make sure all changes affect the order
+            //sort the population based on agility
+            Population.Sort();
         }
         //////////////////////////////////////////////////
 

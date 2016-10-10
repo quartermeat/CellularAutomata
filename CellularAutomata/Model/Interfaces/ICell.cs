@@ -7,7 +7,7 @@ namespace CellularAutomata.Model
     public interface ICell : IComparable<ICell>
     {
         //fields
-        CellType CellType { get; }
+        CellType CellType { get; set; }
 
         CellState CellState { get; set; }
 

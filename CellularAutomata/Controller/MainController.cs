@@ -54,6 +54,7 @@ namespace CellularAutomata.Controller
             ///////////////////////////////////////////////
             //update the window
             _mainWindow.DrawMap(_map);
+            _mainWindow.UpdateCountLabels(_map.Population);
             _mainWindow.UpdateTimerLabels(_gameTime.TimeString);
         }
 
@@ -108,7 +109,7 @@ namespace CellularAutomata.Controller
                     //take cell out of population
                     _map.RemoveCell(mapButton.Tenant);
                     //update window
-                    _mainWindow.DrawTenantCell(mapButton);
+                    _mainWindow.DrawMap(_map);
                 }
                 
                 //update neighbors
@@ -117,8 +118,7 @@ namespace CellularAutomata.Controller
                     _map.UpdateNeighbors(cell);
                 }
                 //update labels
-                _mainWindow.UpdateOriginalPopulationCountLabel(_map.Population.OriginalCount);
-                _mainWindow.UpdateZombiePopulationCountLabel(_map.Population.ZombieCount);
+                _mainWindow.UpdateCountLabels(_map.Population);
                 UpdateStatusBoxNeighborLabels(mapButton);
             }
             else if (mapButton.Tenant == null)//if there is not already a cell there
@@ -141,11 +141,10 @@ namespace CellularAutomata.Controller
                 //update neighbors of all cells currently on map
                 _map.UpdateAllNeighbors();
                 //update window
-                _mainWindow.DrawTenantCell(mapButton);
+                _mainWindow.DrawMap(_map);
                 
                 //update labels
-                _mainWindow.UpdateOriginalPopulationCountLabel(_map.Population.OriginalCount);
-                _mainWindow.UpdateZombiePopulationCountLabel(_map.Population.ZombieCount);
+                _mainWindow.UpdateCountLabels(_map.Population);
                 UpdateStatusBoxNeighborLabels(mapButton);
                 
             }
@@ -261,6 +260,12 @@ namespace CellularAutomata.Controller
             }
 
             _mainWindow.PopulateCellTypeComboBox(cellTypeStrings);
+        }
+
+        //update count labels
+        public void UpdateCountLabels()
+        {
+            
         }
        
     }

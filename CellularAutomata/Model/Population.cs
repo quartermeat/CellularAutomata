@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Dynamic;
+using System.Linq;
 using CellularAutomata.Model.CellTypes;
 
 namespace CellularAutomata.Model
@@ -9,12 +11,16 @@ namespace CellularAutomata.Model
     {
         public int ZombieCount;
         public int OriginalCount;
-        
+        public int DeadCount;
+
+        private readonly List<ICell> _deadCells; 
+
         public Population()
             : base()
         {
             //initialize population here
-            
+            _deadCells = new List<ICell>();
+
         }
 
         //the magic logic////////////////////////////////////////
@@ -22,58 +28,93 @@ namespace CellularAutomata.Model
         {
             foreach (var cell in this)
             {
-                //handle state
-                if (cell.CellState == CellState.Infected)
+                if (cell != null)
                 {
-                    //kill them
-                    cell.CellColor = Color.Black;
-                    cell.CellState = CellState.Dead;
-
-                }else if (cell.CellState == CellState.Alive)
-                {
-                    //move the cell
-                    if (cell.CellType == CellType.Original)
+                    //handle state
+                    if (cell.CellState == CellState.Infected)
                     {
-                        //do original stuff
-                        map.MoveToRandomVacantMapButton(cell);
-
-                        //make sure they always have a fighting chance
-                        cell.Agility = cell.OriginalAgility;
-                        //then lower it accordingly
-                        for (int i = 0; i < cell.Neighbors.Count; i++)
+                        //turn the color
+                        cell.CellColor = Color.Black;
+                        //change the state
+                        cell.CellState = CellState.Dead;
+                        OriginalCount--;
+                        //change the type
+                        cell.CellType = CellType.Dead;
+                    }
+                    else if (cell.CellState == CellState.Alive)
+                    {
+                        //move the cell
+                        if (cell.CellType == CellType.Original)
                         {
-                            cell.Agility--;
+                            //do original stuff
+                            map.MoveToRandomVacantMapButton(cell);
+
+                            //make sure they always have a fighting chance
+                            cell.Agility = cell.OriginalAgility;
+                            //then lower it accordingly
+                            for (int i = 0; i < cell.Neighbors.Count; i++)
+                            {
+                                cell.Agility--;
+                            }
+                        }
+                        else if (cell.CellType == CellType.Zombie)
+                        {
+                            //do zombie stuff
+                            ZombieCell zombieCell = cell as ZombieCell;
+                            if (zombieCell != null) zombieCell.GoGetBrains(map);
                         }
                     }
-                    else if (cell.CellType == CellType.Zombie)
+                    else if (cell.CellState == CellState.Dead)
                     {
-                        //do zombie stuff
-                        ZombieCell zombieCell = cell as ZombieCell;
-                        if (zombieCell != null) zombieCell.GoGetBrains(map);
+                        //add to the dead bodies list
+                        _deadCells.Add(cell);
                     }
+
                 }
-                else if (cell.CellState == CellState.Dead)
-                {
-                    if (cell.ZombieBite)
-                    {
-                        RemoveCell(cell);
-                        ZombieCell zombieCell = new ZombieCell(cell);
-                        AddCell(zombieCell);
-                    }
-                    else
-                    {
-                        RemoveCell(cell);    
-                    }
-                }
-                    
+
             }//end foreach(cell)
-
-            //sort the population based on agility
-            Sort();
-
+            
         }//end Live
         //////////////////////////////////////////////////////////
-        
+
+        //handle dead cells
+        public void HandleDeadCells()
+        {
+            for(int i = 0; i < _deadCells.Count; i++)
+            {
+                //cells have been bitten by zombie
+                if (_deadCells[i].ZombieBite)
+                {
+                    //remove cell from population
+                    RemoveCell(_deadCells[i]);
+                    //change type to zombie
+                    _deadCells[i].CellType = CellType.Zombie;
+                    //create new cell from this cell
+                    ZombieCell zombieCell = new ZombieCell(_deadCells[i]);
+                    //make sure dead cell get's nulled
+                    _deadCells[i] = null;
+                    //add a new zombie to population
+                    AddCell(zombieCell);
+                }
+                else
+                {
+                    //remove cell from population
+                    RemoveCell(_deadCells[i]);
+                    //make sure it get's nulled
+                    _deadCells[i] = null;
+                }
+                
+            }
+
+            _deadCells.RemoveAll(item => item == null);
+        }
+
+        //get dead cells
+        public List<ICell> GetDeadCells()
+        {
+            return _deadCells;
+        }
+
         //remove cell from population
         public void RemoveCell(ICell cellToRemove)
         {
@@ -87,6 +128,11 @@ namespace CellularAutomata.Model
                 case CellType.Zombie:
                     {
                         ZombieCount--;
+                        break;
+                    }
+                case CellType.Dead:
+                    {
+                        DeadCount--;
                         break;
                     }
             }
@@ -107,6 +153,11 @@ namespace CellularAutomata.Model
                 case CellType.Zombie:
                     {
                         ZombieCount++;
+                        break;
+                    }
+                case CellType.Dead:
+                    {
+                        DeadCount++;
                         break;
                     }
             }

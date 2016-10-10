@@ -54,16 +54,20 @@ namespace CellularAutomata.View
             timerHourLabel.Text = timeString;
         }
 
-        //update population label
-        public void UpdateOriginalPopulationCountLabel(int populationCount)
+        //update count labels
+        public void UpdateCountLabels(Population population)
         {
-            originalPopulationCountLabel.Text = populationCount.ToString();
-        }
-
-        //update zombie population
-        public void UpdateZombiePopulationCountLabel(int zombieCount)
-        {
-            zombiePopulationCountLabel.Text = zombieCount.ToString();
+            foreach (ICell cell in population)
+            {
+                if (cell.CellType == CellType.Original)
+                {
+                    originalPopulationCountLabel.Text = population.OriginalCount.ToString();
+                }
+                else if (cell.CellType == CellType.Zombie)
+                {
+                    zombiePopulationCountLabel.Text = population.ZombieCount.ToString();
+                }
+            }
         }
 
         //update start button
@@ -81,6 +85,7 @@ namespace CellularAutomata.View
                 //draw new host
                 DrawTenantCell(currentCell.HostButton);
             }
+
         }
         
         //update a single button

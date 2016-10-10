@@ -9,6 +9,8 @@ namespace CellularAutomata.Model.CellTypes
     {
         public ZombieCell(MapButton newHost) : base(newHost)
         {
+            //make sure we know it's a zombie cell
+            _cellType = CellType.Zombie;
             //zombies are green
             _cellColor = Color.Green;
             //zombies are slow
@@ -22,6 +24,11 @@ namespace CellularAutomata.Model.CellTypes
             _cellColor = Color.Green;
             //and your slow
             _agility = 1;
+            //reanimate the dead
+            _cellState = CellState.Alive;
+            //make sure it is now a zombie cell
+            _cellType = CellType.Zombie;
+            
         }
 
         public void GoGetBrains(Map map)
@@ -66,11 +73,8 @@ namespace CellularAutomata.Model.CellTypes
         }
 
         #region interface
-        
-        public new CellType CellType
-        {
-            get { return CellType.Zombie; }
-        }
+       
+       
         #endregion
     }
 }
