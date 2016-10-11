@@ -80,7 +80,7 @@
             this.agilityLabelTitle.Name = "agilityLabelTitle";
             this.agilityLabelTitle.Size = new System.Drawing.Size(109, 13);
             this.agilityLabelTitle.TabIndex = 14;
-            this.agilityLabelTitle.Text = "Selected Cell\'s Agility:";
+            this.agilityLabelTitle.Text = "Selected OriginalCell\'s Agility:";
             // 
             // agilityLabel
             // 

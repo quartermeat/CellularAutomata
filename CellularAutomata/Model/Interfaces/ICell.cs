@@ -20,8 +20,6 @@ namespace CellularAutomata.Model
         MapButton HostButton { get; set; }
 
         Dictionary<int, ICell> Neighbors { get; set; }
-
-        bool ZombieBite { get; set; }
         
         //methods
         int Agility { get; set; }

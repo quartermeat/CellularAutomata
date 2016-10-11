@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace CellularAutomata.Model.CellTypes
 {
     //a zombie cell
-    class ZombieCell : Cell, ICell
+    public class ZombieCell : Cell
     {
         public ZombieCell(MapButton newHost) : base(newHost)
         {
@@ -33,20 +34,7 @@ namespace CellularAutomata.Model.CellTypes
 
         public void GoGetBrains(Map map)
         {
-            List<ICell> zombieCells = new List<ICell>();
-            List<ICell> originalCells = new List<ICell>();
-
-            foreach (MapButton host in map.GetOccupiedNeighborHosts(this))
-            {
-                if (host.Tenant.CellType == CellType.Zombie)
-                {
-                    zombieCells.Add(host.Tenant);
-                }
-                else if (host.Tenant.CellType == CellType.Original)
-                {
-                    originalCells.Add(host.Tenant);
-                }
-            }
+            List<ICell> originalCells = (from host in map.GetOccupiedNeighborHosts(this) where host.Tenant.CellType == CellType.Original select host.Tenant).ToList();
 
             //if there are no neighbors
             if (originalCells.Count == 0)
@@ -61,15 +49,19 @@ namespace CellularAutomata.Model.CellTypes
                 int randomIndex = random.Next(0, originalCells.Count);
 
                 //bite unfortunate neighbor 
-                Bite(originalCells[randomIndex]);
+                Bite(originalCells[randomIndex], map);
 
             }
         }
 
-        private static void Bite(ICell victim)
+        private static void Bite(ICell victim, Map map)
         {
-            victim.ZombieBite = true;
-            victim.CellState = CellState.Infected;
+            //maybe add some conditionals here based on cell attributes
+            
+            //remove victim from original population 
+            map.Population.OriginalPopulation.RemoveCell(victim);
+            //add victim to infected population
+            map.Population.InfectedPopulation.AddCell(victim);
         }
 
         #region interface

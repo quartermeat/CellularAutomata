@@ -3,141 +3,174 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Dynamic;
 using System.Linq;
+using CellularAutomata.Model.CellLists;
 using CellularAutomata.Model.CellTypes;
 
 namespace CellularAutomata.Model
 {
-    public class Population : List<ICell>
+    public class Population
     {
-        public int ZombieCount;
-        public int OriginalCount;
-        public int DeadCount;
-
-        private readonly List<ICell> _deadCells; 
+        public OriginalPopulation OriginalPopulation;
+        public ZombiePopulation ZombiePopulation;
+        public DeadPopulation DeadPopulation;
+        public InfectedPopulation InfectedPopulation;
 
         public Population()
             : base()
         {
             //initialize population here
-            _deadCells = new List<ICell>();
-
+            OriginalPopulation = new OriginalPopulation();
+            ZombiePopulation = new ZombiePopulation();
+            DeadPopulation = new DeadPopulation();
+            InfectedPopulation = new InfectedPopulation();
         }
 
         //the magic logic////////////////////////////////////////
         public void Live(Map map)
         {
-            foreach (var cell in this)
+            //handle original cells
+            foreach (ICell cell in OriginalPopulation)
             {
-                if (cell != null)
-                {
-                    //handle state
-                    if (cell.CellState == CellState.Infected)
-                    {
-                        //turn the color
-                        cell.CellColor = Color.Black;
-                        //change the state
-                        cell.CellState = CellState.Dead;
-                        OriginalCount--;
-                        //change the type
-                        cell.CellType = CellType.Dead;
-                    }
-                    else if (cell.CellState == CellState.Alive)
-                    {
-                        //move the cell
-                        if (cell.CellType == CellType.Original)
-                        {
-                            //do original stuff
-                            map.MoveToRandomVacantMapButton(cell);
+                OriginalPopulation.Live(cell, map);
+            }
 
-                            //make sure they always have a fighting chance
-                            cell.Agility = cell.OriginalAgility;
-                            //then lower it accordingly
-                            for (int i = 0; i < cell.Neighbors.Count; i++)
-                            {
-                                cell.Agility--;
-                            }
-                        }
-                        else if (cell.CellType == CellType.Zombie)
-                        {
-                            //do zombie stuff
-                            ZombieCell zombieCell = cell as ZombieCell;
-                            if (zombieCell != null) zombieCell.GoGetBrains(map);
-                        }
-                    }
-                    else if (cell.CellState == CellState.Dead)
-                    {
-                        //add to the dead bodies list
-                        _deadCells.Add(cell);
-                    }
+            //handle zombie population
+            foreach (ICell cell in ZombiePopulation)
+            {
+                ZombiePopulation.Live(cell, map);
+            }
 
-                }
+            //handle dead population
+            foreach (ICell cell in DeadPopulation)
+            {
+                //add to the dead bodies list
+                DeadPopulation.Live(cell, map);
+            }
 
-            }//end foreach(cell)
-            
+            //handle infected population
+            foreach (ICell cell in InfectedPopulation)
+            {
+                InfectedPopulation.Live(cell, map);
+            }
+
         }//end Live
         //////////////////////////////////////////////////////////
 
-        //handle dead cells
-        public void HandleDeadCells()
+        //move cells randomly////////////////////////////////////////////////
+        public void MoveToRandomVacantMapButton(ICell cell)
         {
-            for(int i = 0; i < _deadCells.Count; i++)
-            {
-                //cells have been bitten by zombie
-                if (_deadCells[i].ZombieBite)
-                {
-                    //remove cell from population
-                    RemoveCell(_deadCells[i]);
-                    //change type to zombie
-                    _deadCells[i].CellType = CellType.Zombie;
-                    //create new cell from this cell
-                    ZombieCell zombieCell = new ZombieCell(_deadCells[i]);
-                    //make sure dead cell get's nulled
-                    _deadCells[i] = null;
-                    //add a new zombie to population
-                    AddCell(zombieCell);
-                }
-                else
-                {
-                    //remove cell from population
-                    RemoveCell(_deadCells[i]);
-                    //make sure it get's nulled
-                    _deadCells[i] = null;
-                }
-                
-            }
-
-            _deadCells.RemoveAll(item => item == null);
-        }
-
-        //get dead cells
-        public List<ICell> GetDeadCells()
-        {
-            return _deadCells;
-        }
-
-        //remove cell from population
-        public void RemoveCell(ICell cellToRemove)
-        {
-            switch (cellToRemove.CellType)
+            switch (cell.CellType)
             {
                 case CellType.Original:
                     {
-                        OriginalCount--;
+                        OriginalPopulation.MoveToRandomVacantMapButton(cell);
                         break;
                     }
                 case CellType.Zombie:
                     {
-                        ZombieCount--;
+                        ZombiePopulation.MoveToRandomVacantMapButton(cell);
                         break;
                     }
                 case CellType.Dead:
                     {
-                        DeadCount--;
+                        DeadPopulation.MoveToRandomVacantMapButton(cell);
                         break;
                     }
             }
+        }
+        
+        //get dead cells
+        public List<ICell> GetDeadCells()
+        {
+            return DeadPopulation;
+        }
 
-            Remove(cellToRemove);
+        //get zombie cells
+        public List<ICell> GetZombieCells()
+        {
+            return ZombiePopulation;
+        }
+
+        //get original cells
+        public List<ICell> GetOriginalCells()
+        {
+            return OriginalPopulation;
+        }
+
+        //update all neighbors
+        public void UpdateAllNeighbors()
+        {
+            //update all populations neighbors
+            OriginalPopulation.UpdateAllNeighbors();
+            ZombiePopulation.UpdateAllNeighbors();
+            DeadPopulation.UpdateAllNeighbors();
+        }
+
+        //get an array of empty buttons neighboring this cell
+        public List<MapButton> GetVacantNeighborHosts(ICell cell)
+        {
+            switch (cell.CellType)
+            {
+                case CellType.Dead:
+                    {
+                        return DeadPopulation.GetVacantNeighborHosts(cell);
+                    }
+                case CellType.Original:
+                    {
+                        return OriginalPopulation.GetVacantNeighborHosts(cell);
+                    }
+                case CellType.Zombie:
+                    {
+                        return ZombiePopulation.GetVacantNeighborHosts(cell);
+                    }
+            }
+
+            return null;
+        }
+
+        //get an array of occupied buttons neighboring this cell
+        public List<MapButton> GetOccupiedNeighborHosts(ICell cell)
+        {
+            switch (cell.CellType)
+            {
+                case CellType.Dead:
+                    {
+                        return DeadPopulation.GetOccupiedNeighborHosts(cell);
+                    }
+                case CellType.Original:
+                    {
+                        return OriginalPopulation.GetOccupiedNeighborHosts(cell);
+                    }
+                case CellType.Zombie:
+                    {
+                        return ZombiePopulation.GetOccupiedNeighborHosts(cell);
+                    }
+            }
+
+            return null;
+        }
+
+        //update neighbors
+        public void UpdateNeighbors(ICell cell)
+        {
+            switch (cell.CellType)
+            {
+                case CellType.Dead:
+                    {
+                        DeadPopulation.UpdateNeighbors(cell);
+                        break;
+                    }
+                case CellType.Original:
+                    {
+                        OriginalPopulation.UpdateNeighbors(cell);
+                        break;
+                    }
+                case CellType.Zombie:
+                    {
+                        ZombiePopulation.UpdateNeighbors(cell);
+                        break;
+                    }
+            }
         }
 
         //add cell to population
@@ -147,22 +180,50 @@ namespace CellularAutomata.Model
             {
                 case CellType.Original:
                     {
-                        OriginalCount++;
+                        OriginalPopulation.AddCell(newCell);
                         break;
                     }
                 case CellType.Zombie:
                     {
-                        ZombieCount++;
+                        ZombiePopulation.AddCell(newCell);
                         break;
                     }
                 case CellType.Dead:
                     {
-                        DeadCount++;
+                        DeadPopulation.AddCell(newCell);
                         break;
                     }
             }
+        }
 
-            this.AddSorted(newCell);
+        //remove cell from population
+        public void RemoveCell(ICell cellToRemove)
+        {
+            switch (cellToRemove.CellType)
+            {
+                case CellType.Original:
+                    {
+                        OriginalPopulation.RemoveCell(cellToRemove);
+                        break;
+                    }
+                case CellType.Zombie:
+                    {
+                        ZombiePopulation.RemoveCell(cellToRemove);
+                        break;
+                    }
+                case CellType.Dead:
+                    {
+                        DeadPopulation.RemoveCell(cellToRemove);
+                        break;
+                    }
+            }
+        }
+
+        public void SortAll()
+        {
+            ZombiePopulation.Sort();
+            OriginalPopulation.Sort();
+            //dead cells don't matter yet...
         }
     }
 }

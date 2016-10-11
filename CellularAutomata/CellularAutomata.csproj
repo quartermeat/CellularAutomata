@@ -47,20 +47,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controller\MainController.cs" />
-    <Compile Include="Model\Cell.cs" />
+    <Compile Include="Model\CellLists\InfectedPopulation.cs" />
+    <Compile Include="Model\CellTypes\OriginalCell.cs" />
+    <Compile Include="Model\CellLists\DeadPopulation.cs" />
     <Compile Include="Model\Enums\CellState.cs" />
     <Compile Include="Model\Enums\CellType.cs" />
     <Compile Include="Model\GameTime.cs" />
     <Compile Include="Model\Helpers\EnumUtil.cs" />
     <Compile Include="Model\Interfaces\ICell.cs" />
     <Compile Include="Model\Helpers\ListExt.cs" />
+    <Compile Include="Model\Interfaces\IPopulation.cs" />
     <Compile Include="Model\Log.cs" />
     <Compile Include="Model\Map.cs" />
-    <Compile Include="Model\MapButton.cs">
+    <Compile Include="View\MapButton.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Model\CellTypes\ZombieCell.cs" />
+    <Compile Include="Model\CellLists\OriginalPopulation.cs" />
     <Compile Include="Model\Population.cs" />
+    <Compile Include="Model\CellLists\ZombiePopulation.cs" />
     <Compile Include="View\MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
