@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CellularAutomata.Model.Interfaces;
 
-namespace CellularAutomata.Model
+namespace CellularAutomata.Model.CellLists
 {
     public class OriginalPopulation : List<ICell>, IPopulation
     {
@@ -27,12 +27,15 @@ namespace CellularAutomata.Model
             {
                 UpdateNeighbors(currentCell.Value);
             }
+            //remove self from current Host
+            cell.HostButton.BackColor = Map.MapColor;
+            cell.HostButton.Tenant = null;
+            
         }
 
         //update neighbors
         public void UpdateNeighbors(ICell cell)
         {
-
             //get neighbor buttons and if they have an occupant, set them as a neighbor
             foreach (KeyValuePair<int, MapButton> neighborHost in cell.HostButton.Neighbors.Where(neighborHost => neighborHost.Value.Tenant != null).Where(neighborHost => !cell.Neighbors.ContainsKey(neighborHost.Key)))
             {
@@ -90,18 +93,13 @@ namespace CellularAutomata.Model
 
         public void Live(ICell cell, Map map)
         {
-            //handle infected here
-            if (cell.CellState == CellState.Infected)
-            {
-                
-            }
-
             //do original stuff
             MoveToRandomVacantMapButton(cell);
 
-            //make sure they always have a fighting chance
+            //original cells are slower to act around other cells
+            //reset agility at original level
             cell.Agility = cell.OriginalAgility;
-            //then lower it accordingly
+            //then lower it for each neighbor cell
             for (int i = 0; i < cell.Neighbors.Count; i++)
             {
                 cell.Agility--;

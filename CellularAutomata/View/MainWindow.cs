@@ -26,8 +26,8 @@ namespace CellularAutomata.View
             //custom window attributes done outside of designer
             StartPosition = FormStartPosition.CenterScreen;
             MaximizeBox = false;
-            mapPanel.Width = Map.Width*Map.Resolution;
-            mapPanel.Height = Map.Height*Map.Resolution;
+            mapPanel.Width = Map.Width * Map.Resolution;
+            mapPanel.Height = Map.Height * Map.Resolution;
             mapPanel.Margin = new Padding(0);
             //////////////////////////////////////////////////
 
@@ -42,7 +42,7 @@ namespace CellularAutomata.View
                 currentMapButton.MouseDown += OnMouseClicked;
                 mapPanel.Controls.Add(currentMapButton);
             }
-            
+
             startButton.Click += OnStartButtonPressed;
             startButton.BackColor = Color.Green;
         }
@@ -57,17 +57,8 @@ namespace CellularAutomata.View
         //update count labels
         public void UpdateCountLabels(Population population)
         {
-            foreach (ICell cell in population)
-            {
-                if (cell.CellType == CellType.Original)
-                {
-                    originalPopulationCountLabel.Text = population.OriginalCount.ToString();
-                }
-                else if (cell.CellType == CellType.Zombie)
-                {
-                    zombiePopulationCountLabel.Text = population.ZombieCount.ToString();
-                }
-            }
+            originalPopulationCountLabel.Text = population.GetOriginalCells().Count.ToString();
+            zombiePopulationCountLabel.Text = population.GetZombieCells().Count.ToString();
         }
 
         //update start button
@@ -80,14 +71,28 @@ namespace CellularAutomata.View
         //draw population as it is
         public void DrawMap(Map map)
         {
-            foreach (var currentCell in map.Population)
+            foreach (var currentCell in map.Population.GetOriginalCells())
             {
                 //draw new host
                 DrawTenantCell(currentCell.HostButton);
             }
+            foreach (var currentCell in map.Population.GetZombieCells())
+            {
+                //draw new host
+                DrawTenantCell(currentCell.HostButton);
+            }
+            foreach (var currentCell in map.Population.GetDeadCells())
+            {
+                //draw new host
+                DrawTenantCell(currentCell.HostButton);
+            }
+            foreach (var currentCell in map.Population.GetInfectedCells())
+            {
+                DrawTenantCell(currentCell.HostButton);
+            }
 
         }
-        
+
         //update a single button
         public void DrawTenantCell(MapButton currentButton)
         {
@@ -130,13 +135,21 @@ namespace CellularAutomata.View
             switch (cellTypeComboBox.SelectedItem.ToString())
             {
                 case "Original":
-                {
-                    return CellType.Original;
-                }
+                    {
+                        return CellType.Original;
+                    }
                 case "Zombie":
-                {
-                    return CellType.Zombie;
-                }
+                    {
+                        return CellType.Zombie;
+                    }
+                case "Dead":
+                    {
+                        return CellType.Dead;
+                    }
+                case "Infected":
+                    {
+                        return CellType.Infected;
+                    }
             }
 
             return CellType.Original;

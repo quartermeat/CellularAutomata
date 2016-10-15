@@ -78,14 +78,14 @@
             this.agilityLabelTitle.AutoSize = true;
             this.agilityLabelTitle.Location = new System.Drawing.Point(12, 48);
             this.agilityLabelTitle.Name = "agilityLabelTitle";
-            this.agilityLabelTitle.Size = new System.Drawing.Size(109, 13);
+            this.agilityLabelTitle.Size = new System.Drawing.Size(144, 13);
             this.agilityLabelTitle.TabIndex = 14;
             this.agilityLabelTitle.Text = "Selected OriginalCell\'s Agility:";
             // 
             // agilityLabel
             // 
             this.agilityLabel.AutoSize = true;
-            this.agilityLabel.Location = new System.Drawing.Point(127, 48);
+            this.agilityLabel.Location = new System.Drawing.Point(162, 48);
             this.agilityLabel.Name = "agilityLabel";
             this.agilityLabel.Size = new System.Drawing.Size(13, 13);
             this.agilityLabel.TabIndex = 15;

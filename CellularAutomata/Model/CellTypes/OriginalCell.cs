@@ -25,21 +25,15 @@ namespace CellularAutomata.Model
         private Dictionary<int, ICell> _neighbors;
         protected int _agility;
         private int _originalAgility;
-        protected CellState _cellState;
         protected CellType _cellType;
-        private bool _zombieBite;
         
         //constructor: setup defaults
         public Cell(MapButton newHost)
         {
-            //make cell alive
-            _cellState = CellState.Alive;
-            //not bit... yet
-            _zombieBite = false;
             //random num generator
             Random random = new Random(Guid.NewGuid().GetHashCode());
-            //random Agility between 1 and 3
-            _agility = random.Next(1, 4);
+            //random Agility between 2 and 3
+            _agility = random.Next(2, 4);
             //initialize neighbors
             _neighbors = new Dictionary<int, ICell>();
             //add newHost to this cell's host
@@ -96,27 +90,7 @@ namespace CellularAutomata.Model
                 _cellType = CellType;
             }
         }
-
-        public CellState CellState
-        {
-            get { return _cellState; }
-            set
-            {
-                _cellState = value;
-                _cellState = CellState;
-            }
-        }
-
-        public bool ZombieBite
-        {
-            get { return _zombieBite;}
-            set
-            {
-                _zombieBite = value;
-                _zombieBite = ZombieBite;
-            }
-        }
-
+      
         public Dictionary<int, Point> Parameter
         {
             get { return _parameter; }
@@ -202,7 +176,7 @@ namespace CellularAutomata.Model
             }
             else
             {
-                throw new ArgumentException("Object is not a Cell");
+                return -1;
             }
         }
         

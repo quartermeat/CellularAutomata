@@ -8,9 +8,7 @@ namespace CellularAutomata.Model
     {
         //fields
         CellType CellType { get; set; }
-
-        CellState CellState { get; set; }
-
+        
         Dictionary<int, Point> Parameter { get; set; }
 
         Color CellColor { get; set; }

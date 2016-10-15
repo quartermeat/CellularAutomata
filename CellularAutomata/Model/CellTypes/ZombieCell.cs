@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using CellularAutomata.Model.Interfaces;
 
 namespace CellularAutomata.Model.CellTypes
 {
@@ -16,7 +17,6 @@ namespace CellularAutomata.Model.CellTypes
             _cellColor = Color.Green;
             //zombies are slow
             _agility = 1;
-            
         }
 
         public ZombieCell(ICell theUnfortunate) : base(theUnfortunate.HostButton)
@@ -25,8 +25,6 @@ namespace CellularAutomata.Model.CellTypes
             _cellColor = Color.Green;
             //and your slow
             _agility = 1;
-            //reanimate the dead
-            _cellState = CellState.Alive;
             //make sure it is now a zombie cell
             _cellType = CellType.Zombie;
             
@@ -34,7 +32,8 @@ namespace CellularAutomata.Model.CellTypes
 
         public void GoGetBrains(Map map)
         {
-            List<ICell> originalCells = (from host in map.GetOccupiedNeighborHosts(this) where host.Tenant.CellType == CellType.Original select host.Tenant).ToList();
+            //get surrounding original cells.. they only eat original cells... for now
+            List<ICell> originalCells = (from host in map.Population.GetOccupiedNeighborHosts(this) where host.Tenant.CellType == CellType.Original select host.Tenant).ToList();
 
             //if there are no neighbors
             if (originalCells.Count == 0)
@@ -54,12 +53,13 @@ namespace CellularAutomata.Model.CellTypes
             }
         }
 
-        private static void Bite(ICell victim, Map map)
+        public void Bite(ICell victim, Map map)
         {
             //maybe add some conditionals here based on cell attributes
             
             //remove victim from original population 
             map.Population.OriginalPopulation.RemoveCell(victim);
+            
             //add victim to infected population
             map.Population.InfectedPopulation.AddCell(victim);
         }

@@ -4,12 +4,13 @@ using System.Linq;
 using CellularAutomata.Model.CellTypes;
 using CellularAutomata.Model.Interfaces;
 
-namespace CellularAutomata.Model
+namespace CellularAutomata.Model.CellLists
 {
     public class ZombiePopulation : List<ICell>, IPopulation
     {
 
-        public ZombiePopulation() : base()
+        public ZombiePopulation()
+            : base()
         {
             //intialize here
         }
@@ -17,28 +18,24 @@ namespace CellularAutomata.Model
         //add cell to this population
         public void AddCell(ICell cell)
         {
-            this.Add(cell);
-            UpdateNeighbors(cell);
+            ZombieCell zombieCell = new ZombieCell(cell);
+            this.AddSorted(zombieCell);
+            UpdateNeighbors(zombieCell);
         }
-
-        void IPopulation.AddCell(ICell cell)
-        {
-            AddCell(cell);
-        }
-
+        
         public void RemoveCell(ICell cell)
         {
-            //if cell is not already null -- may not be necessary, it got away from me, idk
-            if (cell != null)
+            //remove cell
+            Remove(cell);
+            //update all neighbors since this cell is now gone
+            foreach (KeyValuePair<int, ICell> currentCell in cell.Neighbors)
             {
-                //remove cell
-                Remove(cell);
-                //update all neighbors since this cell is now gone
-                foreach (KeyValuePair<int, ICell> currentCell in cell.Neighbors)
-                {
-                    UpdateNeighbors(currentCell.Value);
-                }
+                UpdateNeighbors(currentCell.Value);
             }
+            //remove self from current Host
+            cell.HostButton.BackColor = Map.MapColor;
+            cell.HostButton.Tenant = null;
+            
         }
 
         //update neighbors

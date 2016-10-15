@@ -108,15 +108,13 @@ namespace CellularAutomata.Controller
                 {
                     //take cell out of population
                     _map.RemoveCell(mapButton.Tenant);
-                    //update window
-                    _mainWindow.DrawMap(_map);
                 }
                 
-                //update neighbors
-                foreach (var cell in _map.Population)
-                {
-                    _map.UpdateNeighbors(cell);
-                }
+                ////update neighbors
+                //_map.UpdateNeighbors(mapButton.Tenant);
+                //update window
+                _mainWindow.DrawMap(_map);
+
                 //update labels
                 _mainWindow.UpdateCountLabels(_map.Population);
                 UpdateStatusBoxNeighborLabels(mapButton);
@@ -125,15 +123,31 @@ namespace CellularAutomata.Controller
             {
                 CellType cellType = _mainWindow.GetCellTypeComboxSelection();
                 ICell newCell = null;
-                
-                if (cellType == CellType.Original)
+
+                switch (cellType)
                 {
-                    //make a new cell at location with the pressed button as host
-                    newCell = new Cell(mapButton);
-                }
-                else if (cellType == CellType.Zombie)
-                {
-                    newCell = new ZombieCell(mapButton);
+                    case CellType.Original:
+                    {
+                        //make a new cell at location with the pressed button as host
+                        newCell = new Cell(mapButton);
+                        break;
+                    }
+                    case CellType.Zombie:
+                    {
+                        newCell = new ZombieCell(mapButton);
+                        break;
+                    }
+                    case CellType.Dead:
+                    {
+                        newCell = new DeadCell(mapButton);
+                        break;
+                    }
+                    case CellType.Infected:
+                    {
+                        newCell = new InfectedCell(mapButton);
+                        break;
+                    }
+
                 }
                 
                 //add a new cell to the population

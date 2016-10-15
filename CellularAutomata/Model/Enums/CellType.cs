@@ -4,6 +4,7 @@ namespace CellularAutomata.Model
     {
         Original,
         Zombie,
+        Infected,
         Dead
     }
 }

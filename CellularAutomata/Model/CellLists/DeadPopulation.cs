@@ -1,50 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CellularAutomata.Model.CellTypes;
 using CellularAutomata.Model.Interfaces;
 
-namespace CellularAutomata.Model
+namespace CellularAutomata.Model.CellLists
 {
     public class DeadPopulation : List<ICell>, IPopulation
     {
-
-
-        public DeadPopulation() : base()
+        public DeadPopulation()
+            : base()
         {
             //intialize here
+
         }
 
+        //add a cell to this population
         public void AddCell(ICell cell)
         {
-            cell.CellState = CellState.Dead;
-            cell.CellType = CellType.Dead;
-            cell.CellColor = Color.Black;
-            UpdateNeighbors(cell);
+            DeadCell deadCell = new DeadCell(cell);
+            Add(deadCell);
+            UpdateNeighbors(deadCell);
         }
 
+        //add a cell to this population
         public void RemoveCell(ICell cell)
         {
-            //if cell is not already null -- may not be necessary, it got away from me, idk
-            if (cell != null)
+            //remove cell
+            Remove(cell);
+            //update all neighbors since this cell is now gone
+            foreach (KeyValuePair<int, ICell> currentCell in cell.Neighbors)
             {
-                //remove cell
-                Remove(cell);
-                //update all neighbors since this cell is now gone
-                foreach (KeyValuePair<int, ICell> currentCell in cell.Neighbors)
-                {
-                    UpdateNeighbors(currentCell.Value);
-                }
+                UpdateNeighbors(currentCell.Value);
             }
+            //remove self from current Host
+            cell.HostButton.BackColor = Map.MapColor;
+            cell.HostButton.Tenant = null;
+            
         }
 
         //update neighbors
         public void UpdateNeighbors(ICell cell)
         {
-
             //get neighbor buttons and if they have an occupant, set them as a neighbor
             foreach (KeyValuePair<int, MapButton> neighborHost in cell.HostButton.Neighbors.Where(neighborHost => neighborHost.Value.Tenant != null).Where(neighborHost => !cell.Neighbors.ContainsKey(neighborHost.Key)))
             {
@@ -89,26 +85,18 @@ namespace CellularAutomata.Model
 
         public void Live(ICell cell, Map map)
         {
-            //cells have been bitten by zombie
-            if (cell.CellState == CellState.Infected)
+            //dead cells only live if they were infected
+            DeadCell deadCell = cell as DeadCell;
+            if (deadCell != null && deadCell.WasInfected)
             {
-                //remove cell
-                //but can't do this, because it is being called inside a foreach loop
-                RemoveCell(cell);
-                ////change type to zombie
-                //_deadCells[i].CellType = CellType.Zombie;
-                //create new cell from this cell
-                ZombieCell zombieCell = new ZombieCell(cell);
-                //make sure dead cell get's nulled
-                cell = null;
-                //add a new zombie to population
-                //this needs to be changed
-                ZombiePopulation.AddCell(cell);
+                RemoveCell(deadCell);
+                map.Population.ZombiePopulation.AddCell(deadCell);
             }
             else
             {
-                this.RemoveAll(item => item == null);
+                //let the body lie there... for now
             }
+
         }
     }
 }

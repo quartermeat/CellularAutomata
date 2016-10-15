@@ -33,6 +33,22 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="SharpDX, Version=3.0.2.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.3.0.2\lib\net45\SharpDX.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SharpDX.Direct2D1, Version=3.0.2.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.Direct2D1.3.0.2\lib\net45\SharpDX.Direct2D1.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SharpDX.Direct3D11, Version=3.0.2.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.Direct3D11.3.0.2\lib\net45\SharpDX.Direct3D11.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SharpDX.DXGI, Version=3.0.2.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.DXGI.3.0.2\lib\net45\SharpDX.DXGI.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -48,11 +64,14 @@
   <ItemGroup>
     <Compile Include="Controller\MainController.cs" />
     <Compile Include="Model\CellLists\InfectedPopulation.cs" />
+    <Compile Include="Model\CellTypes\DeadCell.cs" />
+    <Compile Include="Model\CellTypes\InfectedCell.cs" />
     <Compile Include="Model\CellTypes\OriginalCell.cs" />
     <Compile Include="Model\CellLists\DeadPopulation.cs" />
-    <Compile Include="Model\Enums\CellState.cs" />
     <Compile Include="Model\Enums\CellType.cs" />
-    <Compile Include="Model\GameTime.cs" />
+    <Compile Include="Model\GameTime.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Model\Helpers\EnumUtil.cs" />
     <Compile Include="Model\Interfaces\ICell.cs" />
     <Compile Include="Model\Helpers\ListExt.cs" />
@@ -95,6 +114,7 @@
     <EmbeddedResource Include="View\AuxViews\StatusBox.resx">
       <DependentUpon>StatusBox.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

@@ -28,29 +28,42 @@ namespace CellularAutomata.Model
         //the magic logic////////////////////////////////////////
         public void Live(Map map)
         {
+            //using ToList() to loop through a COPY of each population.  This let's me change the population within the loop
+
+            List<ICell> lifePool = new List<ICell>();
+            lifePool.AddRange(OriginalPopulation);
+            lifePool.AddRange(ZombiePopulation);
+            lifePool.AddRange(InfectedPopulation);
+            lifePool.AddRange(DeadPopulation);
+            lifePool.Sort();
+
             //handle original cells
-            foreach (ICell cell in OriginalPopulation)
+            foreach (ICell cell in lifePool.ToList())
             {
-                OriginalPopulation.Live(cell, map);
-            }
+                switch (cell.CellType)
+                {
+                    case CellType.Original:
+                        {
+                            OriginalPopulation.Live(cell, map);
+                            break;
+                        }
+                    case CellType.Infected:
+                        {
+                            InfectedPopulation.Live(cell, map);
+                            break;
+                        }
+                    case CellType.Dead:
+                        {
+                            DeadPopulation.Live(cell, map);
+                            break;
+                        }
+                    case CellType.Zombie:
+                        {
+                            ZombiePopulation.Live(cell, map);
+                            break;
+                        }
+                }//end switch
 
-            //handle zombie population
-            foreach (ICell cell in ZombiePopulation)
-            {
-                ZombiePopulation.Live(cell, map);
-            }
-
-            //handle dead population
-            foreach (ICell cell in DeadPopulation)
-            {
-                //add to the dead bodies list
-                DeadPopulation.Live(cell, map);
-            }
-
-            //handle infected population
-            foreach (ICell cell in InfectedPopulation)
-            {
-                InfectedPopulation.Live(cell, map);
             }
 
         }//end Live
@@ -76,9 +89,14 @@ namespace CellularAutomata.Model
                         DeadPopulation.MoveToRandomVacantMapButton(cell);
                         break;
                     }
+                case CellType.Infected:
+                    {
+                        InfectedPopulation.MoveToRandomVacantMapButton(cell);
+                        break;
+                    }
             }
         }
-        
+
         //get dead cells
         public List<ICell> GetDeadCells()
         {
@@ -97,6 +115,12 @@ namespace CellularAutomata.Model
             return OriginalPopulation;
         }
 
+        //get infected cells
+        public List<ICell> GetInfectedCells()
+        {
+            return InfectedPopulation;
+        }
+
         //update all neighbors
         public void UpdateAllNeighbors()
         {
@@ -104,6 +128,7 @@ namespace CellularAutomata.Model
             OriginalPopulation.UpdateAllNeighbors();
             ZombiePopulation.UpdateAllNeighbors();
             DeadPopulation.UpdateAllNeighbors();
+            InfectedPopulation.UpdateAllNeighbors();
         }
 
         //get an array of empty buttons neighboring this cell
@@ -122,6 +147,10 @@ namespace CellularAutomata.Model
                 case CellType.Zombie:
                     {
                         return ZombiePopulation.GetVacantNeighborHosts(cell);
+                    }
+                case CellType.Infected:
+                    {
+                        return InfectedPopulation.GetOccupiedNeighborHosts(cell);
                     }
             }
 
@@ -144,6 +173,10 @@ namespace CellularAutomata.Model
                 case CellType.Zombie:
                     {
                         return ZombiePopulation.GetOccupiedNeighborHosts(cell);
+                    }
+                case CellType.Infected:
+                    {
+                        return InfectedPopulation.GetOccupiedNeighborHosts(cell);
                     }
             }
 
@@ -170,6 +203,11 @@ namespace CellularAutomata.Model
                         ZombiePopulation.UpdateNeighbors(cell);
                         break;
                     }
+                case CellType.Infected:
+                    {
+                        InfectedPopulation.UpdateNeighbors(cell);
+                        break;
+                    }
             }
         }
 
@@ -191,6 +229,11 @@ namespace CellularAutomata.Model
                 case CellType.Dead:
                     {
                         DeadPopulation.AddCell(newCell);
+                        break;
+                    }
+                case CellType.Infected:
+                    {
+                        InfectedPopulation.AddCell(newCell);
                         break;
                     }
             }
@@ -216,6 +259,11 @@ namespace CellularAutomata.Model
                         DeadPopulation.RemoveCell(cellToRemove);
                         break;
                     }
+                case CellType.Infected:
+                    {
+                        InfectedPopulation.RemoveCell(cellToRemove);
+                        break;
+                    }
             }
         }
 
@@ -223,7 +271,8 @@ namespace CellularAutomata.Model
         {
             ZombiePopulation.Sort();
             OriginalPopulation.Sort();
-            //dead cells don't matter yet...
+            DeadPopulation.Sort();
+            InfectedPopulation.Sort();
         }
     }
 }
