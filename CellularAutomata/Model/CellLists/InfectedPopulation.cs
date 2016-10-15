@@ -19,10 +19,16 @@ namespace CellularAutomata.Model.CellLists
 
         public void RemoveCell(ICell cell)
         {
+            //remove cell from population
             Remove(cell);
-            //remove self from current Host
+            //update map button
             cell.HostButton.BackColor = Map.MapColor;
             cell.HostButton.Tenant = null;
+            //update all neighbors since this cell is now gone
+            foreach (KeyValuePair<int, ICell> currentCell in cell.Neighbors)
+            {
+                UpdateNeighbors(currentCell.Value);
+            }
             
         }
 

@@ -24,7 +24,7 @@ namespace CellularAutomata.Model
         private MapButton _hostButton;
         private Dictionary<int, ICell> _neighbors;
         protected int _agility;
-        private int _originalAgility;
+        private int _moveOrder;
         protected CellType _cellType;
         
         //constructor: setup defaults
@@ -50,6 +50,13 @@ namespace CellularAutomata.Model
             SetParameter(1);
         }
         
+
+        //reset move order
+        public void ResetMoveOrder()
+        {
+            MoveOrder = Agility;
+        }
+
         //cell knows where it's parameter is
         protected void SetParameter(int distance)
         {
@@ -151,13 +158,13 @@ namespace CellularAutomata.Model
             }
         }
 
-        public int OriginalAgility
+        public int MoveOrder
         {
-            get { return _originalAgility; }
+            get { return _moveOrder; }
             set
             {
-                _originalAgility = value;
-                _originalAgility = OriginalAgility;
+                _moveOrder = value;
+                _moveOrder = MoveOrder;
             }
         }
         
@@ -172,7 +179,7 @@ namespace CellularAutomata.Model
         {
             if (otherCell != null)
             {
-                return Agility.CompareTo(otherCell.Agility);
+                return MoveOrder.CompareTo(otherCell.MoveOrder);
             }
             else
             {

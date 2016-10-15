@@ -22,14 +22,15 @@ namespace CellularAutomata.Model.CellLists
         {
             //remove cell
             Remove(cell);
+            //remove self from current Host
+            cell.HostButton.BackColor = Map.MapColor;
+            cell.HostButton.Tenant = null;
             //update all neighbors since this cell is now gone
             foreach (KeyValuePair<int, ICell> currentCell in cell.Neighbors)
             {
                 UpdateNeighbors(currentCell.Value);
             }
-            //remove self from current Host
-            cell.HostButton.BackColor = Map.MapColor;
-            cell.HostButton.Tenant = null;
+            
             
         }
 
@@ -98,11 +99,11 @@ namespace CellularAutomata.Model.CellLists
 
             //original cells are slower to act around other cells
             //reset agility at original level
-            cell.Agility = cell.OriginalAgility;
+            cell.ResetMoveOrder();
             //then lower it for each neighbor cell
             for (int i = 0; i < cell.Neighbors.Count; i++)
             {
-                cell.Agility--;
+                cell.MoveOrder--;
             }
         }
     }

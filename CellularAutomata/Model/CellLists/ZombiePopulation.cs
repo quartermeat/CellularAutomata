@@ -27,14 +27,15 @@ namespace CellularAutomata.Model.CellLists
         {
             //remove cell
             Remove(cell);
+            //remove self from current Host
+            cell.HostButton.BackColor = Map.MapColor;
+            cell.HostButton.Tenant = null;
             //update all neighbors since this cell is now gone
             foreach (KeyValuePair<int, ICell> currentCell in cell.Neighbors)
             {
                 UpdateNeighbors(currentCell.Value);
             }
-            //remove self from current Host
-            cell.HostButton.BackColor = Map.MapColor;
-            cell.HostButton.Tenant = null;
+            
             
         }
 

@@ -18,14 +18,14 @@ namespace CellularAutomata.Model
         MapButton HostButton { get; set; }
 
         Dictionary<int, ICell> Neighbors { get; set; }
-        
-        //methods
+
         int Agility { get; set; }
 
-        int OriginalAgility { get; set; }
+        int MoveOrder { get; set; }
+        
+        //methods
+        void ResetMoveOrder();
 
         string ToString();
-
-
     }
 }

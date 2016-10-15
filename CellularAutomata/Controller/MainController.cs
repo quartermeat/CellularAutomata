@@ -101,6 +101,7 @@ namespace CellularAutomata.Controller
             //get the current button that was clicked
             MapButton mapButton = (MapButton)sender;
             
+            //if this was a right click
             if (mouseEventArgs != null && mouseEventArgs.Button == MouseButtons.Right)
             {
                 //if cell is in button
@@ -110,8 +111,6 @@ namespace CellularAutomata.Controller
                     _map.RemoveCell(mapButton.Tenant);
                 }
                 
-                ////update neighbors
-                //_map.UpdateNeighbors(mapButton.Tenant);
                 //update window
                 _mainWindow.DrawMap(_map);
 
