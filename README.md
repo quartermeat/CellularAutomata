@@ -7,4 +7,4 @@ I'm using Waffle to manage this project.
 Work and tickets will be accomplished within set monthly milestones.  If multiple developers come on board, I would like to create a develop branch for each developer.  I am managing branches and git with Sourcetree and GitFlow. I will merge each develop branch back into the master at the end of each milestone.
 
 Progress so far
-https://youtu.be/jXcOECH6Wj8
+https://www.youtube.com/watch?v=mgPzsa0v99M
