@@ -69,6 +69,7 @@
     <Compile Include="Model\CellTypes\OriginalCell.cs" />
     <Compile Include="Model\CellLists\DeadPopulation.cs" />
     <Compile Include="Model\Enums\CellType.cs" />
+    <Compile Include="Model\Enums\GameState.cs" />
     <Compile Include="Model\GameTime.cs">
       <SubType>Component</SubType>
     </Compile>

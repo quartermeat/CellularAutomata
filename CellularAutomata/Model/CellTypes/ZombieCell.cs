@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using CellularAutomata.Model.Enums.CellType;
 using CellularAutomata.Model.Interfaces;
 
 namespace CellularAutomata.Model.CellTypes
@@ -29,7 +30,7 @@ namespace CellularAutomata.Model.CellTypes
             _cellType = CellType.Zombie;
             
         }
-
+        
         public void GoGetBrains(Map map)
         {
             //get surrounding original cells.. they only eat original cells... for now
@@ -56,12 +57,20 @@ namespace CellularAutomata.Model.CellTypes
         public void Bite(ICell victim, Map map)
         {
             //maybe add some conditionals here based on cell attributes
-            
+
+
+            //create a new infected cell from victim
+            InfectedCell infectedCell = new InfectedCell(victim);
+
             //remove victim from original population 
             map.Population.OriginalPopulation.RemoveCell(victim);
+
+            //victim should stop acting in it's current population
+            //this is only necessary because this victim was not modified on it's turn in the loop
+            victim.ShouldLive = false;
             
-            //add victim to infected population
-            map.Population.InfectedPopulation.AddCell(victim);
+            //add infected cell to infected population
+            map.Population.InfectedPopulation.AddCell(infectedCell);
         }
 
         #region interface

@@ -4,6 +4,8 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CellularAutomata.Model.Enums.CellType;
+using CellularAutomata.Model.Interfaces;
 
 namespace CellularAutomata.Model.CellTypes
 {

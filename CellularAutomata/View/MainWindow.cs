@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using CellularAutomata.Model;
+using CellularAutomata.Model.Enums.CellType;
 
 namespace CellularAutomata.View
 {
@@ -36,8 +37,8 @@ namespace CellularAutomata.View
             {
                 currentMapButton.FlatStyle = FlatStyle.Flat;
                 currentMapButton.FlatAppearance.BorderSize = 1;
-                currentMapButton.FlatAppearance.BorderColor = Map.MapColor;
-                currentMapButton.BackColor = Map.MapColor;
+                currentMapButton.FlatAppearance.BorderColor = Map.CurrentMapColor;
+                currentMapButton.BackColor = Map.CurrentMapColor;
                 currentMapButton.TabStop = false;
                 currentMapButton.MouseDown += OnMouseClicked;
                 mapPanel.Controls.Add(currentMapButton);
@@ -69,8 +70,20 @@ namespace CellularAutomata.View
         }
 
         //draw population as it is
-        public void DrawMap(Map map)
+        public void DrawMap(Map map, bool isDayLight)
         {
+            //if the map is not the right color for the time of day... draw empty buttons aswell
+            if (isDayLight && Map.CurrentMapColor == Map.MapNightColor)
+            {
+                DrawEmptyMapSpaces(true);
+
+            }
+            else if (!isDayLight && Map.CurrentMapColor == Map.MapDayColor)
+            {
+                DrawEmptyMapSpaces(false);
+            }
+
+            //draw all cells
             foreach (var currentCell in map.Population.GetOriginalCells())
             {
                 //draw new host
@@ -93,11 +106,30 @@ namespace CellularAutomata.View
 
         }
 
+        //draw all empty map buttons
+        private void DrawEmptyMapSpaces(bool isDayLight)
+        {
+            //change the color of the map depending what time of day it is
+            Map.CurrentMapColor = isDayLight ? Map.MapDayColor : Map.MapNightColor;
+
+            //update the color
+            foreach (MapButton mapButton in Map.ButtonMap.Where(mapButton => mapButton.Tenant == null))
+            {
+                mapButton.BackColor = Map.CurrentMapColor;
+                mapButton.FlatAppearance.BorderColor = Map.CurrentMapColor;
+            }
+        }
+
         //update a single button
         public void DrawTenantCell(MapButton currentButton)
         {
             if (currentButton == null) return;
-            currentButton.BackColor = currentButton.Tenant == null ? Map.MapColor : currentButton.Tenant.CellColor;
+            if (currentButton.Tenant != null)
+            {
+                currentButton.BackColor = currentButton.Tenant.CellColor;
+                currentButton.FlatAppearance.BorderColor = Map.CurrentMapColor;    
+            }
+            
         }
 
         //handle button presses

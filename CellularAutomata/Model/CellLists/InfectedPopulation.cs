@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CellularAutomata.Model.CellTypes;
+using CellularAutomata.Model.Helpers;
 using CellularAutomata.Model.Interfaces;
 
 namespace CellularAutomata.Model.CellLists
@@ -12,9 +13,10 @@ namespace CellularAutomata.Model.CellLists
     {
         public void AddCell(ICell cell)
         {
-            InfectedCell infectedCell = new InfectedCell(cell);
-            this.AddSorted(infectedCell);
-            UpdateNeighbors(infectedCell);
+            this.AddSorted(cell);
+            cell.HostButton.BackColor = cell.CellColor;
+            cell.HostButton.Tenant = cell;
+            UpdateNeighbors(cell);
         }
 
         public void RemoveCell(ICell cell)
@@ -22,14 +24,13 @@ namespace CellularAutomata.Model.CellLists
             //remove cell from population
             Remove(cell);
             //update map button
-            cell.HostButton.BackColor = Map.MapColor;
+            cell.HostButton.BackColor = Map.CurrentMapColor;
             cell.HostButton.Tenant = null;
             //update all neighbors since this cell is now gone
             foreach (KeyValuePair<int, ICell> currentCell in cell.Neighbors)
             {
                 UpdateNeighbors(currentCell.Value);
             }
-            
         }
 
         public void UpdateNeighbors(ICell cell)
@@ -78,7 +79,7 @@ namespace CellularAutomata.Model.CellLists
             Random random = new Random(Guid.NewGuid().GetHashCode());
             int randomIndex = random.Next(0, vacantNeighborHosts.Count);
             //remove self from current Host
-            cell.HostButton.BackColor = Map.MapColor;
+            cell.HostButton.BackColor = Map.CurrentMapColor;
             cell.HostButton.Tenant = null;
             //place this self into new host
             vacantNeighborHosts[randomIndex].Tenant = cell;
@@ -90,11 +91,24 @@ namespace CellularAutomata.Model.CellLists
 
         public void Live(ICell cell, Map map)
         {
-            //remove cell from infected
-            RemoveCell(cell);
-            InfectedCell infectedCell = new InfectedCell(cell);
-            //add a new dead to population
-            map.Population.DeadPopulation.AddCell(infectedCell);
+            Random random = new Random(Guid.NewGuid().GetHashCode());
+            int randomNum = random.Next(0, 10);
+            //conditional if the infection has reached it's breaking point
+            if (randomNum == 3)
+            {
+                //create a dead body
+                DeadCell deadCell = new DeadCell(cell);
+                //remove cell from infected
+                RemoveCell(cell);
+                //add a new dead to population
+                map.Population.DeadPopulation.AddCell(deadCell);
+                
+            }
+            else
+            {
+                MoveToRandomVacantMapButton(cell);
+            }
         }
+
     }
 }

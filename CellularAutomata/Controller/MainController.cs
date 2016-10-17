@@ -5,6 +5,9 @@ using System.Linq;
 using System.Windows.Forms;
 using CellularAutomata.Model;
 using CellularAutomata.Model.CellTypes;
+using CellularAutomata.Model.Enums.CellType;
+using CellularAutomata.Model.Helpers;
+using CellularAutomata.Model.Interfaces;
 using CellularAutomata.View;
 
 namespace CellularAutomata.Controller
@@ -53,7 +56,7 @@ namespace CellularAutomata.Controller
             _map.UpdateMap();
             ///////////////////////////////////////////////
             //update the window
-            _mainWindow.DrawMap(_map);
+            _mainWindow.DrawMap(_map, _gameTime.IsDayLight);
             _mainWindow.UpdateCountLabels(_map.Population);
             _mainWindow.UpdateTimerLabels(_gameTime.TimeString);
         }
@@ -112,7 +115,7 @@ namespace CellularAutomata.Controller
                 }
                 
                 //update window
-                _mainWindow.DrawMap(_map);
+                _mainWindow.DrawMap(_map, _gameTime.IsDayLight);
 
                 //update labels
                 _mainWindow.UpdateCountLabels(_map.Population);
@@ -154,7 +157,7 @@ namespace CellularAutomata.Controller
                 //update neighbors of all cells currently on map
                 _map.UpdateAllNeighbors();
                 //update window
-                _mainWindow.DrawMap(_map);
+                _mainWindow.DrawMap(_map, _gameTime.IsDayLight);
                 
                 //update labels
                 _mainWindow.UpdateCountLabels(_map.Population);

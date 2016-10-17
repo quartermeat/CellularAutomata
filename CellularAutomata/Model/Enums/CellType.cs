@@ -1,4 +1,6 @@
-namespace CellularAutomata.Model
+using System.Windows.Forms;
+
+namespace CellularAutomata.Model.Enums.CellType
 {
     public enum CellType
     {
@@ -7,4 +9,5 @@ namespace CellularAutomata.Model
         Infected,
         Dead
     }
+        
 }

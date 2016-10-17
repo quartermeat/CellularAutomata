@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CellularAutomata.Model.Helpers;
 using CellularAutomata.Model.Interfaces;
 
 namespace CellularAutomata.Model.CellLists
@@ -15,6 +16,8 @@ namespace CellularAutomata.Model.CellLists
         public void AddCell(ICell cell)
         {
             this.AddSorted(cell);
+            cell.HostButton.BackColor = cell.CellColor;
+            cell.HostButton.Tenant = cell;
             UpdateNeighbors(cell);
         }
 
@@ -23,7 +26,7 @@ namespace CellularAutomata.Model.CellLists
             //remove cell
             Remove(cell);
             //remove self from current Host
-            cell.HostButton.BackColor = Map.MapColor;
+            cell.HostButton.BackColor = Map.CurrentMapColor;
             cell.HostButton.Tenant = null;
             //update all neighbors since this cell is now gone
             foreach (KeyValuePair<int, ICell> currentCell in cell.Neighbors)
@@ -82,7 +85,7 @@ namespace CellularAutomata.Model.CellLists
             Random random = new Random(Guid.NewGuid().GetHashCode());
             int randomIndex = random.Next(0, vacantNeighborHosts.Count);
             //remove self from current Host
-            cell.HostButton.BackColor = Map.MapColor;
+            cell.HostButton.BackColor = Map.CurrentMapColor;
             cell.HostButton.Tenant = null;
             //place this self into new host
             vacantNeighborHosts[randomIndex].Tenant = cell;

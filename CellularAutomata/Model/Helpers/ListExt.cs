@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace CellularAutomata.Model
+namespace CellularAutomata.Model.Helpers
 {
     public static class ListExt
     {

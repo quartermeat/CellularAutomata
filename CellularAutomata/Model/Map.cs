@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Security.Policy;
 using System.Windows.Forms;
+using CellularAutomata.Model.Interfaces;
 
 namespace CellularAutomata.Model
 {
@@ -16,10 +17,13 @@ namespace CellularAutomata.Model
         public static int Height;
         //how big are the squares
         public static int Resolution;
-        //color of map
-        public static Color MapColor;
-        //color of selected cell
-        public static Color BorderColor;
+        //color of map at day
+        public static Color MapNightColor;
+        //color of map at night
+        public static Color MapDayColor;
+        //current color of map
+        public static Color CurrentMapColor;
+        
         
         //population loaded to the map
         public Population Population { get; private set; }
@@ -35,8 +39,11 @@ namespace CellularAutomata.Model
             Height = 50;
             Resolution = 15;
 
-            MapColor = Color.LightGray;
-            BorderColor = Color.LightBlue;
+            MapNightColor = Color.DimGray;
+            MapDayColor = Color.LightGray;
+
+            CurrentMapColor = MapNightColor;
+            
 
             for (int i = 0; i < Height; i++)
             {

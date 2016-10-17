@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Dynamic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using CellularAutomata.Model.CellLists;
-using CellularAutomata.Model.CellTypes;
+using CellularAutomata.Model.Enums.CellType;
+using CellularAutomata.Model.Interfaces;
 
 namespace CellularAutomata.Model
 {
@@ -40,29 +38,33 @@ namespace CellularAutomata.Model
             //handle original cells
             foreach (ICell cell in lifePool.ToList())
             {
-                switch (cell.CellType)
+                if (cell.ShouldLive)
                 {
-                    case CellType.Original:
-                        {
-                            OriginalPopulation.Live(cell, map);
-                            break;
-                        }
-                    case CellType.Infected:
-                        {
-                            InfectedPopulation.Live(cell, map);
-                            break;
-                        }
-                    case CellType.Dead:
-                        {
-                            DeadPopulation.Live(cell, map);
-                            break;
-                        }
-                    case CellType.Zombie:
-                        {
-                            ZombiePopulation.Live(cell, map);
-                            break;
-                        }
-                }//end switch
+                    switch (cell.CellType)
+                    {
+                        case CellType.Original:
+                            {
+                                OriginalPopulation.Live(cell, map);
+                                break;
+                            }
+                        case CellType.Infected:
+                            {
+                                InfectedPopulation.Live(cell, map);
+                                break;
+                            }
+                        case CellType.Dead:
+                            {
+                                DeadPopulation.Live(cell, map);
+                                break;
+                            }
+                        case CellType.Zombie:
+                            {
+                                ZombiePopulation.Live(cell, map);
+                                break;
+                            }
+                    }//end switch
+                }
+                
 
             }
 

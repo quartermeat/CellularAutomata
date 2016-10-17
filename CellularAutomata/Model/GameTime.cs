@@ -9,15 +9,19 @@ namespace CellularAutomata.Model
 {
     class GameTime : Timer
     {
+        //timer only stuff
         private int _timerCounter;
         private readonly int _ticksInHour;
         private int _hours;
         private int _days;
         private int _years;
         private int _scale;
-
+        
+        //game state stuff
+        public bool IsDayLight;
         public string TimeString;
 
+        //timer tick event handler
         public event EventHandler TimerTicked;
 
         public GameTime() : base()
@@ -30,6 +34,7 @@ namespace CellularAutomata.Model
             _days = 0;
             _years = 0;
             Interval = 1000/_scale;
+            IsDayLight = false;
             Tick += TimerTick;
         }
 
@@ -40,6 +45,15 @@ namespace CellularAutomata.Model
             _timerCounter++;
             //get hours from timerCounter
             _hours = _timerCounter%_ticksInHour;
+            
+            //handle daylight//////////////////////
+            //if hours is divisible by 6
+            if (_hours == 6 || _hours==18)
+            {
+                IsDayLight = IsDayLight == false;
+            }
+            /////////////////////////////////////
+
             //if hours gets to 24
             if (_hours == 24)
             {
@@ -63,6 +77,7 @@ namespace CellularAutomata.Model
             if (TimerTicked != null) TimerTicked(this, e);
         }
 
+        //change speed of the game
         public void SetTimeScale(int timeScale)
         {
             _scale = timeScale;

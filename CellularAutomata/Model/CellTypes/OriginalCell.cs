@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using CellularAutomata.Model.Enums.CellType;
+using CellularAutomata.Model.Interfaces;
 
-namespace CellularAutomata.Model
+namespace CellularAutomata.Model.CellTypes
 {
     //the basic automata unit
     public class Cell : ICell
@@ -23,13 +25,25 @@ namespace CellularAutomata.Model
         private Point _location;
         private MapButton _hostButton;
         private Dictionary<int, ICell> _neighbors;
-        protected int _agility;
-        private int _moveOrder;
         protected CellType _cellType;
+        protected bool _shouldLive;
+        //attribute mechanics
+        private int _moveOrder;
+        private int _awakeHours;
+        //attributes
+        protected int _strength;
+        protected int _perception;
+        protected int _endurance;
+        protected int _charisma;
+        protected int _intelligence;
+        protected int _agility;
+        protected int _luck;
         
         //constructor: setup defaults
         public Cell(MapButton newHost)
         {
+            //this cell should live
+            _shouldLive = true;
             //random num generator
             Random random = new Random(Guid.NewGuid().GetHashCode());
             //random Agility between 2 and 3
@@ -87,7 +101,18 @@ namespace CellularAutomata.Model
         }
         
         #region interface
-        
+
+        public bool ShouldLive
+        {
+            get { return _shouldLive;}
+            set
+            {
+                _shouldLive = value;
+                _shouldLive = ShouldLive;
+            }
+        }
+
+
         public CellType CellType
         {
             get { return _cellType; }
@@ -147,6 +172,42 @@ namespace CellularAutomata.Model
                 _neighbors = Neighbors;
             }
         }
+        
+        //attributes
+
+        public int Strength
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
+
+        public int Perception
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
+
+        public int Endurance
+        {
+            get { return _endurance; }
+            set
+            {
+                _endurance = value;
+                _endurance = Endurance;
+            }
+        }
+
+        public int Charisma
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
+
+        public int Intelligence
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
 
         public int Agility
         {
@@ -158,6 +219,13 @@ namespace CellularAutomata.Model
             }
         }
 
+        public int Luck
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
+
+        //attribute mechanics
         public int MoveOrder
         {
             get { return _moveOrder; }
@@ -167,7 +235,17 @@ namespace CellularAutomata.Model
                 _moveOrder = MoveOrder;
             }
         }
-        
+
+        public int AwakeHours
+        {
+            get { return _awakeHours; }
+            set
+            {
+                _awakeHours = value;
+                _awakeHours = AwakeHours;
+            }
+        }
+
         //methods//////////////////////////////////
         public override string ToString()
         {

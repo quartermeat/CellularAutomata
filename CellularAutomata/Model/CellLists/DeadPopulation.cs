@@ -17,9 +17,10 @@ namespace CellularAutomata.Model.CellLists
         //add a cell to this population
         public void AddCell(ICell cell)
         {
-            DeadCell deadCell = new DeadCell(cell);
-            Add(deadCell);
-            UpdateNeighbors(deadCell);
+            Add(cell);
+            cell.HostButton.BackColor = cell.CellColor;
+            cell.HostButton.Tenant = cell;
+            UpdateNeighbors(cell);
         }
 
         //add a cell to this population
@@ -28,15 +29,13 @@ namespace CellularAutomata.Model.CellLists
             //remove cell
             Remove(cell);
             //remove self from current Host
-            cell.HostButton.BackColor = Map.MapColor;
+            cell.HostButton.BackColor = Map.CurrentMapColor;
             cell.HostButton.Tenant = null;
             //update all neighbors since this cell is now gone
             foreach (KeyValuePair<int, ICell> currentCell in cell.Neighbors)
             {
                 UpdateNeighbors(currentCell.Value);
             }
-            
-            
         }
 
         //update neighbors
@@ -90,8 +89,13 @@ namespace CellularAutomata.Model.CellLists
             DeadCell deadCell = cell as DeadCell;
             if (deadCell != null && deadCell.WasInfected)
             {
-                RemoveCell(deadCell);
-                map.Population.ZombiePopulation.AddCell(deadCell);
+                //create new zombie from dead body
+                ZombieCell zombieCell = new ZombieCell(deadCell);
+                
+                //remove cell from dead population
+                RemoveCell(cell);
+                //add new zombie to the zombie population
+                map.Population.ZombiePopulation.AddCell(zombieCell);
             }
             else
             {

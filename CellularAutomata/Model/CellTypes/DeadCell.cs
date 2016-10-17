@@ -4,6 +4,8 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CellularAutomata.Model.Enums.CellType;
+using CellularAutomata.Model.Interfaces;
 
 namespace CellularAutomata.Model.CellTypes
 {
@@ -29,18 +31,15 @@ namespace CellularAutomata.Model.CellTypes
         public DeadCell(ICell theUnfortunate) : base(theUnfortunate.HostButton)
         {
             //if dead cell was from an infected type
-            if (theUnfortunate.CellType == CellType.Infected)
-            {
-                //make sure we keep track of that fact
-                _wasInfected = true;
-            }
+            _wasInfected = theUnfortunate.CellType == CellType.Infected;
 
+            //make sure it is now a dead cell
+            _cellType = CellType.Dead;
             //your black now unfortunate
             _cellColor = Color.Black;
             //and your slow
             _agility = 0;
-            //make sure it is now a dead cell
-            _cellType = CellType.Dead;
+            
         }
 
         public bool WasInfected
