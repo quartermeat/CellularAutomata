@@ -14,7 +14,7 @@ namespace CellularAutomata.View
         public event EventHandler StartButtonPressed;
         public event EventHandler ShowStatusBoxMenuItemClicked;
         public event EventHandler ChangedTimerTrackBar;
-
+    
         public MainWindow()
         {
             //do default designer stuff

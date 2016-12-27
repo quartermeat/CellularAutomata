@@ -51,8 +51,8 @@ namespace CellularAutomata.Model
                 {
                     MapButton newButton = new MapButton(new Point(j, i))
                     {
-                        Width = Resolution,
                         Height = Resolution,
+                        Width = Resolution,
                         Margin = new Padding(0)
                     };
                     ButtonMap.Add(newButton);

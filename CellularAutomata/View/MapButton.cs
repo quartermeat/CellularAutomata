@@ -6,7 +6,7 @@ using CellularAutomata.Model.Interfaces;
 
 namespace CellularAutomata.Model
 {
-    public class MapButton : Button
+    public sealed class MapButton : Button
     {
         private const int N = 0;
         private const int NE = 1;
@@ -28,6 +28,9 @@ namespace CellularAutomata.Model
         
         public MapButton(Point mapLocation) : base()
         {
+
+            DoubleBuffered = true;
+
             MapLocation = mapLocation;
             //setup neighbors
             Neighbors = new Dictionary<int, MapButton>();
