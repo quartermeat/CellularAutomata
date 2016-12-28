@@ -14,6 +14,7 @@ namespace CellularAutomata.View
         public event EventHandler StartButtonPressed;
         public event EventHandler ShowStatusBoxMenuItemClicked;
         public event EventHandler ChangedTimerTrackBar;
+        public event EventHandler GraphicsButtonPressed;
     
         public MainWindow()
         {
@@ -198,6 +199,11 @@ namespace CellularAutomata.View
         public int GetTimerTrackBarValue()
         {
             return timerTrackBar.Value;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            GraphicsButtonPressed(sender, e);
         }
     }
 }

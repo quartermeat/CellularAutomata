@@ -42,10 +42,12 @@ namespace CellularAutomata.Controller
             _mainWindow.StartButtonPressed += OnStartButtonClicked;
             _mainWindow.ShowStatusBoxMenuItemClicked += OnShowStatusBoxMenuItemClicked;
             _mainWindow.ChangedTimerTrackBar += OnChangedTimerTrackBar;
+            _mainWindow.GraphicsButtonPressed += OnGraphicsButtonPressed;
             _gameTime.Tick += TimerTick;
-
+            
             //show the window
             _mainWindow.ShowDialog();
+
         }
 
         //do stuff on the timer tick
@@ -88,6 +90,15 @@ namespace CellularAutomata.Controller
             _gameTime.SetTimeScale(_mainWindow.GetTimerTrackBarValue());
         }
         #endregion
+
+        //handle graphics button pressed
+        private void OnGraphicsButtonPressed(object sender, EventArgs e)
+        {
+            using (RenderWindow renderWindow = new RenderWindow())
+            {
+                renderWindow.Run();
+            }
+        }
 
         //handle ShowStatusBox menu item selected
         private void OnShowStatusBoxMenuItemClicked(object sender, EventArgs e)

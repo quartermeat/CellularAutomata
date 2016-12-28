@@ -34,6 +34,9 @@
             this.controlPanel = new System.Windows.Forms.Panel();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showStatusBoxMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.speedLabel = new System.Windows.Forms.Label();
+            this.timerTrackBarTitle = new System.Windows.Forms.Label();
+            this.timerTrackBar = new System.Windows.Forms.TrackBar();
             this.zombiePopulationCountLabel = new System.Windows.Forms.Label();
             this.zombiePopulationLabelTitle = new System.Windows.Forms.Label();
             this.cellTypeComboBox = new System.Windows.Forms.ComboBox();
@@ -42,9 +45,7 @@
             this.originalPopulationCountLabel = new System.Windows.Forms.Label();
             this.originalPopulationCountLabelTitle = new System.Windows.Forms.Label();
             this.startButton = new System.Windows.Forms.Button();
-            this.timerTrackBar = new System.Windows.Forms.TrackBar();
-            this.timerTrackBarTitle = new System.Windows.Forms.Label();
-            this.speedLabel = new System.Windows.Forms.Label();
+            this.graphicsButton = new System.Windows.Forms.Button();
             this.mainPanel.SuspendLayout();
             this.controlPanel.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
@@ -78,6 +79,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.controlPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.controlPanel.ContextMenuStrip = this.contextMenuStrip;
+            this.controlPanel.Controls.Add(this.graphicsButton);
             this.controlPanel.Controls.Add(this.speedLabel);
             this.controlPanel.Controls.Add(this.timerTrackBarTitle);
             this.controlPanel.Controls.Add(this.timerTrackBar);
@@ -108,6 +110,41 @@
             this.showStatusBoxMenuItem.Size = new System.Drawing.Size(160, 22);
             this.showStatusBoxMenuItem.Text = "Show Status Box";
             this.showStatusBoxMenuItem.Click += new System.EventHandler(this.showStatusBoxMenuItem_Click);
+            // 
+            // speedLabel
+            // 
+            this.speedLabel.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.speedLabel.AutoSize = true;
+            this.speedLabel.Location = new System.Drawing.Point(344, 81);
+            this.speedLabel.Name = "speedLabel";
+            this.speedLabel.Size = new System.Drawing.Size(13, 13);
+            this.speedLabel.TabIndex = 11;
+            this.speedLabel.Text = "1";
+            // 
+            // timerTrackBarTitle
+            // 
+            this.timerTrackBarTitle.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.timerTrackBarTitle.AutoSize = true;
+            this.timerTrackBarTitle.Location = new System.Drawing.Point(297, 81);
+            this.timerTrackBarTitle.Name = "timerTrackBarTitle";
+            this.timerTrackBarTitle.Size = new System.Drawing.Size(41, 13);
+            this.timerTrackBarTitle.TabIndex = 10;
+            this.timerTrackBarTitle.Text = "Speed:";
+            // 
+            // timerTrackBar
+            // 
+            this.timerTrackBar.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.timerTrackBar.LargeChange = 2;
+            this.timerTrackBar.Location = new System.Drawing.Point(289, 42);
+            this.timerTrackBar.Maximum = 8;
+            this.timerTrackBar.Minimum = 1;
+            this.timerTrackBar.Name = "timerTrackBar";
+            this.timerTrackBar.Size = new System.Drawing.Size(79, 45);
+            this.timerTrackBar.TabIndex = 8;
+            this.timerTrackBar.TabStop = false;
+            this.timerTrackBar.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
+            this.timerTrackBar.Value = 1;
+            this.timerTrackBar.Scroll += new System.EventHandler(this.timerTrackBar_Scroll);
             // 
             // zombiePopulationCountLabel
             // 
@@ -185,40 +222,15 @@
             this.startButton.Text = "Start";
             this.startButton.UseVisualStyleBackColor = true;
             // 
-            // timerTrackBar
+            // graphicsButton
             // 
-            this.timerTrackBar.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.timerTrackBar.LargeChange = 2;
-            this.timerTrackBar.Location = new System.Drawing.Point(289, 42);
-            this.timerTrackBar.Maximum = 8;
-            this.timerTrackBar.Minimum = 1;
-            this.timerTrackBar.Name = "timerTrackBar";
-            this.timerTrackBar.Size = new System.Drawing.Size(79, 45);
-            this.timerTrackBar.TabIndex = 8;
-            this.timerTrackBar.TabStop = false;
-            this.timerTrackBar.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
-            this.timerTrackBar.Value = 1;
-            this.timerTrackBar.Scroll += new System.EventHandler(this.timerTrackBar_Scroll);
-            // 
-            // timerTrackBarTitle
-            // 
-            this.timerTrackBarTitle.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.timerTrackBarTitle.AutoSize = true;
-            this.timerTrackBarTitle.Location = new System.Drawing.Point(297, 81);
-            this.timerTrackBarTitle.Name = "timerTrackBarTitle";
-            this.timerTrackBarTitle.Size = new System.Drawing.Size(41, 13);
-            this.timerTrackBarTitle.TabIndex = 10;
-            this.timerTrackBarTitle.Text = "Speed:";
-            // 
-            // speedLabel
-            // 
-            this.speedLabel.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.speedLabel.AutoSize = true;
-            this.speedLabel.Location = new System.Drawing.Point(344, 81);
-            this.speedLabel.Name = "speedLabel";
-            this.speedLabel.Size = new System.Drawing.Size(13, 13);
-            this.speedLabel.TabIndex = 11;
-            this.speedLabel.Text = "1";
+            this.graphicsButton.Location = new System.Drawing.Point(6, 77);
+            this.graphicsButton.Name = "graphicsButton";
+            this.graphicsButton.Size = new System.Drawing.Size(104, 23);
+            this.graphicsButton.TabIndex = 12;
+            this.graphicsButton.Text = "Go To Graphics";
+            this.graphicsButton.UseVisualStyleBackColor = true;
+            this.graphicsButton.Click += new System.EventHandler(this.button1_Click);
             // 
             // MainWindow
             // 
@@ -258,6 +270,7 @@
         private System.Windows.Forms.Label timerTrackBarTitle;
         private System.Windows.Forms.TrackBar timerTrackBar;
         private System.Windows.Forms.Label speedLabel;
+        private System.Windows.Forms.Button graphicsButton;
     }
 }
 
